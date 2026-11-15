@@ -14,6 +14,9 @@
   --on-magenta: #ffffff;
   --warn: #7a4a00;
   --warn-bg: #ffefc2;
+  /* Green is free for "correct": like magenta, no signal flag uses it. */
+  --good: #17603d;
+  --good-bg: #d6f0e0;
   --rope: #8a7a5c;
 
   --font: 'B612', system-ui, sans-serif;
@@ -43,6 +46,8 @@
     --on-magenta: #2a0318;
     --warn: #ffd98a;
     --warn-bg: #3d2c05;
+    --good: #8fe0b4;
+    --good-bg: #0f3a26;
     --rope: #a3936f;
   }
 }
@@ -1109,6 +1114,309 @@ button.primary {
 
 .position-result strong {
   font-size: var(--step-1);
+}
+
+/* ---------- Learn ---------- */
+
+.learn {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding-top: env(safe-area-inset-top);
+}
+
+.learn-body {
+  padding: 1.25rem 1rem 2rem;
+  max-width: 40rem;
+}
+
+.learn h1 {
+  font-size: var(--step-2);
+  line-height: 1.15;
+  margin-bottom: 0.4rem;
+}
+
+.learn h2 {
+  font-size: var(--step-0);
+  margin: 1.75rem 0 0.6rem;
+}
+
+.learn-body > .muted {
+  max-width: 46ch;
+}
+
+.learn-start {
+  width: 100%;
+  margin-top: 1rem;
+  min-height: 52px;
+  font-size: var(--step-1);
+}
+
+.learn-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1.25rem;
+}
+
+.intro-list {
+  margin-top: 1rem;
+}
+
+.intro-list li {
+  padding-inline: 0;
+}
+
+.learn .intro-list h2 {
+  margin: 0;
+}
+
+/* Every flag with a bar for how well it is known. */
+.mastery {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 0.6rem 0.5rem;
+}
+
+.mastery li {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 3px;
+}
+
+.mastery li[data-box='0'] .flag {
+  opacity: 0.3;
+}
+
+.mastery-bar {
+  display: block;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--water-deep);
+  overflow: hidden;
+}
+
+.mastery-bar span {
+  display: block;
+  height: 100%;
+  background: var(--magenta);
+}
+
+.deck-list button {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.1rem;
+  width: 100%;
+  text-align: left;
+  border: 0;
+  border-top: 1px solid var(--water);
+  border-radius: 0;
+  background: none;
+  padding: 0.8rem 0;
+}
+
+.deck-list span {
+  font-size: var(--step--1);
+  color: var(--ink-soft);
+}
+
+.deck-list span:last-child {
+  color: var(--magenta);
+}
+
+.quiz {
+  display: flex;
+  flex-direction: column;
+}
+
+.quiz-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.quiz-head > div {
+  flex: 1;
+}
+
+.quiz-count {
+  font-size: var(--step--1);
+  color: var(--ink-soft);
+  margin-bottom: 0.25rem;
+}
+
+.quiz progress {
+  display: block;
+  width: 100%;
+  height: 6px;
+  border: 0;
+  border-radius: 3px;
+  background: var(--water-deep);
+  accent-color: var(--magenta);
+  overflow: hidden;
+}
+
+.quiz progress::-webkit-progress-bar {
+  background: var(--water-deep);
+}
+
+.quiz progress::-webkit-progress-value,
+.quiz progress::-moz-progress-bar {
+  background: var(--magenta);
+}
+
+.quiz-body {
+  padding: 1.25rem 1rem 2rem;
+  max-width: 34rem;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.quiz-prompt {
+  display: flex;
+  justify-content: center;
+  min-height: 6rem;
+  margin-bottom: 1rem;
+}
+
+/* The prompt hangs on a rope like a real hoist. */
+.quiz-hoist {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  padding: 0.5rem 0 0.75rem 4px;
+  border-left: 4px solid var(--rope);
+}
+
+.quiz-hoist .flag {
+  height: 3rem;
+  width: auto;
+  filter: drop-shadow(1px 2px 1px rgb(0 0 0 / 0.18));
+}
+
+.quiz-hoist[data-single='true'] .flag {
+  height: 6rem;
+}
+
+.quiz-text {
+  align-self: center;
+  font-size: var(--step-2);
+  font-weight: 700;
+  white-space: pre;
+}
+
+.quiz-question {
+  text-align: center;
+}
+
+.quiz-options {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.quiz-options button {
+  min-height: 52px;
+  text-align: left;
+  white-space: pre-wrap;
+  color: var(--ink);
+}
+
+.quiz-options[data-flags='true'] {
+  grid-template-columns: 1fr 1fr;
+}
+
+.quiz-options[data-flags='true'] button {
+  display: grid;
+  place-items: center;
+  padding: 0.9rem;
+}
+
+.quiz-options[data-flags='true'] .flag {
+  height: 3.5rem;
+  width: auto;
+  max-width: 100%;
+}
+
+.quiz-options button:disabled {
+  opacity: 1;
+}
+
+.quiz-options button[data-state='right'] {
+  border-color: var(--good);
+  background: var(--good-bg);
+  box-shadow: inset 0 0 0 2px var(--good);
+  font-weight: 700;
+}
+
+.quiz-options button[data-state='wrong'] {
+  border-color: var(--warn);
+  background: var(--warn-bg);
+  box-shadow: inset 0 0 0 2px var(--warn);
+}
+
+.quiz-options button[data-state='other'] {
+  opacity: 0.45;
+}
+
+.quiz-typed {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.quiz-feedback {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-top: 1rem;
+  padding: 0.75rem;
+  border-radius: 6px;
+  background: var(--warn-bg);
+  color: var(--warn);
+}
+
+.quiz-feedback[data-correct='true'] {
+  background: var(--good-bg);
+  color: var(--good);
+}
+
+.quiz-feedback span {
+  color: var(--ink);
+  white-space: pre-wrap;
+}
+
+.quiz-feedback button {
+  margin-top: 0.5rem;
+}
+
+.missed li {
+  display: grid;
+  grid-template-columns: 4rem 1fr;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.6rem 0;
+  border-top: 1px solid var(--water);
+  white-space: pre-wrap;
+}
+
+.missed-flags {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.missed-flags .flag {
+  height: 1.4rem;
+  width: auto;
+  align-self: flex-start;
 }
 
 /* ---------- Wider screens: flags beside the message ---------- */

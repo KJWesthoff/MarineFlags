@@ -46,7 +46,7 @@ export function Reference({ onShowAsFlags, onOpenTable, onTransfer }: Props) {
   )
 
   const onAddFlag = (f: (typeof FLAGS)[number]) =>
-    onTransfer({ group: f.id, flag: f.id, label: f.kind === 'letter' || f.kind === 'numeral' ? f.id : f.name, placement: 'append' })
+    onTransfer({ group: f.id, flag: f.id, label: f.kind === 'letter' || f.kind === 'numeral' ? f.id : f.name, placement: 'new' })
 
   // Rows from every guide topic that match the search, e.g. a country or a call sign prefix.
   const guideHits = useMemo(() => {
@@ -121,9 +121,9 @@ export function Reference({ onShowAsFlags, onOpenTable, onTransfer }: Props) {
                     type="button"
                     className="quiet add-flag"
                     onClick={() => onAddFlag(f)}
-                    aria-label={`Add ${f.name} to the hoist`}
+                    aria-label={`Add ${f.name} as a new hoist`}
                   >
-                    Add to hoist
+                    Add as a new hoist
                   </button>
                 </div>
               </li>

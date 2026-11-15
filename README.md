@@ -4,10 +4,11 @@ An offline-first PWA for reading, composing and learning International Code of S
 
 ## Status
 
-Phases 1 (foundation) and 2 (compose and reference) are done.
+Phases 1 (foundation), 2 (compose and reference) and 3 (training) are done.
 
 - **Compose** – build a message from flags or by typing a group; each hoist is decoded live.
 - **Positions** – add a latitude/longitude from the device's location or by tapping a map. The map uses OpenStreetMap tiles when online, over a bundled coastline that works offline.
+- **Learn** – short practice sessions with spaced repetition: naming flags, finding flags, single-flag meanings, common signals and reading hoists, with progress per flag.
 - **Reference** – all 40 flags with names and meanings, the searchable code book, and a guide (signaling procedure, terms, procedure signals, Morse code, distress signals, call sign prefixes by country). Tapping a signal shows it as flags.
 - Installable and usable offline (service worker and web manifest via `vite-plugin-pwa`).
 
@@ -19,7 +20,7 @@ Code layout:
 - `src/lib/signals.ts` – resolving substitutes, decoding hoists, encoding text to flags, code book search.
 - `src/screens/` – the Compose and Reference screens.
 
-Next: training, then camera recognition.
+Next: camera recognition.
 
 ## Commands
 

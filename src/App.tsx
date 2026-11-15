@@ -4,9 +4,10 @@ import { FLAG_BY_ID, type FlagId } from './data/flags'
 import { encodeGroup, resolveHoist, type TableRef } from './lib/signals'
 import { useStored } from './lib/useStored'
 import { Compose } from './screens/Compose'
+import { Learn } from './screens/Learn'
 import { Reference } from './screens/Reference'
 
-type Tab = 'compose' | 'reference'
+type Tab = 'compose' | 'reference' | 'learn'
 
 export interface Message {
   hoists: FlagId[][]
@@ -23,7 +24,9 @@ function reviveMessage(raw: unknown): Message | undefined {
 }
 
 export default function App() {
-  const [tab, setTab] = useStored<Tab>('tab', 'compose', (r) => (r === 'reference' ? 'reference' : 'compose'))
+  const [tab, setTab] = useStored<Tab>('tab', 'compose', (r) =>
+    r === 'reference' || r === 'learn' ? r : 'compose',
+  )
   const [message, setMessage] = useStored<Message>('message', EMPTY, reviveMessage)
   const [table, setTable] = useState<TableRef | null>(null)
   /** A short confirmation shown after something is sent to the hoist from Reference. */
@@ -41,7 +44,7 @@ export default function App() {
       if (placement === 'new') {
         // A value such as a course or a date is a group of its own: give it its own hoist.
         const kept = message.hoists.filter((h) => h.length > 0)
-        setMessage({ hoists: [...kept, encodeGroup(group).flags], active: kept.length })
+        setMessage({ hoists: [...kept, flag ? [flag] : encodeGroup(group).flags], active: kept.length })
         setNotice(`Added ${label} as hoist ${kept.length + 1}`)
         return
       }
@@ -77,8 +80,10 @@ export default function App() {
       <main className="screen">
         {tab === 'compose' ? (
           <Compose message={message} setMessage={setMessage} onOpenTable={setTable} />
-        ) : (
+        ) : tab === 'reference' ? (
           <Reference onShowAsFlags={showAsFlags} onOpenTable={setTable} onTransfer={transfer} />
+        ) : (
+          <Learn />
         )}
       </main>
       <nav className="tabbar" aria-label="Sections">
@@ -95,6 +100,14 @@ export default function App() {
             <path d="M12 6v14" />
           </svg>
           Reference
+        </button>
+        <button type="button" aria-current={tab === 'learn' ? 'page' : undefined} onClick={() => setTab('learn')}>
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="m3 9 9-4 9 4-9 4z" />
+            <path d="M7 11v5c3 2 7 2 10 0v-5" />
+            <path d="M21 9v5" />
+          </svg>
+          Learn
         </button>
       </nav>
       {notice && (
