@@ -196,39 +196,106 @@ button.quiet {
 .deck {
   flex: 1;
   min-height: 0;
-  display: grid;
-  grid-template-columns: 7.5rem 1fr;
   overflow-y: auto;
   padding-top: env(safe-area-inset-top);
 }
 
-/* The halyard: a rope down the hoist edge with the flags hung from it. */
+/* The mast: every hoist on its own halyard, side by side, read left to right.
+   Flags shrink as the longest hoist grows, so a long group still fits. */
+.mast {
+  --flag-h: clamp(1.6rem, calc(15rem / var(--n, 1)), 3rem);
+  display: flex;
+  align-items: stretch;
+  gap: 1.25rem;
+  overflow-x: auto;
+  padding: 0.75rem 1rem 1rem;
+  border-bottom: 1px solid var(--line);
+  scrollbar-width: thin;
+}
+
+/* A halyard: a rope down the hoist edge with the flags hung from it. */
 .halyard {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 4rem;
+  cursor: pointer;
+}
+
+.hoist-tab {
+  min-height: 0;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border-radius: 50%;
+  font-size: var(--step--1);
+  font-weight: 700;
+  color: var(--ink-soft);
+  margin-left: calc(2px - 1rem + 2px);
+  transform: translateX(calc(1rem - 2px));
   position: relative;
-  padding: 1.25rem 0 1.5rem 1.5rem;
+  z-index: 1;
+}
+
+.hoist-tab[aria-pressed='true'] {
+  background: var(--magenta);
+  border-color: var(--magenta);
+  color: var(--on-magenta);
+}
+
+.rope {
+  position: relative;
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 5px;
-  min-height: 100%;
+  margin-left: calc(1rem - 2px);
+  padding: 0.5rem 0 0.75rem 4px;
+  min-height: calc(var(--flag-h) + 1.25rem);
 }
 
-.halyard::before {
+.rope::before {
   content: '';
   position: absolute;
-  left: calc(1.5rem - 4px);
-  top: 0;
+  left: 0;
+  top: -0.25rem;
   bottom: 0;
   width: 4px;
   border-radius: 2px;
   background: repeating-linear-gradient(-35deg, var(--rope) 0 3px, color-mix(in srgb, var(--rope) 55%, var(--paper)) 3px 6px);
 }
 
-.halyard-empty {
+.halyard[data-active='false'] .rope {
+  opacity: 0.75;
+}
+
+/* An empty hoist shows where its first flag will hang. */
+.hung-placeholder {
+  display: block;
+  height: var(--flag-h);
+  aspect-ratio: 4 / 3;
+  border: 2px dashed var(--line);
+  border-radius: 3px;
+}
+
+.add-hoist {
+  flex: none;
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  border-style: dashed;
+  color: var(--magenta);
   font-size: var(--step--1);
-  color: var(--ink-soft);
-  padding-left: 0.6rem;
-  max-width: 5rem;
+  padding: 0.4rem 0.6rem;
+}
+
+.add-hoist span {
+  font-size: var(--step-2);
+  line-height: 1;
 }
 
 .hung-slot {
@@ -268,7 +335,7 @@ button.quiet {
   position: absolute;
   left: -0.5rem;
   top: -5px;
-  width: 6.5rem;
+  width: calc(var(--flag-h) * 2 + 1rem);
   height: 5px;
   border-radius: 3px;
   background: var(--magenta);
@@ -298,7 +365,7 @@ button.quiet {
 }
 
 .hung .flag {
-  height: 3rem;
+  height: var(--flag-h);
   width: auto;
   filter: drop-shadow(1px 2px 1px rgb(0 0 0 / 0.18));
 }
@@ -316,7 +383,7 @@ button.quiet {
 }
 
 .readings {
-  padding: 1.25rem 1rem 1rem 0.75rem;
+  padding: 0.75rem 1rem 1rem 0.5rem;
   min-width: 0;
 }
 
@@ -326,9 +393,13 @@ button.quiet {
   margin-bottom: 0.5rem;
 }
 
+.reading-empty {
+  padding-left: calc(0.75rem + 4px);
+}
+
 .reading-empty p {
   color: var(--ink-soft);
-  max-width: 26ch;
+  max-width: 34ch;
 }
 
 .reading-list {
@@ -419,6 +490,29 @@ button.quiet {
   background: var(--water);
   border-top: 1px solid var(--line);
   padding: 0.5rem 0.75rem 0.6rem;
+}
+
+/* One wide, labelled bar hides the flags and brings them back. */
+.keys-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  width: 100%;
+  min-height: 40px;
+  padding: 0.2rem;
+  margin-bottom: 0.5rem;
+  border-color: var(--water-deep);
+  background: var(--water-deep);
+  font-weight: 700;
+}
+
+.keyboard[data-hidden='true'] .keys-panel {
+  display: none;
+}
+
+.keyboard[data-hidden='true'] .toolbar {
+  margin-bottom: 0;
 }
 
 .keyboard[data-removing='true'] > :not(.remove-hint) {
@@ -856,12 +950,8 @@ button.primary {
     flex-direction: row;
   }
 
-  .deck {
-    grid-template-columns: 10rem 1fr;
-  }
-
-  .hung .flag {
-    height: 4rem;
+  .mast {
+    --flag-h: clamp(2rem, calc(24rem / var(--n, 1)), 4rem);
   }
 
   .keyboard {
@@ -870,11 +960,24 @@ button.primary {
     border-left: 1px solid var(--line);
     overflow-y: auto;
   }
+
+  /* Beside the message there is room for the flags at all times. */
+  .keys-toggle {
+    display: none;
+  }
+
+  .keyboard[data-hidden='true'] .keys-panel {
+    display: block;
+  }
+
+  .keyboard[data-hidden='true'] .toolbar {
+    margin-bottom: 0.5rem;
+  }
 }
 
 @media (max-height: 40rem) {
-  .hung .flag {
-    height: 2.25rem;
+  .mast {
+    --flag-h: clamp(1.3rem, calc(8rem / var(--n, 1)), 2.25rem);
   }
 
   .key span {

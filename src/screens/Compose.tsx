@@ -1,26 +1,29 @@
-import { useRef, useState, type Dispatch, type PointerEvent, type SetStateAction } from 'react'
+import {
+  useEffect, useRef, useState, type CSSProperties, type Dispatch, type PointerEvent, type SetStateAction,
+} from 'react'
 import type { Message } from '../App'
 import { Flag } from '../components/Flag'
 import { PositionSheet } from '../components/PositionSheet'
 import { TableLinks } from '../components/TableSheet'
 import { FLAGS, type FlagId } from '../data/flags'
 import { decodeHoist, encodeGroup, resolveHoist, type Decoded, type TableRef } from '../lib/signals'
+import { useStored } from '../lib/useStored'
 
 const KEY_LABEL: Partial<Record<FlagId, string>> = { SUB1: '1st', SUB2: '2nd', SUB3: '3rd', CODE: 'Code' }
 const LETTER_KEYS = FLAGS.filter((f) => f.kind === 'letter')
 const PENNANT_KEYS = FLAGS.filter((f) => f.kind !== 'letter')
 
-/** Where a dragged flag came from: a place on the halyard, or the flag keyboard. */
-type DragSource = { from: 'hoist'; index: number } | { from: 'key' }
+/** Where a dragged flag came from: a place on a halyard, or the flag keyboard. */
+type DragSource = { from: 'hoist'; hoist: number; index: number } | { from: 'key' }
 
 interface Drag {
   source: DragSource
   id: FlagId
   x: number
   y: number
-  /** Position on the halyard the flag would drop into, if it is over the halyard. */
-  gap: number | null
-  /** A flag taken off the halyard and held over the keyboard is removed on drop. */
+  /** The hoist and position the flag would drop into, if it is over the mast. */
+  target: { hoist: number; gap: number } | null
+  /** A flag taken off a halyard and held over the keyboard is removed on drop. */
   overKeys: boolean
 }
 
@@ -35,19 +38,24 @@ interface Props {
 export function Compose({ message, setMessage, onOpenTable }: Props) {
   const { hoists, active } = message
   const hoist = hoists[active]
-  /** Index of the flag picked on the halyard, for moving or removing it. */
+  /** Index of the flag picked on the active halyard, for moving or removing it. */
   const [picked, setPicked] = useState<number | null>(null)
   const pickedValid = picked !== null && picked < hoist.length ? picked : null
-  /** Index of the flag that was just added, so only it animates in. */
+  /** Index of the flag just added to the active hoist, so only it animates in. */
   const [justAdded, setJustAdded] = useState<number | null>(null)
+  const [keysHidden, setKeysHidden] = useStored('keys-hidden', false, (r) => r === true)
+  const [pickingPosition, setPickingPosition] = useState(false)
 
   const [drag, setDrag] = useState<Drag | null>(null)
-  const [pickingPosition, setPickingPosition] = useState(false)
   const pending = useRef<{ source: DragSource; id: FlagId; x0: number; y0: number } | null>(null)
   const suppressClick = useRef(false)
-  const deckRef = useRef<HTMLElement>(null)
-  const halyardRef = useRef<HTMLDivElement>(null)
+  const mastRef = useRef<HTMLDivElement>(null)
   const keyboardRef = useRef<HTMLElement>(null)
+
+  // Keep the active hoist in view when the mast scrolls sideways.
+  useEffect(() => {
+    mastRef.current?.querySelector('.halyard[data-active="true"]')?.scrollIntoView({ block: 'nearest', inline: 'nearest' })
+  }, [active, hoists.length])
 
   const setHoist = (flags: FlagId[]) =>
     setMessage((m) => ({ ...m, hoists: m.hoists.map((h, i) => (i === m.active ? flags : h)) }))
@@ -57,33 +65,94 @@ export function Compose({ message, setMessage, onOpenTable }: Props) {
     setJustAdded(hoist.length)
     setPicked(null)
   }
+  const move = (from: number, by: number) => {
+    const to = from + by
+    if (to < 0 || to >= hoist.length) return
+    const next = hoist.slice()
+    ;[next[from], next[to]] = [next[to], next[from]]
+    setHoist(next)
+    setPicked(to)
+  }
+  const remove = (index: number) => {
+    setHoist(hoist.filter((_, i) => i !== index))
+    setPicked(null)
+  }
+  const selectHoist = (index: number, pick: number | null = null) => {
+    setMessage((m) => ({ ...m, active: index }))
+    setPicked(pick)
+    setJustAdded(null)
+  }
+  const addHoist = () => {
+    setMessage((m) => ({ hoists: [...m.hoists, []], active: m.hoists.length }))
+    setPicked(null)
+  }
+  const removeHoist = (index: number) => {
+    setMessage((m) => {
+      const rest = m.hoists.filter((_, i) => i !== index)
+      const next = rest.length ? rest : [[]]
+      return { hoists: next, active: Math.min(m.active > index ? m.active - 1 : m.active, next.length - 1) }
+    })
+    setPicked(null)
+  }
+  /** Append the latitude and longitude groups as two hoists. */
+  const addPosition = (groups: [string, string]) => {
+    setMessage((m) => {
+      const kept = m.hoists.filter((h) => h.length > 0)
+      const next = [...kept, ...groups.map((g) => encodeGroup(g).flags)]
+      return { hoists: next, active: kept.length }
+    })
+    setPicked(null)
+  }
+  const clearAll = () => {
+    setMessage({ hoists: [[]], active: 0 })
+    setPicked(null)
+  }
 
   /** Work out what the pointer is over while dragging. */
-  const locate = (x: number, y: number, source: DragSource): Pick<Drag, 'gap' | 'overKeys'> => {
-    const deck = deckRef.current?.getBoundingClientRect()
-    const halyard = halyardRef.current?.getBoundingClientRect()
+  const locate = (x: number, y: number, source: DragSource): Pick<Drag, 'target' | 'overKeys'> => {
+    const mast = mastRef.current?.getBoundingClientRect()
     const keys = keyboardRef.current?.getBoundingClientRect()
-    if (!deck || !halyard || !keys) return { gap: null, overKeys: false }
+    if (!mast || !keys) return { target: null, overKeys: false }
     const overKeys = x >= keys.left && x <= keys.right && y >= keys.top && y <= keys.bottom
-    if (overKeys || x < deck.left || x > halyard.right + 56 || y < deck.top || y > deck.bottom) {
-      return { gap: null, overKeys }
+    if (overKeys || x < mast.left || x > mast.right || y < mast.top || y > mast.bottom) {
+      return { target: null, overKeys }
     }
+    // The nearest halyard sideways; a little slack so the flag need not be exactly on it.
+    const columns = [...mastRef.current!.querySelectorAll<HTMLElement>('.halyard')]
+    let nearest = -1
+    let distance = Infinity
+    columns.forEach((el, i) => {
+      const r = el.getBoundingClientRect()
+      const d = x < r.left ? r.left - x : x > r.right ? x - r.right : 0
+      if (d < distance) {
+        distance = d
+        nearest = i
+      }
+    })
+    if (nearest < 0 || distance > 40) return { target: null, overKeys }
     let gap = 0
-    halyardRef.current!.querySelectorAll('.hung').forEach((el, i) => {
-      if (source.from === 'hoist' && i === source.index) return
+    columns[nearest].querySelectorAll('.hung').forEach((el, i) => {
+      if (source.from === 'hoist' && source.hoist === nearest && i === source.index) return
       const r = el.getBoundingClientRect()
       if (y > r.top + r.height / 2) gap++
     })
-    return { gap, overKeys }
+    return { target: { hoist: nearest, gap }, overKeys }
   }
 
   const drop = (d: Drag) => {
-    if (d.gap !== null) {
-      const next = d.source.from === 'hoist' ? hoist.filter((_, i) => i !== (d.source as { index: number }).index) : hoist.slice()
-      next.splice(d.gap, 0, d.id)
-      setHoist(next)
-    } else if (d.source.from === 'hoist' && d.overKeys) {
-      setHoist(hoist.filter((_, i) => i !== (d.source as { index: number }).index))
+    const { source, target, id } = d
+    if (target) {
+      setMessage((m) => {
+        const next = m.hoists.map((h) => h.slice())
+        if (source.from === 'hoist') next[source.hoist].splice(source.index, 1)
+        next[target.hoist].splice(target.gap, 0, id)
+        return { hoists: next, active: target.hoist }
+      })
+    } else if (source.from === 'hoist' && d.overKeys) {
+      setMessage((m) => ({
+        ...m,
+        hoists: m.hoists.map((h, i) => (i === source.hoist ? h.filter((_, j) => j !== source.index) : h)),
+      }))
     }
   }
 
@@ -126,83 +195,74 @@ export function Compose({ message, setMessage, onOpenTable }: Props) {
     if (suppressClick.current) suppressClick.current = false
     else action()
   }
-  const dragIndex = drag?.source.from === 'hoist' ? drag.source.index : null
-  const removing = dragIndex !== null && drag!.overKeys
-  const move = (from: number, by: number) => {
-    const to = from + by
-    if (to < 0 || to >= hoist.length) return
-    const next = hoist.slice()
-    ;[next[from], next[to]] = [next[to], next[from]]
-    setHoist(next)
-    setPicked(to)
-  }
-  const remove = (index: number) => {
-    setHoist(hoist.filter((_, i) => i !== index))
-    setPicked(null)
-  }
-  const selectHoist = (index: number) => {
-    setMessage((m) => ({ ...m, active: index }))
-    setPicked(null)
-  }
-  const addHoist = () => {
-    setMessage((m) => ({ hoists: [...m.hoists, []], active: m.hoists.length }))
-    setPicked(null)
-  }
-  const removeHoist = (index: number) => {
-    setMessage((m) => {
-      const rest = m.hoists.filter((_, i) => i !== index)
-      const next = rest.length ? rest : [[]]
-      return { hoists: next, active: Math.min(m.active > index ? m.active - 1 : m.active, next.length - 1) }
-    })
-    setPicked(null)
-  }
-  /** Append the latitude and longitude groups as two hoists. */
-  const addPosition = (groups: [string, string]) => {
-    setMessage((m) => {
-      const kept = m.hoists.filter((h) => h.length > 0)
-      const hoists = [...kept, ...groups.map((g) => encodeGroup(g).flags)]
-      return { hoists, active: kept.length }
-    })
-    setPicked(null)
-  }
-  const clearAll = () => {
-    setMessage({ hoists: [[]], active: 0 })
-    setPicked(null)
-  }
+  const dragFrom = drag?.source.from === 'hoist' ? drag.source : null
+  const removing = dragFrom !== null && drag!.overKeys
 
   const typed = resolveHoist(hoist).text.replaceAll('?', '')
   const isEmpty = hoists.every((h) => h.length === 0)
+  const longest = Math.max(1, ...hoists.map((h) => h.length))
 
   return (
     <div className="compose">
-      <section className="deck" aria-label="Message" ref={deckRef}>
-        <div className="halyard" aria-label={`Hoist ${active + 1}, read from the top`} ref={halyardRef}>
-          {hoist.length === 0 && !drag && <p className="halyard-empty">Top of the hoist</p>}
-          {hoist.map((id, i) => {
-            const dragged = dragIndex === i
-            // Position among the flags that stay put, so the drop mark lands between the right two.
-            const slot = dragIndex !== null && dragIndex < i ? i - 1 : i
+      <section className="deck" aria-label="Message">
+        <div className="mast" ref={mastRef} style={{ '--n': longest } as CSSProperties}>
+          {hoists.map((flags, h) => {
+            const fromHere = dragFrom?.hoist === h ? dragFrom.index : null
+            const gapHere = drag?.target?.hoist === h ? drag.target.gap : null
             return (
-              <div className="hung-slot" key={`${i}-${id}`}>
-                {!dragged && drag?.gap === slot && <span className="drop-mark" />}
+              <div className="halyard" key={h} data-active={h === active} onClick={() => selectHoist(h)}>
                 <button
                   type="button"
-                  className="hung"
-                  data-new={justAdded === i}
-                  data-dragging={dragged}
-                  aria-pressed={pickedValid === i}
-                  onClick={tap(() => setPicked(pickedValid === i ? null : i))}
-                  {...draggable({ from: 'hoist', index: i }, id)}
+                  className="hoist-tab"
+                  aria-pressed={h === active}
+                  aria-label={`Hoist ${h + 1}`}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    selectHoist(h)
+                  }}
                 >
-                  <Flag id={id} />
+                  {h + 1}
                 </button>
+                <div className="rope">
+                  {flags.length === 0 && gapHere === null && <span className="hung-placeholder" />}
+                  {flags.map((id, i) => {
+                    const dragged = fromHere === i
+                    // Position among the flags that stay put, so the drop mark lands between the right two.
+                    const slot = fromHere !== null && fromHere < i ? i - 1 : i
+                    return (
+                      <div className="hung-slot" key={`${i}-${id}`}>
+                        {!dragged && gapHere === slot && <span className="drop-mark" />}
+                        <button
+                          type="button"
+                          className="hung"
+                          data-new={h === active && justAdded === i}
+                          data-dragging={dragged}
+                          aria-pressed={h === active && pickedValid === i}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            tap(() => selectHoist(h, h === active && pickedValid === i ? null : i))()
+                          }}
+                          {...draggable({ from: 'hoist', hoist: h, index: i }, id)}
+                        >
+                          <Flag id={id} />
+                        </button>
+                      </div>
+                    )
+                  })}
+                  {gapHere !== null && gapHere === flags.length - (fromHere !== null ? 1 : 0) && (
+                    <div className="hung-slot">
+                      <span className="drop-mark" />
+                    </div>
+                  )}
+                </div>
               </div>
             )
           })}
-          {drag && drag.gap === hoist.length - (dragIndex !== null ? 1 : 0) && (
-            <div className="hung-slot">
-              <span className="drop-mark" />
-            </div>
+          {hoists[hoists.length - 1].length > 0 && (
+            <button type="button" className="add-hoist" onClick={addHoist}>
+              <span aria-hidden="true">+</span>
+              Add hoist
+            </button>
           )}
         </div>
 
@@ -210,7 +270,7 @@ export function Compose({ message, setMessage, onOpenTable }: Props) {
           {isEmpty ? (
             <div className="reading-empty">
               <h1>Build a hoist</h1>
-              <p>Tap flags below. They hang in the order you add them and read from the top down.</p>
+              <p>Tap flags to hang them on the halyard. A hoist reads from the top down; hoists read left to right.</p>
             </div>
           ) : (
             <ol className="reading-list">
@@ -229,11 +289,6 @@ export function Compose({ message, setMessage, onOpenTable }: Props) {
             </ol>
           )}
           <div className="message-actions">
-            {!isEmpty && hoists[hoists.length - 1].length > 0 && (
-              <button type="button" className="quiet" onClick={addHoist}>
-                Add hoist
-              </button>
-            )}
             <button type="button" className="quiet" onClick={() => setPickingPosition(true)}>
               Add position
             </button>
@@ -246,8 +301,27 @@ export function Compose({ message, setMessage, onOpenTable }: Props) {
         </div>
       </section>
 
-      <section className="keyboard" aria-label="Flags" ref={keyboardRef} data-removing={removing}>
+      <section
+        className="keyboard"
+        aria-label="Flags"
+        ref={keyboardRef}
+        data-removing={removing}
+        data-hidden={keysHidden}
+      >
         {removing && <p className="remove-hint">Drop to remove</p>}
+        <button
+          type="button"
+          className="keys-toggle"
+          aria-expanded={!keysHidden}
+          aria-controls="flag-keys"
+          onClick={() => setKeysHidden(!keysHidden)}
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true" className="icon">
+            <path d={keysHidden ? 'm6 15 6-6 6 6' : 'm6 9 6 6 6-6'} />
+          </svg>
+          {keysHidden ? 'Show flags' : 'Hide flags'}
+        </button>
+
         {pickedValid !== null ? (
           <div className="toolbar">
             <button type="button" onClick={() => move(pickedValid, -1)} disabled={pickedValid === 0}>
@@ -273,7 +347,7 @@ export function Compose({ message, setMessage, onOpenTable }: Props) {
               autoCorrect="off"
               spellCheck={false}
               placeholder="Or type a group, like NC or AE1"
-              aria-label="Type a group"
+              aria-label={`Type a group for hoist ${active + 1}`}
               value={typed}
               onChange={(e) => setHoist(encodeGroup(e.target.value).flags)}
             />
@@ -291,35 +365,37 @@ export function Compose({ message, setMessage, onOpenTable }: Props) {
           </div>
         )}
 
-        <div className="keys">
-          {LETTER_KEYS.map((f) => (
-            <button
-              type="button"
-              key={f.id}
-              className="key"
-              onClick={tap(() => add(f.id))}
-              aria-label={f.name}
-              {...draggable({ from: 'key' }, f.id)}
-            >
-              <Flag id={f.id} />
-              <span aria-hidden="true">{f.id}</span>
-            </button>
-          ))}
-        </div>
-        <div className="keys keys-pennants">
-          {PENNANT_KEYS.map((f) => (
-            <button
-              type="button"
-              key={f.id}
-              className="key"
-              onClick={tap(() => add(f.id))}
-              aria-label={f.name}
-              {...draggable({ from: 'key' }, f.id)}
-            >
-              <Flag id={f.id} />
-              <span aria-hidden="true">{KEY_LABEL[f.id] ?? f.id}</span>
-            </button>
-          ))}
+        <div id="flag-keys" className="keys-panel">
+          <div className="keys">
+            {LETTER_KEYS.map((f) => (
+              <button
+                type="button"
+                key={f.id}
+                className="key"
+                onClick={tap(() => add(f.id))}
+                aria-label={f.name}
+                {...draggable({ from: 'key' }, f.id)}
+              >
+                <Flag id={f.id} />
+                <span aria-hidden="true">{f.id}</span>
+              </button>
+            ))}
+          </div>
+          <div className="keys keys-pennants">
+            {PENNANT_KEYS.map((f) => (
+              <button
+                type="button"
+                key={f.id}
+                className="key"
+                onClick={tap(() => add(f.id))}
+                aria-label={f.name}
+                {...draggable({ from: 'key' }, f.id)}
+              >
+                <Flag id={f.id} />
+                <span aria-hidden="true">{KEY_LABEL[f.id] ?? f.id}</span>
+              </button>
+            ))}
+          </div>
         </div>
       </section>
 
