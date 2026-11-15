@@ -3,6 +3,8 @@ import { defineConfig } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
+  // Relative paths, so the build works at a domain root or under any sub-path (GitHub Pages).
+  base: './',
   plugins: [
     react(),
     VitePWA({
@@ -13,6 +15,8 @@ export default defineConfig({
         name: 'Marine Flags',
         short_name: 'Marine Flags',
         description: 'Read, compose and learn International Code of Signals flag messages.',
+        start_url: '.',
+        scope: '.',
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#f4f8fa',
