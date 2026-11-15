@@ -339,6 +339,18 @@ export function decodeHoist(flags: FlagId[]): Decoded {
     }
   }
 
+  // A code signal with a depth or length: the figures are followed by F (feet) or M (meters).
+  const measured = /^([A-Z]{2}|M[A-Z]{2})(\d+(?:\.\d+)?)([FM])$/.exec(text)
+  const measuredEntry = measured ? lookup(measured[1]) : undefined
+  if (measured && measuredEntry && /feet or meters/i.test(measuredEntry.meaning)) {
+    const medical = measured[1].length === 3
+    return result({
+      kind: medical ? 'medical' : 'code', title: medical ? 'Medical signal' : 'Code signal',
+      meaning: measuredEntry.meaning, entry: measuredEntry, text: `${measured[1]} ${measured[2]} ${measured[3]}`,
+      notes: [`${measured[2]} ${measured[3] === 'F' ? 'feet' : 'meters'}.`],
+    })
+  }
+
   const m = /^([A-Z]*)([0-9.]*)$/.exec(text)
   if (!m) {
     return result({ kind: 'spelling', title: 'Mixed group', meaning: text, ...callSignHint(text) })
@@ -395,6 +407,15 @@ export function decodeHoist(flags: FlagId[]): Decoded {
           kind, title, meaning: entry.meaning, entry, text: `${letters} ${digits}`,
           tables: resolved.tables,
           notes: resolved.notes.length ? resolved.notes : [`With complement ${digits}.`],
+        })
+      }
+    } else if (/^\d+\.\d+$/.test(digits)) {
+      // A decimal number as the complement, e.g. a draft of 7.5.
+      const entry = lookup(letters)
+      if (entry) {
+        return result({
+          kind, title, meaning: entry.meaning, entry, text: `${letters} ${digits}`,
+          tables: resolveTables(entry).tables, notes: [`With complement ${digits}.`],
         })
       }
     }

@@ -9,7 +9,7 @@ import { ValueSheet } from '../components/ValueSheet'
 import { FLAGS, FLAG_BY_ID, type Flag as FlagData, type FlagId } from '../data/flags'
 import { decodeHoist, encodeGroup, resolveHoist, type Decoded, type TableRef } from '../lib/signals'
 import { useStored } from '../lib/useStored'
-import { VALUE_KINDS, valueKindsFor, type ValueKind } from '../lib/values'
+import { optionsFor, type SignalOption, type ValueRequest } from '../lib/values'
 
 const KEY_LABEL: Partial<Record<FlagId, string>> = { SUB1: '1st', SUB2: '2nd', SUB3: '3rd', CODE: 'Code' }
 const LETTER_KEYS = FLAGS.filter((f) => f.kind === 'letter')
@@ -50,8 +50,8 @@ export function Compose({ message, setMessage, onOpenTable }: Props) {
   const [justAdded, setJustAdded] = useState<number | null>(null)
   const [keysHidden, setKeysHidden] = useStored('keys-hidden', false, (r) => r === true)
   const [pickingPosition, setPickingPosition] = useState(false)
-  /** The value being entered for a signal that calls for one: a time, a course… */
-  const [enteringValue, setEnteringValue] = useState<Exclude<ValueKind, 'position'> | null>(null)
+  /** The further information being entered for a hoist: a time, a number, a name… */
+  const [request, setRequest] = useState<ValueRequest | null>(null)
   const [layout, setLayout] = useStored<KeyLayout>('key-layout', 'qwerty', (r) => (r === 'alphabet' ? 'alphabet' : 'qwerty'))
 
   const [drag, setDrag] = useState<Drag | null>(null)
@@ -119,9 +119,17 @@ export function Compose({ message, setMessage, onOpenTable }: Props) {
     })
     setPicked(null)
   }
-  const askFor = (kind: ValueKind) => {
-    if (kind === 'position') setPickingPosition(true)
-    else setEnteringValue(kind)
+  const askFor = (wanted: SignalOption['request']) => {
+    if (wanted === 'position') setPickingPosition(true)
+    else setRequest(wanted)
+  }
+  /** A finished value: it completes the active hoist, or becomes a hoist of its own. */
+  const addValue = (group: string, placement: 'replace' | 'new') => {
+    if (placement === 'new') addGroup(group)
+    else {
+      setHoist(encodeGroup(group).flags)
+      setPicked(null)
+    }
   }
   const clearAll = () => {
     setMessage({ hoists: [[]], active: 0 })
@@ -422,7 +430,12 @@ export function Compose({ message, setMessage, onOpenTable }: Props) {
         </div>
       </section>
 
-      <ValueSheet key={enteringValue} kind={enteringValue} onClose={() => setEnteringValue(null)} onAdd={addGroup} />
+      <ValueSheet
+        key={request ? JSON.stringify(request) : 'closed'}
+        request={request}
+        onClose={() => setRequest(null)}
+        onAdd={addValue}
+      />
       <PositionSheet open={pickingPosition} onClose={() => setPickingPosition(false)} onAdd={addPosition} />
 
       {drag && (
@@ -441,13 +454,13 @@ function Reading(props: {
   showIndex: boolean
   onSelect: () => void
   onOpenTable: (ref: TableRef) => void
-  onAskFor: (kind: ValueKind) => void
+  onAskFor: (wanted: SignalOption['request']) => void
   onRemove?: () => void
 }) {
   const { decoded: d, active } = props
   const empty = d.kind === 'empty'
-  // What the signal's wording says it can be followed by: a position, a time, a course…
-  const wanted = d.entry ? valueKindsFor(d.entry.meaning) : []
+  // What more this hoist can say: a value for a lone letter, or what a signal's wording calls for.
+  const options = optionsFor(d)
   return (
     <li className="reading" data-active={active}>
       <button type="button" className="reading-body" onClick={props.onSelect} aria-current={active}>
@@ -475,11 +488,11 @@ function Reading(props: {
         )}
       </button>
       {active && <TableLinks tables={d.tables} onOpen={props.onOpenTable} />}
-      {active && wanted.length > 0 && (
+      {active && options.length > 0 && (
         <div className="table-links">
-          {wanted.map((kind) => (
-            <button type="button" key={kind} className="quiet" onClick={() => props.onAskFor(kind)}>
-              Add {VALUE_KINDS[kind].name}
+          {options.map((option) => (
+            <button type="button" key={option.label} className="quiet" onClick={() => props.onAskFor(option.request)}>
+              {option.label}
             </button>
           ))}
         </div>

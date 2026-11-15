@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { FLAGS, type FlagId } from '../data/flags'
 import { formatPosition, positionGroups } from './position'
-import { valueKindsFor } from './values'
+import { optionsFor, valueKindsFor } from './values'
 import {
   CODEBOOK, GUIDE, TABLES, callSignCountry, decodeHoist, encodeGroup, findRow, lookup, resolveHoist, rowGroup,
   searchCodebook, tablesFor,
@@ -227,6 +227,41 @@ describe('meanings outside the code book', () => {
     expect(decodeHoist(['R']).notes[0]).toMatch(/preparing to replenish/)
     expect(decodeHoist(['SUB3']).notes[0]).toMatch(/commanding officer is absent/)
     expect(decodeHoist(['H']).notes).toEqual([])
+  })
+})
+
+describe('options for further information', () => {
+  const labels = (group: string) => optionsFor(decodeHoist(encodeGroup(group).flags)).map((o) => o.label)
+
+  it('offers the value for a lone value letter', () => {
+    expect(labels('T')).toEqual(['Add time'])
+    expect(labels('C')).toEqual(['Add course'])
+    expect(labels('D')).toEqual(['Add date'])
+    expect(labels('L')).toEqual(['Add latitude'])
+    expect(labels('O')).toEqual([])
+    expect(labels('T1430')).toEqual([])
+  })
+
+  it('offers what a code signal calls for', () => {
+    expect(labels('DI')).toEqual(['Add number'])
+    expect(labels('MA')).toEqual(['Add number'])
+    expect(labels('FE')).toEqual(['Add position', 'Add time'])
+    expect(labels('CH')).toEqual(['Add position', 'Add bearing', 'Add distance', 'Add name or call sign'])
+    expect(labels('AC')).toEqual([])
+  })
+
+  it('asks for feet or meters where the signal allows either', () => {
+    const [option] = optionsFor(decodeHoist(['N', 'U']))
+    expect(option.request).toEqual({ type: 'number', code: 'NU', units: true })
+    const d = decodeHoist(encodeGroup('NU7.5M').flags)
+    expect(d).toMatchObject({ kind: 'code', text: 'NU 7.5 M', notes: ['7.5 meters.'] })
+    expect(decodeHoist(encodeGroup('DI20').flags).notes).toEqual(['With complement 20.'])
+  })
+
+  it('finds something to offer for most signals with a blank to fill', () => {
+    const blanks = CODEBOOK.filter((e) => e.meaning.includes('…'))
+    const covered = blanks.filter((e) => optionsFor({ kind: 'code', text: e.code, entry: e }).length > 0 || tablesFor(e).length > 0)
+    expect(covered.length / blanks.length).toBeGreaterThan(0.9)
   })
 })
 
