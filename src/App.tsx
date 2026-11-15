@@ -1,0 +1,68 @@
+import { useCallback } from 'react'
+import { FLAG_BY_ID, type FlagId } from './data/flags'
+import { encodeGroup } from './lib/signals'
+import { useStored } from './lib/useStored'
+import { Compose } from './screens/Compose'
+import { Reference } from './screens/Reference'
+
+type Tab = 'compose' | 'reference'
+
+export interface Message {
+  hoists: FlagId[][]
+  active: number
+}
+
+const EMPTY: Message = { hoists: [[]], active: 0 }
+
+function reviveMessage(raw: unknown): Message | undefined {
+  const m = raw as Message
+  if (!m || !Array.isArray(m.hoists) || m.hoists.length === 0) return undefined
+  const hoists = m.hoists.map((h) => (Array.isArray(h) ? h.filter((id) => id in FLAG_BY_ID) : []))
+  return { hoists, active: Math.min(Math.max(0, Number(m.active) || 0), hoists.length - 1) }
+}
+
+export default function App() {
+  const [tab, setTab] = useStored<Tab>('tab', 'compose', (r) => (r === 'reference' ? 'reference' : 'compose'))
+  const [message, setMessage] = useStored<Message>('message', EMPTY, reviveMessage)
+
+  /** Put a code-book signal on the active hoist and show it. */
+  const showAsFlags = useCallback(
+    (group: string) => {
+      setMessage((m) => {
+        const hoists = m.hoists.slice()
+        hoists[m.active] = encodeGroup(group).flags
+        return { ...m, hoists }
+      })
+      setTab('compose')
+    },
+    [setMessage, setTab],
+  )
+
+  return (
+    <div className="app">
+      <main className="screen">
+        {tab === 'compose' ? (
+          <Compose message={message} setMessage={setMessage} />
+        ) : (
+          <Reference onShowAsFlags={showAsFlags} />
+        )}
+      </main>
+      <nav className="tabbar" aria-label="Sections">
+        <button type="button" aria-current={tab === 'compose' ? 'page' : undefined} onClick={() => setTab('compose')}>
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M5 3v18" />
+            <path d="M5 4h12l-3 4 3 4H5" />
+          </svg>
+          Compose
+        </button>
+        <button type="button" aria-current={tab === 'reference' ? 'page' : undefined} onClick={() => setTab('reference')}>
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 5c3-1 5-1 8 1 3-2 5-2 8-1v14c-3-1-5-1-8 1-3-2-5-2-8-1z" />
+            <path d="M12 6v14" />
+          </svg>
+          Reference
+        </button>
+      </nav>
+    </div>
+  )
+}
