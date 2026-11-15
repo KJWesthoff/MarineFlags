@@ -11,6 +11,9 @@ interface Props {
 
 type Leaflet = typeof import('leaflet')
 
+/** Where the map opens: Skovshoved Havn, Denmark. */
+const HOME: [number, number] = [55.7607, 12.599]
+
 const LOCATION_ERRORS: Record<number, string> = {
   1: 'Location access was denied. Allow it in your browser settings, or tap the map instead.',
   2: 'Your location is not available right now. Tap the map to choose a point instead.',
@@ -43,7 +46,7 @@ export function PositionSheet({ open, onClose, onAdd }: Props) {
           import('leaflet/dist/leaflet.css'),
         ])
         if (cancelled || !mapEl.current) return
-        map = L.map(mapEl.current, { center: [25, 0], zoom: 1, minZoom: 1, worldCopyJump: true })
+        map = L.map(mapEl.current, { center: HOME, zoom: 11, minZoom: 1, worldCopyJump: true })
         map.attributionControl.setPrefix('<a href="https://leafletjs.com">Leaflet</a>')
         // A bundled coastline sits under the online tiles, so the map still works at sea.
         map.createPane('land').style.zIndex = '150'
