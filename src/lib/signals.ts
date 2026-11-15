@@ -259,6 +259,21 @@ export function decodeHoist(flags: FlagId[]): Decoded {
     return result({ kind: 'unknown', title: 'Invalid hoist', meaning: 'This hoist cannot be read as it stands.' })
   }
 
+  // A position: latitude or longitude with its hemisphere, e.g. L2537N or G13925E.
+  const position = /^(?:(L)(\d{4})([NS])|(G)(\d{4,5})([EW]))$/.exec(text)
+  if (position) {
+    const letter = position[1] ?? position[4]
+    const figures = position[2] ?? position[5]
+    const hemisphere = position[3] ?? position[6]
+    const c = decodeComplement(letter, figures)
+    if (c) {
+      return result({
+        kind: 'complement', title: c.title, text: `${letter} ${figures} ${hemisphere}`,
+        meaning: c.meaning.replace(/\.$/, ` ${hemisphere}.`),
+      })
+    }
+  }
+
   const m = /^([A-Z]*)([0-9.]*)$/.exec(text)
   if (!m) {
     return result({ kind: 'spelling', title: 'Mixed group', meaning: text })

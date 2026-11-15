@@ -7,6 +7,7 @@ An offline-first PWA for reading, composing and learning International Code of S
 Phases 1 (foundation) and 2 (compose and reference) are done.
 
 - **Compose** – build a message from flags or by typing a group; each hoist is decoded live.
+- **Positions** – add a latitude/longitude from the device's location or by tapping a map. The map uses OpenStreetMap tiles when online, over a bundled coastline that works offline.
 - **Reference** – all 40 flags with names and meanings, and the searchable code book. Tapping a signal shows it as flags.
 - Installable and usable offline (service worker and web manifest via `vite-plugin-pwa`).
 

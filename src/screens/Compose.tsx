@@ -1,6 +1,7 @@
 import { useRef, useState, type Dispatch, type PointerEvent, type SetStateAction } from 'react'
 import type { Message } from '../App'
 import { Flag } from '../components/Flag'
+import { PositionSheet } from '../components/PositionSheet'
 import { TableLinks } from '../components/TableSheet'
 import { FLAGS, type FlagId } from '../data/flags'
 import { decodeHoist, encodeGroup, resolveHoist, type Decoded, type TableRef } from '../lib/signals'
@@ -41,6 +42,7 @@ export function Compose({ message, setMessage, onOpenTable }: Props) {
   const [justAdded, setJustAdded] = useState<number | null>(null)
 
   const [drag, setDrag] = useState<Drag | null>(null)
+  const [pickingPosition, setPickingPosition] = useState(false)
   const pending = useRef<{ source: DragSource; id: FlagId; x0: number; y0: number } | null>(null)
   const suppressClick = useRef(false)
   const deckRef = useRef<HTMLElement>(null)
@@ -154,6 +156,15 @@ export function Compose({ message, setMessage, onOpenTable }: Props) {
     })
     setPicked(null)
   }
+  /** Append the latitude and longitude groups as two hoists. */
+  const addPosition = (groups: [string, string]) => {
+    setMessage((m) => {
+      const kept = m.hoists.filter((h) => h.length > 0)
+      const hoists = [...kept, ...groups.map((g) => encodeGroup(g).flags)]
+      return { hoists, active: kept.length }
+    })
+    setPicked(null)
+  }
   const clearAll = () => {
     setMessage({ hoists: [[]], active: 0 })
     setPicked(null)
@@ -217,18 +228,21 @@ export function Compose({ message, setMessage, onOpenTable }: Props) {
               ))}
             </ol>
           )}
-          {!isEmpty && (
-            <div className="message-actions">
-              {hoists[hoists.length - 1].length > 0 && (
-                <button type="button" className="quiet" onClick={addHoist}>
-                  Add hoist
-                </button>
-              )}
+          <div className="message-actions">
+            {!isEmpty && hoists[hoists.length - 1].length > 0 && (
+              <button type="button" className="quiet" onClick={addHoist}>
+                Add hoist
+              </button>
+            )}
+            <button type="button" className="quiet" onClick={() => setPickingPosition(true)}>
+              Add position
+            </button>
+            {!isEmpty && (
               <button type="button" className="quiet" onClick={clearAll}>
                 Clear message
               </button>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </section>
 
@@ -308,6 +322,8 @@ export function Compose({ message, setMessage, onOpenTable }: Props) {
           ))}
         </div>
       </section>
+
+      <PositionSheet open={pickingPosition} onClose={() => setPickingPosition(false)} onAdd={addPosition} />
 
       {drag && (
         <div className="ghost" style={{ left: drag.x, top: drag.y }} data-removing={removing} aria-hidden="true">

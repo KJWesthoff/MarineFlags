@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { FLAGS, type FlagId } from '../data/flags'
+import { formatPosition, positionGroups } from './position'
 import {
   CODEBOOK, TABLES, decodeHoist, encodeGroup, findRow, lookup, resolveHoist, searchCodebook, tablesFor,
 } from './signals'
@@ -137,6 +138,28 @@ describe('referenced tables', () => {
   it('keeps signals that duplicate single-letter signals', () => {
     expect(lookup('ZS')?.meaning).toBe('My vessel is “healthy” and I request free pratique.')
     expect(lookup('SO')?.meaning).toBe('You should stop your vessel instantly.')
+  })
+})
+
+describe('positions', () => {
+  it('formats latitude and longitude groups', () => {
+    expect(positionGroups({ lat: 25.6167, lon: -40.25 })).toEqual(['L2537N', 'G4015W'])
+    expect(positionGroups({ lat: -37.6667, lon: 139.4167 })).toEqual(['L3740S', 'G13925E'])
+    expect(positionGroups({ lat: 0, lon: 0 })).toEqual(['L0000N', 'G0000E'])
+    expect(positionGroups({ lat: 59.9999, lon: 9.9999 })).toEqual(['L6000N', 'G1000E'])
+    expect(positionGroups({ lat: 10, lon: 190 })).toEqual(['L1000N', 'G17000W'])
+    expect(formatPosition({ lat: 25.6167, lon: -40.25 })).toBe('25° 37′ N, 40° 15′ W')
+  })
+
+  it('reads position groups with a hemisphere', () => {
+    for (const [group, meaning] of [
+      ['L2537N', 'Latitude 25° 37′ N.'],
+      ['L3740S', 'Latitude 37° 40′ S.'],
+      ['G4015W', 'Longitude 40° 15′ W.'],
+      ['G13925E', 'Longitude 139° 25′ E.'],
+    ]) {
+      expect(decodeHoist(encodeGroup(group).flags)).toMatchObject({ kind: 'complement', meaning })
+    }
   })
 })
 

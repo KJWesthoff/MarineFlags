@@ -788,6 +788,55 @@ button.quiet {
   }
 }
 
+/* ---------- Position picker ---------- */
+
+button.primary {
+  background: var(--magenta);
+  border-color: var(--magenta);
+  color: var(--on-magenta);
+  font-weight: 700;
+}
+
+.position-sheet .sheet-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.map {
+  height: min(45dvh, 22rem);
+  flex: none;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--water);
+  font-family: inherit;
+  /* Leaflet sets its own stacking; keep it inside the sheet. */
+  isolation: isolate;
+}
+
+.map-land {
+  fill: #e9e2c4;
+  fill-opacity: 1;
+  stroke: #9a916c;
+}
+
+.map-marker {
+  fill: #a3216a;
+  fill-opacity: 0.35;
+  stroke: #a3216a;
+}
+
+.position-result {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-height: 2.9rem;
+}
+
+.position-result strong {
+  font-size: var(--step-1);
+}
+
 /* ---------- Wider screens: flags beside the message ---------- */
 
 @media (min-width: 52rem) and (min-height: 30rem) {
