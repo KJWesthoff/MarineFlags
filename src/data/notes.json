@@ -1,0 +1,15 @@
+{
+  "BZ": "Naval use: BZ, spoken “Bravo Zulu”, means “Well done”. That meaning comes from the Allied Naval Signal Book, not the International Code of Signals.",
+  "F": "US Navy use: on aircraft carriers, flight operations are under way.",
+  "I": "US Navy use: preparing to come alongside, in port or at anchor.",
+  "J": "US Navy use: I have a semaphore message to transmit.",
+  "K": "US Navy use: personnel working aloft.",
+  "Q": "US Navy use: boat recall; all boats return to the ship.",
+  "R": "US Navy use: in port, flown by the ship with ready duty; at sea, preparing to replenish.",
+  "S": "US Navy use: holding a flag hoist drill.",
+  "T": "US Navy use: do not pass ahead of me.",
+  "Y": "US Navy use: this ship has visual communications duty.",
+  "SUB1": "US Navy use, in port: the flag officer or unit commander is absent.",
+  "SUB2": "US Navy use, in port: the chief of staff is absent.",
+  "SUB3": "US Navy use, in port: the commanding officer is absent."
+}

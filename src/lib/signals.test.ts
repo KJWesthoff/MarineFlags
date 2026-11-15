@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { FLAGS, type FlagId } from '../data/flags'
 import { formatPosition, positionGroups } from './position'
+import { valueKindsFor } from './values'
 import {
   CODEBOOK, GUIDE, TABLES, callSignCountry, decodeHoist, encodeGroup, findRow, lookup, resolveHoist, rowGroup,
   searchCodebook, tablesFor,
@@ -197,6 +198,35 @@ describe('call signs', () => {
 
   it('lists every guide topic', () => {
     for (const id of GUIDE) expect(TABLES[id].title).toBeTruthy()
+  })
+})
+
+describe('values a signal calls for', () => {
+  it('reads them from the wording', () => {
+    expect(valueKindsFor(lookup('CH')!.meaning)).toEqual(['position', 'bearing', 'distance'])
+    expect(valueKindsFor(lookup('FE')!.meaning)).toEqual(['position', 'time'])
+    expect(valueKindsFor('I am altering my course to starboard.')).toEqual([])
+    expect(valueKindsFor('You should steer course… speed… knots.')).toEqual(['course', 'speed'])
+    expect(valueKindsFor(lookup('AC')!.meaning)).toEqual([])
+    expect(valueKindsFor('Insert antiseptic eye drops… (number) times daily.')).toEqual([])
+  })
+})
+
+describe('meanings outside the code book', () => {
+  it('adds the naval meaning of BZ to its explanation', () => {
+    const d = decodeHoist(['B', 'Z'])
+    expect(d.meaning).toMatch(/magnetic bearing/)
+    expect(d.notes.join(' ')).toMatch(/Bravo Zulu.*Well done/)
+    expect(searchCodebook('well done').map((e) => e.code)).toContain('BZ')
+  })
+
+  it('adds naval meanings to single flags', () => {
+    const q = decodeHoist(['Q'])
+    expect(q.meaning).toMatch(/free pratique/)
+    expect(q.notes).toEqual(['US Navy use: boat recall; all boats return to the ship.'])
+    expect(decodeHoist(['R']).notes[0]).toMatch(/preparing to replenish/)
+    expect(decodeHoist(['SUB3']).notes[0]).toMatch(/commanding officer is absent/)
+    expect(decodeHoist(['H']).notes).toEqual([])
   })
 })
 

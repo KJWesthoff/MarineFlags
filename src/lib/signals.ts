@@ -3,6 +3,7 @@
  * Pure logic, no UI: a hoist is a list of flags read from the top down.
  */
 import codebookData from '../data/codebook.json'
+import notesData from '../data/notes.json'
 import tablesData from '../data/tables.json'
 import { FLAG_BY_ID, type FlagId } from '../data/flags'
 
@@ -11,9 +12,16 @@ export interface CodebookEntry {
   meaning: string
   section: string | null
   procedural?: boolean
+  /** A meaning the group has outside the code book, e.g. in naval use. */
+  note?: string
 }
 
-export const CODEBOOK = codebookData as CodebookEntry[]
+const NOTES = notesData as Record<string, string>
+
+/** A meaning a flag or group has outside the code book, e.g. in naval use. */
+export const noteFor = (key: string): string | undefined => NOTES[key]
+
+export const CODEBOOK = (codebookData as CodebookEntry[]).map((e) => (NOTES[e.code] ? { ...e, note: NOTES[e.code] } : e))
 const BY_CODE = new Map(CODEBOOK.map((e) => [e.code, e]))
 
 export const lookup = (code: string): CodebookEntry | undefined => BY_CODE.get(code)
@@ -300,13 +308,17 @@ export function decodeHoist(flags: FlagId[]): Decoded {
   if (flags.length === 1 && FLAG_BY_ID[flags[0]].kind !== 'letter' && FLAG_BY_ID[flags[0]].kind !== 'numeral') {
     const f = FLAG_BY_ID[flags[0]]
     const errors = f.kind === 'substitute' ? ['A substitute cannot be hoisted alone.'] : []
-    return { ...base, errors, kind: 'pennant', text: '', title: f.name, meaning: f.meaning ?? '' }
+    const notes = NOTES[f.id] ? [NOTES[f.id]] : []
+    return { ...base, notes, errors, kind: 'pennant', text: '', title: f.name, meaning: f.meaning ?? '' }
   }
 
   const { text, errors } = resolveHoist(flags)
   const result = (
     d: Omit<Decoded, 'notes' | 'errors' | 'text' | 'tables'> & { notes?: string[]; text?: string; tables?: TableRef[] },
-  ): Decoded => ({ text, notes: [], tables: [], ...d, errors })
+  ): Decoded => ({
+    text, tables: [], ...d, errors,
+    notes: [...(d.notes ?? []), ...(d.entry?.note ? [d.entry.note] : [])],
+  })
 
   if (text.includes('?')) {
     return result({ kind: 'unknown', title: 'Invalid hoist', meaning: 'This hoist cannot be read as it stands.' })
@@ -343,6 +355,7 @@ export function decodeHoist(flags: FlagId[]): Decoded {
       kind: 'single-letter',
       title: f.name,
       meaning: f.meaning ?? 'No single-letter meaning; used as a procedure signal.',
+      notes: NOTES[letters] ? [NOTES[letters]] : [],
     })
   }
 
@@ -413,7 +426,7 @@ export function searchCodebook(query: string, limit = 50): CodebookEntry[] {
   for (const e of CODEBOOK) {
     if (/^[A-Z]{1,3}( \d*)?$/.test(asCode) && e.code.startsWith(asCode)) byCode.push(e)
     else {
-      const text = e.meaning.toLowerCase()
+      const text = `${e.meaning} ${e.note ?? ''}`.toLowerCase()
       if (words.every((w) => text.includes(w))) byText.push(e)
     }
   }

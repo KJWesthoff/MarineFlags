@@ -3,7 +3,7 @@ import { Flag } from '../components/Flag'
 import { TableLinks, type Transfer } from '../components/TableSheet'
 import { FLAGS } from '../data/flags'
 import {
-  CODEBOOK, GUIDE, TABLES, encodeGroup, searchCodebook, tablesFor, type CodebookEntry, type TableRef,
+  CODEBOOK, GUIDE, TABLES, encodeGroup, noteFor, searchCodebook, tablesFor, type CodebookEntry, type TableRef,
 } from '../lib/signals'
 import { useStored } from '../lib/useStored'
 
@@ -31,7 +31,11 @@ export function Reference({ onShowAsFlags, onOpenTable, onTransfer }: Props) {
     () =>
       q
         ? FLAGS.filter(
-            (f) => f.id.toLowerCase() === q || f.name.toLowerCase().includes(q) || f.meaning?.toLowerCase().includes(q),
+            (f) =>
+              f.id.toLowerCase() === q ||
+              f.name.toLowerCase().includes(q) ||
+              f.meaning?.toLowerCase().includes(q) ||
+              noteFor(f.id)?.toLowerCase().includes(q),
           )
         : FLAGS,
     [q],
@@ -112,6 +116,7 @@ export function Reference({ onShowAsFlags, onOpenTable, onTransfer }: Props) {
                     {f.pronunciation && <span className="say">{f.pronunciation}</span>}
                   </h2>
                   <p>{f.meaning ?? (f.kind === 'numeral' ? 'Numeral pennant.' : 'No meaning when hoisted alone.')}</p>
+                  {noteFor(f.id) && <p className="signal-note">{noteFor(f.id)}</p>}
                   <button
                     type="button"
                     className="quiet add-flag"
@@ -185,6 +190,7 @@ function SignalRow(props: { entry: CodebookEntry; onOpen: (group: string) => voi
         <span className="signal-text">
           <strong className="group">{entry.code}</strong>
           <span>{entry.meaning}</span>
+          {entry.note && <span className="signal-note">{entry.note}</span>}
         </span>
       </button>
       <TableLinks tables={tables} onOpen={props.onOpenTable} />

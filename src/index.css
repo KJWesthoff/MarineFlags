@@ -789,6 +789,11 @@ button.quiet {
   max-width: 64ch;
 }
 
+.signal-note {
+  font-size: var(--step--1);
+  color: var(--ink-soft);
+}
+
 .no-results {
   padding: 2rem 1rem;
   color: var(--ink-soft);
@@ -945,6 +950,16 @@ button.quiet {
 
 .sheet-foot > button {
   width: 100%;
+}
+
+.value-choice {
+  margin-bottom: 0.6rem;
+}
+
+.value-choice button[aria-pressed='true'] {
+  background: var(--ink);
+  color: var(--paper);
+  font-weight: 700;
 }
 
 /* The value a single-letter signal carries: a course, a date, a time… */

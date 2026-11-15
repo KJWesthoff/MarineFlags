@@ -5,9 +5,11 @@ import type { Message } from '../App'
 import { Flag } from '../components/Flag'
 import { PositionSheet } from '../components/PositionSheet'
 import { TableLinks } from '../components/TableSheet'
+import { ValueSheet } from '../components/ValueSheet'
 import { FLAGS, FLAG_BY_ID, type Flag as FlagData, type FlagId } from '../data/flags'
 import { decodeHoist, encodeGroup, resolveHoist, type Decoded, type TableRef } from '../lib/signals'
 import { useStored } from '../lib/useStored'
+import { VALUE_KINDS, valueKindsFor, type ValueKind } from '../lib/values'
 
 const KEY_LABEL: Partial<Record<FlagId, string>> = { SUB1: '1st', SUB2: '2nd', SUB3: '3rd', CODE: 'Code' }
 const LETTER_KEYS = FLAGS.filter((f) => f.kind === 'letter')
@@ -48,6 +50,8 @@ export function Compose({ message, setMessage, onOpenTable }: Props) {
   const [justAdded, setJustAdded] = useState<number | null>(null)
   const [keysHidden, setKeysHidden] = useStored('keys-hidden', false, (r) => r === true)
   const [pickingPosition, setPickingPosition] = useState(false)
+  /** The value being entered for a signal that calls for one: a time, a course… */
+  const [enteringValue, setEnteringValue] = useState<Exclude<ValueKind, 'position'> | null>(null)
   const [layout, setLayout] = useStored<KeyLayout>('key-layout', 'qwerty', (r) => (r === 'alphabet' ? 'alphabet' : 'qwerty'))
 
   const [drag, setDrag] = useState<Drag | null>(null)
@@ -106,6 +110,18 @@ export function Compose({ message, setMessage, onOpenTable }: Props) {
       return { hoists: next, active: kept.length }
     })
     setPicked(null)
+  }
+  /** Add a value group such as C240 as a hoist of its own, after the rest of the message. */
+  const addGroup = (group: string) => {
+    setMessage((m) => {
+      const kept = m.hoists.filter((h) => h.length > 0)
+      return { hoists: [...kept, encodeGroup(group).flags], active: kept.length }
+    })
+    setPicked(null)
+  }
+  const askFor = (kind: ValueKind) => {
+    if (kind === 'position') setPickingPosition(true)
+    else setEnteringValue(kind)
   }
   const clearAll = () => {
     setMessage({ hoists: [[]], active: 0 })
@@ -300,6 +316,7 @@ export function Compose({ message, setMessage, onOpenTable }: Props) {
                   showIndex={hoists.length > 1}
                   onSelect={() => selectHoist(i)}
                   onOpenTable={onOpenTable}
+                  onAskFor={askFor}
                   onRemove={hoists.length > 1 ? () => removeHoist(i) : undefined}
                 />
               ))}
@@ -405,6 +422,7 @@ export function Compose({ message, setMessage, onOpenTable }: Props) {
         </div>
       </section>
 
+      <ValueSheet key={enteringValue} kind={enteringValue} onClose={() => setEnteringValue(null)} onAdd={addGroup} />
       <PositionSheet open={pickingPosition} onClose={() => setPickingPosition(false)} onAdd={addPosition} />
 
       {drag && (
@@ -423,10 +441,13 @@ function Reading(props: {
   showIndex: boolean
   onSelect: () => void
   onOpenTable: (ref: TableRef) => void
+  onAskFor: (kind: ValueKind) => void
   onRemove?: () => void
 }) {
   const { decoded: d, active } = props
   const empty = d.kind === 'empty'
+  // What the signal's wording says it can be followed by: a position, a time, a course…
+  const wanted = d.entry ? valueKindsFor(d.entry.meaning) : []
   return (
     <li className="reading" data-active={active}>
       <button type="button" className="reading-body" onClick={props.onSelect} aria-current={active}>
@@ -454,6 +475,15 @@ function Reading(props: {
         )}
       </button>
       {active && <TableLinks tables={d.tables} onOpen={props.onOpenTable} />}
+      {active && wanted.length > 0 && (
+        <div className="table-links">
+          {wanted.map((kind) => (
+            <button type="button" key={kind} className="quiet" onClick={() => props.onAskFor(kind)}>
+              Add {VALUE_KINDS[kind].name}
+            </button>
+          ))}
+        </div>
+      )}
       {props.onRemove && active && (
         <button type="button" className="quiet reading-remove" onClick={props.onRemove}>
           Remove hoist

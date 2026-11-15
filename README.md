@@ -39,6 +39,8 @@ python3 tools/build_tables.py pub102.txt src/data/tables.json
 
 ## Source
 
+Naval meanings (`src/data/notes.json`) are not from the code book. The US Navy single-flag meanings follow the Navy's Basic Military Requirements training manual (table 4-3, commonly used signals, as published at navyadvancement.tpub.com) and the flag table at navysite.de; BZ follows the US Naval History and Heritage Command's account of “Bravo Zulu”.
+
 Call sign prefixes (`tools/itu_prefixes.json`) are the ITU allocations of international call sign series (Radio Regulations, Appendix 42), taken from the list on Wikipedia's “ITU prefix” page.
 
 Signal meanings come from the *International Code of Signals* (Pub. 102, 1969 edition, revised 2020), published by the US National Geospatial-Intelligence Agency.
