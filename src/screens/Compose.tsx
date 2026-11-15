@@ -1,4 +1,4 @@
-import { useState, type Dispatch, type SetStateAction } from 'react'
+import { useRef, useState, type Dispatch, type PointerEvent, type SetStateAction } from 'react'
 import type { Message } from '../App'
 import { Flag } from '../components/Flag'
 import { FLAGS, type FlagId } from '../data/flags'
@@ -7,6 +7,22 @@ import { decodeHoist, encodeGroup, resolveHoist, type Decoded } from '../lib/sig
 const KEY_LABEL: Partial<Record<FlagId, string>> = { SUB1: '1st', SUB2: '2nd', SUB3: '3rd', CODE: 'Code' }
 const LETTER_KEYS = FLAGS.filter((f) => f.kind === 'letter')
 const PENNANT_KEYS = FLAGS.filter((f) => f.kind !== 'letter')
+
+/** Where a dragged flag came from: a place on the halyard, or the flag keyboard. */
+type DragSource = { from: 'hoist'; index: number } | { from: 'key' }
+
+interface Drag {
+  source: DragSource
+  id: FlagId
+  x: number
+  y: number
+  /** Position on the halyard the flag would drop into, if it is over the halyard. */
+  gap: number | null
+  /** A flag taken off the halyard and held over the keyboard is removed on drop. */
+  overKeys: boolean
+}
+
+const DRAG_THRESHOLD = 8
 
 interface Props {
   message: Message
@@ -19,14 +35,95 @@ export function Compose({ message, setMessage }: Props) {
   /** Index of the flag picked on the halyard, for moving or removing it. */
   const [picked, setPicked] = useState<number | null>(null)
   const pickedValid = picked !== null && picked < hoist.length ? picked : null
+  /** Index of the flag that was just added, so only it animates in. */
+  const [justAdded, setJustAdded] = useState<number | null>(null)
+
+  const [drag, setDrag] = useState<Drag | null>(null)
+  const pending = useRef<{ source: DragSource; id: FlagId; x0: number; y0: number } | null>(null)
+  const suppressClick = useRef(false)
+  const deckRef = useRef<HTMLElement>(null)
+  const halyardRef = useRef<HTMLDivElement>(null)
+  const keyboardRef = useRef<HTMLElement>(null)
 
   const setHoist = (flags: FlagId[]) =>
     setMessage((m) => ({ ...m, hoists: m.hoists.map((h, i) => (i === m.active ? flags : h)) }))
 
   const add = (id: FlagId) => {
     setHoist([...hoist, id])
+    setJustAdded(hoist.length)
     setPicked(null)
   }
+
+  /** Work out what the pointer is over while dragging. */
+  const locate = (x: number, y: number, source: DragSource): Pick<Drag, 'gap' | 'overKeys'> => {
+    const deck = deckRef.current?.getBoundingClientRect()
+    const halyard = halyardRef.current?.getBoundingClientRect()
+    const keys = keyboardRef.current?.getBoundingClientRect()
+    if (!deck || !halyard || !keys) return { gap: null, overKeys: false }
+    const overKeys = x >= keys.left && x <= keys.right && y >= keys.top && y <= keys.bottom
+    if (overKeys || x < deck.left || x > halyard.right + 56 || y < deck.top || y > deck.bottom) {
+      return { gap: null, overKeys }
+    }
+    let gap = 0
+    halyardRef.current!.querySelectorAll('.hung').forEach((el, i) => {
+      if (source.from === 'hoist' && i === source.index) return
+      const r = el.getBoundingClientRect()
+      if (y > r.top + r.height / 2) gap++
+    })
+    return { gap, overKeys }
+  }
+
+  const drop = (d: Drag) => {
+    if (d.gap !== null) {
+      const next = d.source.from === 'hoist' ? hoist.filter((_, i) => i !== (d.source as { index: number }).index) : hoist.slice()
+      next.splice(d.gap, 0, d.id)
+      setHoist(next)
+    } else if (d.source.from === 'hoist' && d.overKeys) {
+      setHoist(hoist.filter((_, i) => i !== (d.source as { index: number }).index))
+    }
+  }
+
+  /** Pointer handlers that make a flag draggable; a press without movement stays a tap. */
+  const draggable = (source: DragSource, id: FlagId) => ({
+    onPointerDown: (e: PointerEvent<HTMLButtonElement>) => {
+      if (e.button !== 0) return
+      try {
+        e.currentTarget.setPointerCapture(e.pointerId)
+      } catch {
+        // Capture is a convenience; the drag still works over the element without it.
+      }
+      pending.current = { source, id, x0: e.clientX, y0: e.clientY }
+    },
+    onPointerMove: (e: PointerEvent<HTMLButtonElement>) => {
+      const p = pending.current
+      if (!p) return
+      if (!drag && Math.hypot(e.clientX - p.x0, e.clientY - p.y0) < DRAG_THRESHOLD) return
+      if (!drag) {
+        setPicked(null)
+        setJustAdded(null)
+      }
+      setDrag({ source: p.source, id: p.id, x: e.clientX, y: e.clientY, ...locate(e.clientX, e.clientY, p.source) })
+    },
+    onPointerUp: () => {
+      pending.current = null
+      if (!drag) return
+      // The browser still sends a click after a drag; ignore that one.
+      suppressClick.current = true
+      setTimeout(() => (suppressClick.current = false), 50)
+      drop(drag)
+      setDrag(null)
+    },
+    onPointerCancel: () => {
+      pending.current = null
+      setDrag(null)
+    },
+  })
+  const tap = (action: () => void) => () => {
+    if (suppressClick.current) suppressClick.current = false
+    else action()
+  }
+  const dragIndex = drag?.source.from === 'hoist' ? drag.source.index : null
+  const removing = dragIndex !== null && drag!.overKeys
   const move = (from: number, by: number) => {
     const to = from + by
     if (to < 0 || to >= hoist.length) return
@@ -65,20 +162,35 @@ export function Compose({ message, setMessage }: Props) {
 
   return (
     <div className="compose">
-      <section className="deck" aria-label="Message">
-        <div className="halyard" aria-label={`Hoist ${active + 1}, read from the top`}>
-          {hoist.length === 0 && <p className="halyard-empty">Top of the hoist</p>}
-          {hoist.map((id, i) => (
-            <button
-              type="button"
-              key={`${i}-${id}`}
-              className="hung"
-              aria-pressed={pickedValid === i}
-              onClick={() => setPicked(pickedValid === i ? null : i)}
-            >
-              <Flag id={id} />
-            </button>
-          ))}
+      <section className="deck" aria-label="Message" ref={deckRef}>
+        <div className="halyard" aria-label={`Hoist ${active + 1}, read from the top`} ref={halyardRef}>
+          {hoist.length === 0 && !drag && <p className="halyard-empty">Top of the hoist</p>}
+          {hoist.map((id, i) => {
+            const dragged = dragIndex === i
+            // Position among the flags that stay put, so the drop mark lands between the right two.
+            const slot = dragIndex !== null && dragIndex < i ? i - 1 : i
+            return (
+              <div className="hung-slot" key={`${i}-${id}`}>
+                {!dragged && drag?.gap === slot && <span className="drop-mark" />}
+                <button
+                  type="button"
+                  className="hung"
+                  data-new={justAdded === i}
+                  data-dragging={dragged}
+                  aria-pressed={pickedValid === i}
+                  onClick={tap(() => setPicked(pickedValid === i ? null : i))}
+                  {...draggable({ from: 'hoist', index: i }, id)}
+                >
+                  <Flag id={id} />
+                </button>
+              </div>
+            )
+          })}
+          {drag && drag.gap === hoist.length - (dragIndex !== null ? 1 : 0) && (
+            <div className="hung-slot">
+              <span className="drop-mark" />
+            </div>
+          )}
         </div>
 
         <div className="readings">
@@ -117,7 +229,8 @@ export function Compose({ message, setMessage }: Props) {
         </div>
       </section>
 
-      <section className="keyboard" aria-label="Flags">
+      <section className="keyboard" aria-label="Flags" ref={keyboardRef} data-removing={removing}>
+        {removing && <p className="remove-hint">Drop to remove</p>}
         {pickedValid !== null ? (
           <div className="toolbar">
             <button type="button" onClick={() => move(pickedValid, -1)} disabled={pickedValid === 0}>
@@ -163,7 +276,14 @@ export function Compose({ message, setMessage }: Props) {
 
         <div className="keys">
           {LETTER_KEYS.map((f) => (
-            <button type="button" key={f.id} className="key" onClick={() => add(f.id)} aria-label={f.name}>
+            <button
+              type="button"
+              key={f.id}
+              className="key"
+              onClick={tap(() => add(f.id))}
+              aria-label={f.name}
+              {...draggable({ from: 'key' }, f.id)}
+            >
               <Flag id={f.id} />
               <span aria-hidden="true">{f.id}</span>
             </button>
@@ -171,13 +291,26 @@ export function Compose({ message, setMessage }: Props) {
         </div>
         <div className="keys keys-pennants">
           {PENNANT_KEYS.map((f) => (
-            <button type="button" key={f.id} className="key" onClick={() => add(f.id)} aria-label={f.name}>
+            <button
+              type="button"
+              key={f.id}
+              className="key"
+              onClick={tap(() => add(f.id))}
+              aria-label={f.name}
+              {...draggable({ from: 'key' }, f.id)}
+            >
               <Flag id={f.id} />
               <span aria-hidden="true">{KEY_LABEL[f.id] ?? f.id}</span>
             </button>
           ))}
         </div>
       </section>
+
+      {drag && (
+        <div className="ghost" style={{ left: drag.x, top: drag.y }} data-removing={removing} aria-hidden="true">
+          <Flag id={drag.id} />
+        </div>
+      )}
     </div>
   )
 }
