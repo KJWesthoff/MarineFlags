@@ -1,6 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import type { FlagId } from '../data/flags'
 import { TABLES, rowGroup, type TableRef, type TableRow } from '../lib/signals'
+import { isValueLetter } from '../lib/values'
+import { ValueField } from './ValueField'
 
 /** Buttons that open the tables a signal refers to. */
 export function TableLinks({ tables, onOpen }: { tables: TableRef[]; onOpen: (ref: TableRef) => void }) {
@@ -22,8 +24,11 @@ export interface Transfer {
   group: string
   /** The group as the code book writes it, e.g. "MBF 12". */
   label: string
-  /** True when the group is a whole signal that takes the hoist's place; false to add to the hoist. */
-  replace: boolean
+  /**
+   * Where the group goes: in place of the active hoist (a whole signal), added to the end of it,
+   * or on a hoist of its own (a value such as a course or a date).
+   */
+  placement: 'replace' | 'append' | 'new'
   /** A single flag to hang as it is, for flags such as substitutes that are not a character. */
   flag?: FlagId
 }
@@ -42,6 +47,9 @@ export function TableSheet({ open, onClose, onTransfer }: Props) {
   const dialog = useRef<HTMLDialogElement>(null)
   const table = open ? TABLES[open.id] : undefined
   const [selected, setSelected] = useState<string | null>(null)
+  /** The figures entered for a single-letter signal that carries a value. */
+  const [value, setValue] = useState<string | null>(null)
+  const onValue = useCallback((v: string | null) => setValue(v), [])
 
   useEffect(() => {
     const el = dialog.current
@@ -57,12 +65,20 @@ export function TableSheet({ open, onClose, onTransfer }: Props) {
     const group = rowGroup(open, row)
     if (!group) return null
     const complement = open.code !== undefined && group !== row.n
-    return { group, label: complement ? `${open.code} ${row.n}` : group, replace: complement }
+    return { group, label: complement ? `${open.code} ${row.n}` : group, placement: complement ? 'replace' : 'append' }
   }
   const rows = table.groups.flatMap((g) => g.rows)
   const selectable = rows.length > 0 && transferFor(rows[0]) !== null
   const chosenRow = selected === null ? undefined : rows.find((r) => r.n === selected)
-  const chosen = chosenRow ? transferFor(chosenRow) : null
+  // Single letters with numerals need their value before they mean anything.
+  const valueLetter = open.id === 'LETTERS' && chosenRow && isValueLetter(chosenRow.n) ? chosenRow.n : null
+  const chosen: Transfer | null = valueLetter
+    ? value
+      ? { group: valueLetter + value, label: valueLetter + value, placement: 'new' }
+      : null
+    : chosenRow
+      ? transferFor(chosenRow)
+      : null
 
   const close = () => dialog.current?.close()
   return (
@@ -129,6 +145,7 @@ export function TableSheet({ open, onClose, onTransfer }: Props) {
       </div>
       {selectable && (
         <footer className="sheet-foot">
+          {valueLetter && <ValueField key={valueLetter} letter={valueLetter} onChange={onValue} />}
           <button
             type="button"
             className="primary"
@@ -138,11 +155,15 @@ export function TableSheet({ open, onClose, onTransfer }: Props) {
               close()
             }}
           >
-            {!chosen
-              ? 'Select a row to hoist it'
-              : chosen.replace
+            {chosen
+              ? chosen.placement === 'replace'
                 ? `Put ${chosen.label} on the hoist`
-                : `Add ${chosen.label} to the hoist`}
+                : chosen.placement === 'new'
+                  ? `Add ${chosen.label} as a new hoist`
+                  : `Add ${chosen.label} to the hoist`
+              : valueLetter
+                ? 'Fill in the value to add it'
+                : 'Select a row to hoist it'}
           </button>
         </footer>
       )}

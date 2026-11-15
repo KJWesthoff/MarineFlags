@@ -92,6 +92,8 @@ describe('decoding', () => {
     expect(decodeHoist(['T', '1', '4', '3', '0']).meaning).toBe('Local time 14:30.')
     expect(decodeHoist(['C', '2', '4', '0']).meaning).toBe('Course 240°.')
     expect(decodeHoist(['S', '1', '5']).meaning).toBe('Speed 15 knots.')
+    expect(decodeHoist(encodeGroup('S12.5').flags).meaning).toBe('Speed 12.5 knots.')
+    expect(decodeHoist(encodeGroup('D1504').flags).meaning).toBe('Day 15, month 04.')
     expect(decodeHoist(['K', '3']).meaning).toMatch(/Morse signaling lamp/)
   })
 

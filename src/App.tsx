@@ -37,19 +37,26 @@ export default function App() {
 
   /** Send a group to the active hoist: in place of what is there, or added below it. */
   const transfer = useCallback(
-    ({ group, label, replace, flag }: Transfer) => {
+    ({ group, label, placement, flag }: Transfer) => {
+      if (placement === 'new') {
+        // A value such as a course or a date is a group of its own: give it its own hoist.
+        const kept = message.hoists.filter((h) => h.length > 0)
+        setMessage({ hoists: [...kept, encodeGroup(group).flags], active: kept.length })
+        setNotice(`Added ${label} as hoist ${kept.length + 1}`)
+        return
+      }
       setMessage((m) => {
         const hoists = m.hoists.slice()
         if (flag) hoists[m.active] = [...hoists[m.active], flag]
-        else if (replace) hoists[m.active] = encodeGroup(group).flags
+        else if (placement === 'replace') hoists[m.active] = encodeGroup(group).flags
         // Re-encode the whole hoist so substitutes come out right for the longer group.
         else hoists[m.active] = encodeGroup(resolveHoist(hoists[m.active]).text.replaceAll('?', '') + group).flags
         return { ...m, hoists }
       })
       const hoist = `hoist ${message.active + 1}`
-      setNotice(replace ? `Put ${label} on ${hoist}` : `Added ${label} to ${hoist}`)
+      setNotice(placement === 'replace' ? `Put ${label} on ${hoist}` : `Added ${label} to ${hoist}`)
     },
-    [setMessage, message.active],
+    [setMessage, message],
   )
 
   /** Put a code-book signal on the active hoist and show it. */

@@ -42,7 +42,7 @@ export function Reference({ onShowAsFlags, onOpenTable, onTransfer }: Props) {
   )
 
   const onAddFlag = (f: (typeof FLAGS)[number]) =>
-    onTransfer({ group: f.id, flag: f.id, label: f.kind === 'letter' || f.kind === 'numeral' ? f.id : f.name, replace: false })
+    onTransfer({ group: f.id, flag: f.id, label: f.kind === 'letter' || f.kind === 'numeral' ? f.id : f.name, placement: 'append' })
 
   // Rows from every guide topic that match the search, e.g. a country or a call sign prefix.
   const guideHits = useMemo(() => {

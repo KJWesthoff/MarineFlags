@@ -348,7 +348,7 @@ export function decodeHoist(flags: FlagId[]): Decoded {
 
   const plainDigits = /^[0-9]+$/.test(digits)
 
-  if (letters.length === 1 && plainDigits) {
+  if (letters.length === 1 && (plainDigits || ('RSV'.includes(letters) && /^\d+\.\d+$/.test(digits)))) {
     const c = decodeComplement(letters, digits)
     if (c) return result({ kind: 'complement', ...c, text: `${letters} ${digits}` })
   }
