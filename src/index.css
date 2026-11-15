@@ -561,7 +561,19 @@ button.quiet {
   overflow-x: auto;
   margin-inline: -1rem;
   padding-inline: 1rem;
-  scrollbar-width: none;
+  /* Keep a scrollbar so the row can always be scrolled, whatever the input device. */
+  scrollbar-width: thin;
+}
+
+/* With a mouse there is no swipe to scroll the row, and wide windows have the room:
+   show every section on wrapped lines. */
+@media (hover: hover) and (pointer: fine), (min-width: 40rem) {
+  .chips {
+    flex-wrap: wrap;
+    overflow-x: visible;
+    margin-inline: 0;
+    padding-inline: 0;
+  }
 }
 
 .chips button {
