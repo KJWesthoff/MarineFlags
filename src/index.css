@@ -578,6 +578,12 @@ button.quiet {
   gap: 4px 6px;
 }
 
+/* A–Z letters use the same ten-to-a-row key size as the QWERTY layout. */
+.keys-letters {
+  grid-template-columns: repeat(10, 1fr);
+  gap: 4px;
+}
+
 /* Letter flags laid out like a typing keyboard: ten to a row, shorter rows centred. */
 .keys-qwerty {
   display: flex;

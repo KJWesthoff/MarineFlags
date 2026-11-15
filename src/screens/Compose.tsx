@@ -336,7 +336,7 @@ export function Compose({ message, setMessage, onOpenTable }: Props) {
           <svg viewBox="0 0 24 24" aria-hidden="true" className="icon">
             <path d={keysHidden ? 'm6 15 6-6 6 6' : 'm6 9 6 6 6-6'} />
           </svg>
-          {keysHidden ? 'Show flags' : 'Hide flags'}
+          {keysHidden ? 'Show flag keyboard' : 'Hide flag keyboard'}
         </button>
 
         {pickedValid !== null ? (
@@ -392,7 +392,7 @@ export function Compose({ message, setMessage, onOpenTable }: Props) {
               ))}
             </div>
           ) : (
-            <div className="keys">{LETTER_KEYS.map(renderKey)}</div>
+            <div className="keys keys-letters">{LETTER_KEYS.map(renderKey)}</div>
           )}
           <div className="keys keys-pennants">{PENNANT_KEYS.map(renderKey)}</div>
           <button
