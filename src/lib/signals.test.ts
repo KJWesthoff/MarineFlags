@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest'
 import { FLAGS, type FlagId } from '../data/flags'
 import { formatPosition, positionGroups } from './position'
 import {
-  CODEBOOK, TABLES, decodeHoist, encodeGroup, findRow, lookup, resolveHoist, searchCodebook, tablesFor,
+  CODEBOOK, GUIDE, TABLES, callSignCountry, decodeHoist, encodeGroup, findRow, lookup, resolveHoist, rowGroup,
+  searchCodebook, tablesFor,
 } from './signals'
 
 describe('flag set', () => {
@@ -118,6 +119,16 @@ describe('referenced tables', () => {
     expect(tablesFor(lookup('AC')!)).toEqual([])
   })
 
+  it('turns a table row into the group to hoist', () => {
+    expect(rowGroup({ id: 'M1', code: 'MBF' }, findRow('M1', '12')!)).toBe('MBF12')
+    expect(rowGroup({ id: 'PASSAGE', code: 'UV 4' }, findRow('PASSAGE', '7')!)).toBe('UV47')
+    expect(rowGroup({ id: 'C3' }, findRow('C3', '4')!)).toBe('4')
+    expect(rowGroup({ id: 'PRATIQUE' }, findRow('PRATIQUE', 'ZW 1')!)).toBe('ZW1')
+    expect(rowGroup({ id: 'MORSE' }, findRow('MORSE', 'K')!)).toBe('K')
+    expect(rowGroup({ id: 'PREFIX' }, findRow('PREFIX', 'OU–OZ')!)).toBe('OU')
+    expect(rowGroup({ id: 'TERMS' }, findRow('TERMS', 'Hoist')!)).toBeNull()
+  })
+
   it('has complete medical tables', () => {
     const count = (id: string) => TABLES[id].groups.reduce((n, g) => n + g.rows.length, 0)
     expect(count('M1')).toBe(92)
@@ -128,7 +139,7 @@ describe('referenced tables', () => {
 
   it('resolves a complement to its table row', () => {
     const body = decodeHoist(['M', 'B', 'F', '1', '2'])
-    expect(body.tables).toEqual([{ id: 'M1', row: '12' }])
+    expect(body.tables).toEqual([{ id: 'M1', row: '12', code: 'MBF' }])
     expect(body.notes).toEqual(['12: Armpit.'])
     expect(decodeHoist(['W', 'Y', '4']).notes).toEqual(['4: Moderate.'])
     expect(decodeHoist(['J', 'F', '3']).notes).toEqual(['3: Amidship.'])
@@ -160,6 +171,30 @@ describe('positions', () => {
     ]) {
       expect(decodeHoist(encodeGroup(group).flags)).toMatchObject({ kind: 'complement', meaning })
     }
+  })
+})
+
+describe('call signs', () => {
+  it('finds the country a call sign series is allocated to', () => {
+    expect(callSignCountry('OXYZ')?.text).toBe('Denmark')
+    expect(callSignCountry('5PAB')?.text).toBe('Denmark')
+    expect(callSignCountry('SMAB')?.text).toBe('Sweden')
+    expect(callSignCountry('SSBC')?.text).toBe('Egypt')
+    expect(callSignCountry('SSPC')?.text).toBe('Sudan')
+    expect(callSignCountry('KABC')?.text).toBe('United States')
+    expect(callSignCountry('3EAB')?.text).toBe('Panama')
+  })
+
+  it('offers the country for a spelled group that could be a call sign', () => {
+    const d = decodeHoist(encodeGroup('OXYZ').flags)
+    expect(d.kind).toBe('spelling')
+    expect(d.notes.at(-1)).toBe('As a call sign, it belongs to Denmark (series OU–OZ).')
+    expect(d.tables).toEqual([{ id: 'PREFIX', row: 'OU–OZ' }])
+    expect(decodeHoist(encodeGroup('SOS').flags).tables).toEqual([])
+  })
+
+  it('lists every guide topic', () => {
+    for (const id of GUIDE) expect(TABLES[id].title).toBeTruthy()
   })
 })
 

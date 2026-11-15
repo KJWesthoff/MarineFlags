@@ -1,7 +1,7 @@
-import { useCallback, useState } from 'react'
-import { TableSheet } from './components/TableSheet'
+import { useCallback, useEffect, useState } from 'react'
+import { TableSheet, type Transfer } from './components/TableSheet'
 import { FLAG_BY_ID, type FlagId } from './data/flags'
-import { encodeGroup, type TableRef } from './lib/signals'
+import { encodeGroup, resolveHoist, type TableRef } from './lib/signals'
 import { useStored } from './lib/useStored'
 import { Compose } from './screens/Compose'
 import { Reference } from './screens/Reference'
@@ -26,6 +26,31 @@ export default function App() {
   const [tab, setTab] = useStored<Tab>('tab', 'compose', (r) => (r === 'reference' ? 'reference' : 'compose'))
   const [message, setMessage] = useStored<Message>('message', EMPTY, reviveMessage)
   const [table, setTable] = useState<TableRef | null>(null)
+  /** A short confirmation shown after something is sent to the hoist from Reference. */
+  const [notice, setNotice] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!notice) return
+    const timer = setTimeout(() => setNotice(null), 2500)
+    return () => clearTimeout(timer)
+  }, [notice])
+
+  /** Send a group to the active hoist: in place of what is there, or added below it. */
+  const transfer = useCallback(
+    ({ group, label, replace, flag }: Transfer) => {
+      setMessage((m) => {
+        const hoists = m.hoists.slice()
+        if (flag) hoists[m.active] = [...hoists[m.active], flag]
+        else if (replace) hoists[m.active] = encodeGroup(group).flags
+        // Re-encode the whole hoist so substitutes come out right for the longer group.
+        else hoists[m.active] = encodeGroup(resolveHoist(hoists[m.active]).text.replaceAll('?', '') + group).flags
+        return { ...m, hoists }
+      })
+      const hoist = `hoist ${message.active + 1}`
+      setNotice(replace ? `Put ${label} on ${hoist}` : `Added ${label} to ${hoist}`)
+    },
+    [setMessage, message.active],
+  )
 
   /** Put a code-book signal on the active hoist and show it. */
   const showAsFlags = useCallback(
@@ -46,7 +71,7 @@ export default function App() {
         {tab === 'compose' ? (
           <Compose message={message} setMessage={setMessage} onOpenTable={setTable} />
         ) : (
-          <Reference onShowAsFlags={showAsFlags} onOpenTable={setTable} />
+          <Reference onShowAsFlags={showAsFlags} onOpenTable={setTable} onTransfer={transfer} />
         )}
       </main>
       <nav className="tabbar" aria-label="Sections">
@@ -65,7 +90,12 @@ export default function App() {
           Reference
         </button>
       </nav>
-      <TableSheet open={table} onClose={() => setTable(null)} />
+      {notice && (
+        <p className="notice" role="status">
+          {notice}
+        </p>
+      )}
+      <TableSheet open={table} onClose={() => setTable(null)} onTransfer={transfer} />
     </div>
   )
 }

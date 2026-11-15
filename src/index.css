@@ -892,15 +892,26 @@ button.quiet {
 }
 
 .table-rows li {
-  display: grid;
-  grid-template-columns: 2.75rem 1fr;
-  gap: 0.5rem;
-  padding: 0.4rem 0.5rem;
   border-bottom: 1px solid var(--water);
   border-left: 4px solid transparent;
 }
 
-.table-rows li > div {
+/* A row's content; a button when the row can be sent to the hoist. */
+.row-pick {
+  display: grid;
+  grid-template-columns: 2.75rem 1fr;
+  gap: 0.5rem;
+  width: 100%;
+  min-height: 0;
+  padding: 0.5rem;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  text-align: left;
+  font-weight: inherit;
+}
+
+.row-text {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -911,6 +922,81 @@ button.quiet {
   border-left-color: var(--magenta);
   background: var(--water);
   font-weight: 700;
+}
+
+.table-rows[data-keys='wide'] .row-pick {
+  grid-template-columns: 6.5rem 1fr;
+}
+
+.table-rows[data-keys='stacked'] .row-pick {
+  grid-template-columns: 1fr;
+  gap: 0.15rem;
+  padding-block: 0.6rem;
+}
+
+.table-rows[data-keys='stacked'] .row-text {
+  max-width: 62ch;
+}
+
+.sheet-foot {
+  padding: 0.6rem 1rem calc(0.6rem + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--line);
+}
+
+.sheet-foot button {
+  width: 100%;
+}
+
+.sheet:has(.sheet-foot) .sheet-body {
+  padding-bottom: 1rem;
+}
+
+/* Confirmation after something is sent to the hoist. */
+.notice {
+  position: fixed;
+  left: 50%;
+  bottom: calc(4.75rem + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  z-index: 5;
+  max-width: calc(100% - 2rem);
+  padding: 0.55rem 1rem;
+  border-radius: 6px;
+  background: var(--ink);
+  color: var(--paper);
+  font-weight: 700;
+  text-align: center;
+  pointer-events: none;
+}
+
+.add-flag {
+  min-height: 40px;
+  padding-block: 0.25rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.guide-list button {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.1rem;
+  width: 100%;
+  text-align: left;
+  border: 0;
+  border-bottom: 1px solid var(--water);
+  border-radius: 0;
+  background: none;
+  padding: 0.8rem 1rem;
+}
+
+.guide-list button:active {
+  background: var(--water);
+}
+
+.guide-list span:not(.group) {
+  font-size: var(--step--1);
+  color: var(--ink-soft);
+  max-width: 62ch;
 }
 
 @media (min-width: 40rem) {

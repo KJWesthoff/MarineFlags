@@ -1503,6 +1503,1741 @@
      ]
     }
    ]
+  },
+  "FLAGS": {
+   "title": "Signaling by flags",
+   "subtitle": "How a flag signal is made and answered",
+   "source": "Chapter 1, Section 5",
+   "keys": "stacked",
+   "groups": [
+    {
+     "rows": [
+      {
+       "n": "One hoist at a time",
+       "text": "As a general rule only one hoist should be shown at a time. Each hoist is kept flying until the receiving station has answered it. Hoist the signal where the receiving station can see it most easily, with the flags blowing out clear and free from smoke. Groups shown on the same halyard are separated by a tackline."
+      },
+      {
+       "n": "How to call",
+       "text": "Hoist the identity signal of the station addressed with the signal. With no identity signal, the signal is addressed to all stations within visual signaling distance. If you do not know the other station’s identity signal, first hoist VF (You should hoist your identity signal) or CS (What is the name or identity signal of your vessel?), together with your own identity signal."
+      },
+      {
+       "n": "How to answer",
+       "text": "Hoist the answering pennant at the dip as soon as you see each hoist, and close up as soon as you understand it. Lower it to the dip when the hoist is hauled down, and close up again when the next hoist is understood."
+      },
+      {
+       "n": "How to complete a signal",
+       "text": "After the last hoist, the transmitting station hoists the answering pennant alone to show the signal is complete. The receiving station answers it like any other hoist."
+      },
+      {
+       "n": "When a signal is not understood",
+       "text": "If you cannot make the signal out, keep the answering pennant at the dip. If you can make it out but not understand it, hoist ZQ (Your signal appears incorrectly coded. You should check and repeat the whole) or ZL (Your signal has been received but not understood)."
+      },
+      {
+       "n": "Substitutes",
+       "text": "Substitutes repeat a flag within a group when only one set of flags is carried. The first substitute repeats the uppermost flag of the class (letters or numerals) of the flag just above it; the second repeats the second flag of that class, the third the third. No substitute is used more than once in a group. The answering pennant used as a decimal point is ignored when choosing a substitute. Examples: VV is V, first substitute. 1100 is 1, first substitute, 0, third substitute. L2330 is L, 2, 3, second substitute, 0."
+      },
+      {
+       "n": "How to spell",
+       "text": "Names in the text of a signal are spelled out with the alphabetical flags. YZ (The words which follow are in plain language) can be used first if necessary."
+      },
+      {
+       "n": "Code pennant by ships of war",
+       "text": "A ship of war wishing to communicate with a merchant vessel hoists the Code pennant in a conspicuous position and keeps it flying the whole time the signal is being made."
+      }
+     ]
+    }
+   ]
+  },
+  "TERMS": {
+   "title": "Signaling terms",
+   "subtitle": "Words the code uses",
+   "source": "Chapter 1, Section 2",
+   "keys": "stacked",
+   "groups": [
+    {
+     "rows": [
+      {
+       "n": "Group",
+       "text": "More than one continuous letter and/or numeral which together compose a signal."
+      },
+      {
+       "n": "Numeral group",
+       "text": "One or more numerals."
+      },
+      {
+       "n": "Hoist",
+       "text": "One or more groups displayed from a single halyard."
+      },
+      {
+       "n": "At the dip",
+       "text": "A hoist or signal hoisted about half of the full extent of the halyards."
+      },
+      {
+       "n": "Close up",
+       "text": "A hoist or signal hoisted to the full extent of the halyards."
+      },
+      {
+       "n": "Tackline",
+       "text": "A length of halyard about 2 m (6 ft) long, used to separate each group of flags."
+      },
+      {
+       "n": "Identity signal or call sign",
+       "text": "The group of letters and figures assigned to each station by its administration. Identity signals are allocated internationally, so they can indicate the nationality of a ship or aircraft."
+      },
+      {
+       "n": "Station",
+       "text": "A ship, aircraft, survival craft, or any place at which communications can be effected."
+      },
+      {
+       "n": "Transmitting station",
+       "text": "The station by which a signal is actually being made."
+      },
+      {
+       "n": "Receiving station",
+       "text": "The station by which a signal is actually being read."
+      },
+      {
+       "n": "Procedure signal",
+       "text": "A signal designed to facilitate the conduct of signaling."
+      },
+      {
+       "n": "Originator",
+       "text": "The authority who orders a signal to be sent."
+      },
+      {
+       "n": "Addressee",
+       "text": "The authority to whom a signal is addressed."
+      },
+      {
+       "n": "Time of origin",
+       "text": "The time at which a signal is ordered to be made."
+      }
+     ]
+    }
+   ]
+  },
+  "LETTERS": {
+   "title": "Single letters with numerals",
+   "subtitle": "A letter followed by figures gives a value",
+   "source": "Chapter 1, Section 10",
+   "groups": [
+    {
+     "rows": [
+      {
+       "n": "A",
+       "text": "Azimuth or bearing",
+       "detail": "With three numerals."
+      },
+      {
+       "n": "C",
+       "text": "Course",
+       "detail": "With three numerals."
+      },
+      {
+       "n": "D",
+       "text": "Date",
+       "detail": "With two, four or six numerals."
+      },
+      {
+       "n": "G",
+       "text": "Longitude",
+       "detail": "With four or five numerals: the last two are minutes, the rest degrees."
+      },
+      {
+       "n": "K",
+       "text": "I wish to communicate with you by… (Complements Table 1)",
+       "detail": "With one numeral."
+      },
+      {
+       "n": "L",
+       "text": "Latitude",
+       "detail": "With four numerals: the first two are degrees, the rest minutes."
+      },
+      {
+       "n": "R",
+       "text": "Distance in nautical miles",
+       "detail": "With one or more numerals."
+      },
+      {
+       "n": "S",
+       "text": "Speed in knots",
+       "detail": "With one or more numerals."
+      },
+      {
+       "n": "T",
+       "text": "Local time",
+       "detail": "With four numerals: the first two are hours, the rest minutes."
+      },
+      {
+       "n": "V",
+       "text": "Speed in kilometers per hour",
+       "detail": "With one or more numerals."
+      },
+      {
+       "n": "Z",
+       "text": "UTC",
+       "detail": "With four numerals: the first two are hours, the rest minutes. With one numeral: to call or address shore visual stations."
+      }
+     ]
+    }
+   ]
+  },
+  "PROCEDURE": {
+   "title": "Procedure signals",
+   "subtitle": "Signals that help conduct signaling",
+   "source": "Chapter 1, Section 10",
+   "keys": "wide",
+   "note": "C, N, NO and RQ cannot be used in conjunction with single-letter signals.",
+   "groups": [
+    {
+     "rows": [
+      {
+       "n": "AA",
+       "text": "“All after…” (used after RPT) means “Repeat all after…”."
+      },
+      {
+       "n": "AB",
+       "text": "“All before…” (used after RPT) means “Repeat all before…”."
+      },
+      {
+       "n": "AR",
+       "text": "Ending signal, or end of transmission or signal."
+      },
+      {
+       "n": "AS",
+       "text": "Waiting signal or period."
+      },
+      {
+       "n": "BN",
+       "text": "“All between… and…” (used after RPT) means “Repeat all between… and…”."
+      },
+      {
+       "n": "C",
+       "text": "Affirmative: yes, or “The significance of the previous group should be read in the affirmative”."
+      },
+      {
+       "n": "CQ",
+       "text": "Call for unknown station(s) or general call to all stations."
+      },
+      {
+       "n": "CS",
+       "text": "“What is the name or identity signal of your vessel (or station)?”"
+      },
+      {
+       "n": "DE",
+       "text": "“From…” (used to precede the name or identity signal of the calling station)."
+      },
+      {
+       "n": "K",
+       "text": "“I wish to communicate with you” or “Invitation to transmit”."
+      },
+      {
+       "n": "NO",
+       "text": "Negative: no, or “The significance of the previous group should be read in the negative”."
+      },
+      {
+       "n": "OK",
+       "text": "Acknowledging a correct repetition, or “It is correct”."
+      },
+      {
+       "n": "RQ",
+       "text": "Interrogative, or “The significance of the previous group should be read as a question”."
+      },
+      {
+       "n": "R",
+       "text": "“Received” or “I have received your last signal”."
+      },
+      {
+       "n": "RPT",
+       "text": "Repeat signal: “I repeat” or “Repeat what you have sent” or “Repeat what you have received”."
+      },
+      {
+       "n": "WA",
+       "text": "“Word or group after…” (used after RPT) means “Repeat word or group after…”."
+      },
+      {
+       "n": "WB",
+       "text": "“Word or group before…” (used after RPT) means “Repeat word or group before…”."
+      }
+     ]
+    }
+   ]
+  },
+  "MORSE": {
+   "title": "Morse code",
+   "subtitle": "Letters and numerals",
+   "source": "Chapter 1, Section 10",
+   "groups": [
+    {
+     "title": "Letters",
+     "rows": [
+      {
+       "n": "A",
+       "text": "• –"
+      },
+      {
+       "n": "B",
+       "text": "– • • •"
+      },
+      {
+       "n": "C",
+       "text": "– • – •"
+      },
+      {
+       "n": "D",
+       "text": "– • •"
+      },
+      {
+       "n": "E",
+       "text": "•"
+      },
+      {
+       "n": "F",
+       "text": "• • – •"
+      },
+      {
+       "n": "G",
+       "text": "– – •"
+      },
+      {
+       "n": "H",
+       "text": "• • • •"
+      },
+      {
+       "n": "I",
+       "text": "• •"
+      },
+      {
+       "n": "J",
+       "text": "• – – –"
+      },
+      {
+       "n": "K",
+       "text": "– • –"
+      },
+      {
+       "n": "L",
+       "text": "• – • •"
+      },
+      {
+       "n": "M",
+       "text": "– –"
+      },
+      {
+       "n": "N",
+       "text": "– •"
+      },
+      {
+       "n": "O",
+       "text": "– – –"
+      },
+      {
+       "n": "P",
+       "text": "• – – •"
+      },
+      {
+       "n": "Q",
+       "text": "– – • –"
+      },
+      {
+       "n": "R",
+       "text": "• – •"
+      },
+      {
+       "n": "S",
+       "text": "• • •"
+      },
+      {
+       "n": "T",
+       "text": "–"
+      },
+      {
+       "n": "U",
+       "text": "• • –"
+      },
+      {
+       "n": "V",
+       "text": "• • • –"
+      },
+      {
+       "n": "W",
+       "text": "• – –"
+      },
+      {
+       "n": "X",
+       "text": "– • • –"
+      },
+      {
+       "n": "Y",
+       "text": "– • – –"
+      },
+      {
+       "n": "Z",
+       "text": "– – • •"
+      }
+     ]
+    },
+    {
+     "title": "Numerals",
+     "rows": [
+      {
+       "n": "1",
+       "text": "• – – – –"
+      },
+      {
+       "n": "2",
+       "text": "• • – – –"
+      },
+      {
+       "n": "3",
+       "text": "• • • – –"
+      },
+      {
+       "n": "4",
+       "text": "• • • • –"
+      },
+      {
+       "n": "5",
+       "text": "• • • • •"
+      },
+      {
+       "n": "6",
+       "text": "– • • • •"
+      },
+      {
+       "n": "7",
+       "text": "– – • • •"
+      },
+      {
+       "n": "8",
+       "text": "– – – • •"
+      },
+      {
+       "n": "9",
+       "text": "– – – – •"
+      },
+      {
+       "n": "0",
+       "text": "– – – – –"
+      }
+     ]
+    }
+   ]
+  },
+  "DISTRESS": {
+   "title": "Distress signals",
+   "subtitle": "Prescribed by the International Regulations for Preventing Collisions at Sea, 1972",
+   "source": "Chapter 4, Section 1",
+   "note": "To be used or displayed, together or separately, by a vessel (or seaplane on the water) in distress requiring assistance from other vessels or from the shore. Using any of these signals except to indicate distress, or using signals that may be confused with them, is prohibited.",
+   "groups": [
+    {
+     "rows": [
+      {
+       "n": "1",
+       "text": "A gun or other explosive signal fired at intervals of about a minute."
+      },
+      {
+       "n": "2",
+       "text": "A continuous sounding with any fog-signaling apparatus."
+      },
+      {
+       "n": "3",
+       "text": "Rockets or shells, throwing red stars fired one at a time at short intervals."
+      },
+      {
+       "n": "4",
+       "text": "A signal made by radiotelegraphy or by any other signaling method consisting of the group • • •  – – –  • • • (SOS) in the Morse Code."
+      },
+      {
+       "n": "5",
+       "text": "A signal sent by radiotelephony consisting of the spoken word “MAYDAY”."
+      },
+      {
+       "n": "6",
+       "text": "The International Code Signal of distress indicated by NC."
+      },
+      {
+       "n": "7",
+       "text": "A signal consisting of a square flag having above or below it a ball or anything resembling a ball."
+      },
+      {
+       "n": "8",
+       "text": "Flames on the vessel (as from a burning tar barrel, oil barrel, etc.)."
+      },
+      {
+       "n": "9",
+       "text": "A rocket parachute flare or a hand flare showing a red light."
+      },
+      {
+       "n": "10",
+       "text": "A smoke signal giving off a volume of orange-colored smoke."
+      },
+      {
+       "n": "11",
+       "text": "Slowly and repeatedly raising and lowering arms outstretched to each side."
+      },
+      {
+       "n": "12",
+       "text": "The radiotelegraph alarm signal.",
+       "detail": "A series of twelve four-second dashes at intervals of one second."
+      },
+      {
+       "n": "13",
+       "text": "The radiotelephone alarm signal.",
+       "detail": "Two audio tones transmitted alternately at 2200 Hz and 1300 Hz for 30 seconds to one minute."
+      },
+      {
+       "n": "14",
+       "text": "Signals transmitted by emergency position-indicating beacons."
+      }
+     ]
+    }
+   ]
+  },
+  "PREFIX": {
+   "title": "Call sign prefixes",
+   "subtitle": "The country a call sign (identity signal) belongs to",
+   "credit": "International Telecommunication Union, Radio Regulations, Appendix 42: allocation of international call sign series.",
+   "keys": "wide",
+   "note": "A ship’s call sign starts with characters from a series allocated to its flag state, so the first one or two characters of an identity signal show its nationality.",
+   "groups": [
+    {
+     "rows": [
+      {
+       "n": "AA–AL",
+       "text": "United States"
+      },
+      {
+       "n": "AM–AO",
+       "text": "Spain"
+      },
+      {
+       "n": "AP–AS",
+       "text": "Pakistan"
+      },
+      {
+       "n": "AT–AW",
+       "text": "India"
+      },
+      {
+       "n": "AX",
+       "text": "Australia"
+      },
+      {
+       "n": "AY–AZ",
+       "text": "Argentina"
+      },
+      {
+       "n": "A2",
+       "text": "Botswana"
+      },
+      {
+       "n": "A3",
+       "text": "Tonga"
+      },
+      {
+       "n": "A4",
+       "text": "Oman"
+      },
+      {
+       "n": "A5",
+       "text": "Bhutan"
+      },
+      {
+       "n": "A6",
+       "text": "United Arab Emirates"
+      },
+      {
+       "n": "A7",
+       "text": "Qatar"
+      },
+      {
+       "n": "A8",
+       "text": "Liberia"
+      },
+      {
+       "n": "A9",
+       "text": "Bahrain"
+      },
+      {
+       "n": "B",
+       "text": "China"
+      },
+      {
+       "n": "CA–CE",
+       "text": "Chile"
+      },
+      {
+       "n": "CF–CK",
+       "text": "Canada"
+      },
+      {
+       "n": "CL–CM",
+       "text": "Cuba"
+      },
+      {
+       "n": "CN",
+       "text": "Morocco"
+      },
+      {
+       "n": "CO",
+       "text": "Cuba"
+      },
+      {
+       "n": "CP",
+       "text": "Bolivia"
+      },
+      {
+       "n": "CQ–CU",
+       "text": "Portugal"
+      },
+      {
+       "n": "CV–CX",
+       "text": "Uruguay"
+      },
+      {
+       "n": "CY–CZ",
+       "text": "Canada"
+      },
+      {
+       "n": "C2",
+       "text": "Nauru"
+      },
+      {
+       "n": "C3",
+       "text": "Andorra"
+      },
+      {
+       "n": "C4",
+       "text": "Cyprus"
+      },
+      {
+       "n": "C5",
+       "text": "The Gambia"
+      },
+      {
+       "n": "C6",
+       "text": "The Bahamas"
+      },
+      {
+       "n": "C7",
+       "text": "World Meteorological Organization"
+      },
+      {
+       "n": "C8–C9",
+       "text": "Mozambique"
+      },
+      {
+       "n": "DA–DR",
+       "text": "Germany"
+      },
+      {
+       "n": "DS–DT",
+       "text": "South Korea"
+      },
+      {
+       "n": "DU–DZ",
+       "text": "Philippines"
+      },
+      {
+       "n": "D2–D3",
+       "text": "Angola"
+      },
+      {
+       "n": "D4",
+       "text": "Cape Verde"
+      },
+      {
+       "n": "D5",
+       "text": "Liberia"
+      },
+      {
+       "n": "D6",
+       "text": "Comoros"
+      },
+      {
+       "n": "D7–D9",
+       "text": "South Korea"
+      },
+      {
+       "n": "EA–EH",
+       "text": "Spain"
+      },
+      {
+       "n": "EI–EJ",
+       "text": "Ireland"
+      },
+      {
+       "n": "EK",
+       "text": "Armenia"
+      },
+      {
+       "n": "EL",
+       "text": "Liberia"
+      },
+      {
+       "n": "EM–EO",
+       "text": "Ukraine"
+      },
+      {
+       "n": "EP–EQ",
+       "text": "Iran"
+      },
+      {
+       "n": "ER",
+       "text": "Moldova"
+      },
+      {
+       "n": "ES",
+       "text": "Estonia"
+      },
+      {
+       "n": "ET",
+       "text": "Ethiopia"
+      },
+      {
+       "n": "EU–EW",
+       "text": "Belarus"
+      },
+      {
+       "n": "EX",
+       "text": "Kyrgyzstan"
+      },
+      {
+       "n": "EY",
+       "text": "Tajikistan"
+      },
+      {
+       "n": "EZ",
+       "text": "Turkmenistan"
+      },
+      {
+       "n": "E2",
+       "text": "Thailand"
+      },
+      {
+       "n": "E3",
+       "text": "Eritrea"
+      },
+      {
+       "n": "E4",
+       "text": "Palestinian Authority"
+      },
+      {
+       "n": "E5",
+       "text": "Cook Islands"
+      },
+      {
+       "n": "E6",
+       "text": "Niue"
+      },
+      {
+       "n": "E7",
+       "text": "Bosnia and Herzegovina"
+      },
+      {
+       "n": "F",
+       "text": "France (and its Overseas departments/territories)"
+      },
+      {
+       "n": "G",
+       "text": "United Kingdom (and its overseas territories/Crown dependencies)"
+      },
+      {
+       "n": "HA",
+       "text": "Hungary"
+      },
+      {
+       "n": "HB",
+       "text": "Switzerland"
+      },
+      {
+       "n": "HC–HD",
+       "text": "Ecuador"
+      },
+      {
+       "n": "HE",
+       "text": "Switzerland"
+      },
+      {
+       "n": "HF",
+       "text": "Poland"
+      },
+      {
+       "n": "HG",
+       "text": "Hungary"
+      },
+      {
+       "n": "HH",
+       "text": "Haiti"
+      },
+      {
+       "n": "HI",
+       "text": "Dominican Republic"
+      },
+      {
+       "n": "HJ–HK",
+       "text": "Colombia"
+      },
+      {
+       "n": "HL",
+       "text": "South Korea"
+      },
+      {
+       "n": "HM",
+       "text": "North Korea"
+      },
+      {
+       "n": "HN",
+       "text": "Iraq"
+      },
+      {
+       "n": "HO–HP",
+       "text": "Panama"
+      },
+      {
+       "n": "HQ–HR",
+       "text": "Honduras"
+      },
+      {
+       "n": "HS",
+       "text": "Thailand"
+      },
+      {
+       "n": "HT",
+       "text": "Nicaragua"
+      },
+      {
+       "n": "HU",
+       "text": "El Salvador"
+      },
+      {
+       "n": "HV",
+       "text": "Vatican City"
+      },
+      {
+       "n": "HW–HY",
+       "text": "France (and its Overseas departments/territories)"
+      },
+      {
+       "n": "HZ",
+       "text": "Saudi Arabia"
+      },
+      {
+       "n": "H2",
+       "text": "Cyprus"
+      },
+      {
+       "n": "H3",
+       "text": "Panama"
+      },
+      {
+       "n": "H4",
+       "text": "Solomon Islands"
+      },
+      {
+       "n": "H6–H7",
+       "text": "Nicaragua"
+      },
+      {
+       "n": "H8–H9",
+       "text": "Panama"
+      },
+      {
+       "n": "I",
+       "text": "Italy"
+      },
+      {
+       "n": "JA–JS",
+       "text": "Japan"
+      },
+      {
+       "n": "JT–JV",
+       "text": "Mongolia"
+      },
+      {
+       "n": "JW–JX",
+       "text": "Norway"
+      },
+      {
+       "n": "JY",
+       "text": "Jordan"
+      },
+      {
+       "n": "JZ",
+       "text": "Indonesia"
+      },
+      {
+       "n": "J2",
+       "text": "Djibouti"
+      },
+      {
+       "n": "J3",
+       "text": "Grenada"
+      },
+      {
+       "n": "J4",
+       "text": "Greece"
+      },
+      {
+       "n": "J5",
+       "text": "Guinea-Bissau"
+      },
+      {
+       "n": "J6",
+       "text": "Saint Lucia"
+      },
+      {
+       "n": "J7",
+       "text": "Dominica"
+      },
+      {
+       "n": "J8",
+       "text": "Saint Vincent and the Grenadines"
+      },
+      {
+       "n": "K",
+       "text": "United States"
+      },
+      {
+       "n": "LA–LN",
+       "text": "Norway"
+      },
+      {
+       "n": "LO–LW",
+       "text": "Argentina"
+      },
+      {
+       "n": "LX",
+       "text": "Luxembourg"
+      },
+      {
+       "n": "LY",
+       "text": "Lithuania"
+      },
+      {
+       "n": "LZ",
+       "text": "Bulgaria"
+      },
+      {
+       "n": "L2–L9",
+       "text": "Argentina"
+      },
+      {
+       "n": "M",
+       "text": "United Kingdom (and its overseas territories/Crown dependencies)"
+      },
+      {
+       "n": "N",
+       "text": "United States"
+      },
+      {
+       "n": "OA–OC",
+       "text": "Peru"
+      },
+      {
+       "n": "OD",
+       "text": "Lebanon"
+      },
+      {
+       "n": "OE",
+       "text": "Austria"
+      },
+      {
+       "n": "OF–OJ",
+       "text": "Finland"
+      },
+      {
+       "n": "OK–OL",
+       "text": "Czech Republic"
+      },
+      {
+       "n": "OM",
+       "text": "Slovakia"
+      },
+      {
+       "n": "ON–OT",
+       "text": "Belgium"
+      },
+      {
+       "n": "OU–OZ",
+       "text": "Denmark"
+      },
+      {
+       "n": "PA–PI",
+       "text": "Netherlands"
+      },
+      {
+       "n": "PJ",
+       "text": "Netherlands – Former Netherlands Antilles"
+      },
+      {
+       "n": "PK–PO",
+       "text": "Indonesia"
+      },
+      {
+       "n": "PP–PY",
+       "text": "Brazil"
+      },
+      {
+       "n": "PZ",
+       "text": "Suriname"
+      },
+      {
+       "n": "P2",
+       "text": "Papua New Guinea"
+      },
+      {
+       "n": "P3",
+       "text": "Cyprus"
+      },
+      {
+       "n": "P4",
+       "text": "Aruba"
+      },
+      {
+       "n": "P5–P9",
+       "text": "North Korea"
+      },
+      {
+       "n": "R",
+       "text": "Russia"
+      },
+      {
+       "n": "SA–SM",
+       "text": "Sweden"
+      },
+      {
+       "n": "SN–SR",
+       "text": "Poland"
+      },
+      {
+       "n": "SSA–SSM",
+       "text": "Egypt"
+      },
+      {
+       "n": "SSN–SSZ",
+       "text": "Sudan"
+      },
+      {
+       "n": "SU",
+       "text": "Egypt"
+      },
+      {
+       "n": "SV–SZ",
+       "text": "Greece"
+      },
+      {
+       "n": "S2–S3",
+       "text": "Bangladesh"
+      },
+      {
+       "n": "S5",
+       "text": "Slovenia"
+      },
+      {
+       "n": "S6",
+       "text": "Singapore"
+      },
+      {
+       "n": "S7",
+       "text": "Seychelles"
+      },
+      {
+       "n": "S8",
+       "text": "South Africa"
+      },
+      {
+       "n": "S9",
+       "text": "São Tomé and Príncipe"
+      },
+      {
+       "n": "TA–TC",
+       "text": "Turkey"
+      },
+      {
+       "n": "TD",
+       "text": "Guatemala"
+      },
+      {
+       "n": "TE",
+       "text": "Costa Rica"
+      },
+      {
+       "n": "TF",
+       "text": "Iceland"
+      },
+      {
+       "n": "TG",
+       "text": "Guatemala"
+      },
+      {
+       "n": "TH",
+       "text": "France (and its Overseas departments/territories)"
+      },
+      {
+       "n": "TI",
+       "text": "Costa Rica"
+      },
+      {
+       "n": "TJ",
+       "text": "Cameroon"
+      },
+      {
+       "n": "TK",
+       "text": "France (and its Overseas departments/territories)"
+      },
+      {
+       "n": "TL",
+       "text": "Central African Republic"
+      },
+      {
+       "n": "TM",
+       "text": "France (and its Overseas departments/territories)"
+      },
+      {
+       "n": "TN",
+       "text": "Republic of the Congo"
+      },
+      {
+       "n": "TO–TQ",
+       "text": "France (and its Overseas departments/territories)"
+      },
+      {
+       "n": "TR",
+       "text": "Gabon"
+      },
+      {
+       "n": "TS",
+       "text": "Tunisia"
+      },
+      {
+       "n": "TT",
+       "text": "Chad"
+      },
+      {
+       "n": "TU",
+       "text": "Ivory Coast"
+      },
+      {
+       "n": "TV–TX",
+       "text": "France (and its Overseas departments/territories)"
+      },
+      {
+       "n": "TY",
+       "text": "Benin"
+      },
+      {
+       "n": "TZ",
+       "text": "Mali"
+      },
+      {
+       "n": "T2",
+       "text": "Tuvalu"
+      },
+      {
+       "n": "T3",
+       "text": "Kiribati"
+      },
+      {
+       "n": "T4",
+       "text": "Cuba"
+      },
+      {
+       "n": "T5",
+       "text": "Somalia"
+      },
+      {
+       "n": "T6",
+       "text": "Afghanistan"
+      },
+      {
+       "n": "T7",
+       "text": "San Marino"
+      },
+      {
+       "n": "T8",
+       "text": "Palau"
+      },
+      {
+       "n": "UA–UI",
+       "text": "Russia"
+      },
+      {
+       "n": "UJ–UM",
+       "text": "Uzbekistan"
+      },
+      {
+       "n": "UN–UQ",
+       "text": "Kazakhstan"
+      },
+      {
+       "n": "UR–UZ",
+       "text": "Ukraine"
+      },
+      {
+       "n": "VA–VG",
+       "text": "Canada"
+      },
+      {
+       "n": "VH–VN",
+       "text": "Australia"
+      },
+      {
+       "n": "VO",
+       "text": "Canada (formerly Dominion of Newfoundland)"
+      },
+      {
+       "n": "VP–VQ",
+       "text": "United Kingdom (and its overseas territories/Crown dependencies)"
+      },
+      {
+       "n": "VR",
+       "text": "Hong Kong (Special administrative regions of China)"
+      },
+      {
+       "n": "VS",
+       "text": "United Kingdom"
+      },
+      {
+       "n": "VT–VW",
+       "text": "India"
+      },
+      {
+       "n": "VX–VY",
+       "text": "Canada"
+      },
+      {
+       "n": "VZ",
+       "text": "Australia"
+      },
+      {
+       "n": "V2",
+       "text": "Antigua and Barbuda"
+      },
+      {
+       "n": "V3",
+       "text": "Belize"
+      },
+      {
+       "n": "V4",
+       "text": "Saint Kitts and Nevis"
+      },
+      {
+       "n": "V5",
+       "text": "Namibia"
+      },
+      {
+       "n": "V6",
+       "text": "Federated States of Micronesia"
+      },
+      {
+       "n": "V7",
+       "text": "Marshall Islands"
+      },
+      {
+       "n": "V8",
+       "text": "Brunei"
+      },
+      {
+       "n": "W",
+       "text": "United States"
+      },
+      {
+       "n": "XA–XI",
+       "text": "Mexico"
+      },
+      {
+       "n": "XJ–XO",
+       "text": "Canada"
+      },
+      {
+       "n": "XP",
+       "text": "Denmark"
+      },
+      {
+       "n": "XQ–XR",
+       "text": "Chile"
+      },
+      {
+       "n": "XS",
+       "text": "China"
+      },
+      {
+       "n": "XT",
+       "text": "Burkina Faso"
+      },
+      {
+       "n": "XU",
+       "text": "Cambodia"
+      },
+      {
+       "n": "XV",
+       "text": "Vietnam"
+      },
+      {
+       "n": "XW",
+       "text": "Laos"
+      },
+      {
+       "n": "XX",
+       "text": "Macao (Special administrative regions of China)"
+      },
+      {
+       "n": "XY–XZ",
+       "text": "Burma"
+      },
+      {
+       "n": "YA",
+       "text": "Afghanistan"
+      },
+      {
+       "n": "YB–YH",
+       "text": "Indonesia"
+      },
+      {
+       "n": "YI",
+       "text": "Iraq"
+      },
+      {
+       "n": "YJ",
+       "text": "Vanuatu"
+      },
+      {
+       "n": "YK",
+       "text": "Syria"
+      },
+      {
+       "n": "YL",
+       "text": "Latvia"
+      },
+      {
+       "n": "YM",
+       "text": "Turkey"
+      },
+      {
+       "n": "YN",
+       "text": "Nicaragua"
+      },
+      {
+       "n": "YO–YR",
+       "text": "Romania"
+      },
+      {
+       "n": "YS",
+       "text": "El Salvador"
+      },
+      {
+       "n": "YT–YU",
+       "text": "Serbia"
+      },
+      {
+       "n": "YV–YY",
+       "text": "Venezuela"
+      },
+      {
+       "n": "Y2–Y9",
+       "text": "Germany"
+      },
+      {
+       "n": "ZA",
+       "text": "Albania"
+      },
+      {
+       "n": "ZB–ZJ",
+       "text": "United Kingdom (and its overseas territories/Crown dependencies)"
+      },
+      {
+       "n": "ZK–ZM",
+       "text": "New Zealand"
+      },
+      {
+       "n": "ZN–ZO",
+       "text": "United Kingdom (and its overseas territories/Crown dependencies)"
+      },
+      {
+       "n": "ZP",
+       "text": "Paraguay"
+      },
+      {
+       "n": "ZQ",
+       "text": "United Kingdom (and its overseas territories/Crown dependencies)"
+      },
+      {
+       "n": "ZR–ZU",
+       "text": "South Africa"
+      },
+      {
+       "n": "ZV–ZZ",
+       "text": "Brazil"
+      },
+      {
+       "n": "Z2",
+       "text": "Zimbabwe"
+      },
+      {
+       "n": "Z3",
+       "text": "North Macedonia"
+      },
+      {
+       "n": "Z8",
+       "text": "South Sudan"
+      },
+      {
+       "n": "2",
+       "text": "United Kingdom (and its overseas territories/Crown dependencies)"
+      },
+      {
+       "n": "3A",
+       "text": "Monaco"
+      },
+      {
+       "n": "3B",
+       "text": "Mauritius"
+      },
+      {
+       "n": "3C",
+       "text": "Equatorial Guinea"
+      },
+      {
+       "n": "3DA–3DM",
+       "text": "Eswatini"
+      },
+      {
+       "n": "3DN–3DZ",
+       "text": "Fiji"
+      },
+      {
+       "n": "3E–3F",
+       "text": "Panama"
+      },
+      {
+       "n": "3G",
+       "text": "Chile"
+      },
+      {
+       "n": "3H–3U",
+       "text": "China"
+      },
+      {
+       "n": "3V",
+       "text": "Tunisia"
+      },
+      {
+       "n": "3W",
+       "text": "Vietnam"
+      },
+      {
+       "n": "3X",
+       "text": "Guinea"
+      },
+      {
+       "n": "3Y",
+       "text": "Norway"
+      },
+      {
+       "n": "3Z",
+       "text": "Poland"
+      },
+      {
+       "n": "4A–4C",
+       "text": "Mexico"
+      },
+      {
+       "n": "4D–4I",
+       "text": "Philippines"
+      },
+      {
+       "n": "4J–4K",
+       "text": "Azerbaijan"
+      },
+      {
+       "n": "4L",
+       "text": "Georgia"
+      },
+      {
+       "n": "4M",
+       "text": "Venezuela"
+      },
+      {
+       "n": "4O",
+       "text": "Montenegro"
+      },
+      {
+       "n": "4P–4S",
+       "text": "Sri Lanka"
+      },
+      {
+       "n": "4T",
+       "text": "Peru"
+      },
+      {
+       "n": "4U",
+       "text": "United Nations"
+      },
+      {
+       "n": "4V",
+       "text": "Haiti"
+      },
+      {
+       "n": "4W",
+       "text": "Timor-Leste"
+      },
+      {
+       "n": "4X",
+       "text": "Israel"
+      },
+      {
+       "n": "4Y",
+       "text": "International Civil Aviation Organization"
+      },
+      {
+       "n": "4Z",
+       "text": "Israel"
+      },
+      {
+       "n": "5A",
+       "text": "Libya"
+      },
+      {
+       "n": "5B",
+       "text": "Cyprus"
+      },
+      {
+       "n": "5C–5G",
+       "text": "Morocco"
+      },
+      {
+       "n": "5H–5I",
+       "text": "Tanzania"
+      },
+      {
+       "n": "5J–5K",
+       "text": "Colombia"
+      },
+      {
+       "n": "5L–5M",
+       "text": "Liberia"
+      },
+      {
+       "n": "5N–5O",
+       "text": "Nigeria"
+      },
+      {
+       "n": "5P–5Q",
+       "text": "Denmark"
+      },
+      {
+       "n": "5R–5S",
+       "text": "Madagascar"
+      },
+      {
+       "n": "5T",
+       "text": "Mauritania"
+      },
+      {
+       "n": "5U",
+       "text": "Niger"
+      },
+      {
+       "n": "5V",
+       "text": "Togo"
+      },
+      {
+       "n": "5W",
+       "text": "Western Samoa"
+      },
+      {
+       "n": "5X",
+       "text": "Uganda"
+      },
+      {
+       "n": "5Y–5Z",
+       "text": "Kenya"
+      },
+      {
+       "n": "6A–6B",
+       "text": "Egypt"
+      },
+      {
+       "n": "6C",
+       "text": "Syria"
+      },
+      {
+       "n": "6D–6J",
+       "text": "Mexico"
+      },
+      {
+       "n": "6K–6N",
+       "text": "South Korea"
+      },
+      {
+       "n": "6O",
+       "text": "Somalia"
+      },
+      {
+       "n": "6P–6S",
+       "text": "Pakistan"
+      },
+      {
+       "n": "6T–6U",
+       "text": "Sudan"
+      },
+      {
+       "n": "6V–6W",
+       "text": "Senegal"
+      },
+      {
+       "n": "6X",
+       "text": "Madagascar"
+      },
+      {
+       "n": "6Y",
+       "text": "Jamaica"
+      },
+      {
+       "n": "6Z",
+       "text": "Liberia"
+      },
+      {
+       "n": "7A–7I",
+       "text": "Indonesia"
+      },
+      {
+       "n": "7J–7N",
+       "text": "Japan"
+      },
+      {
+       "n": "7O",
+       "text": "Yemen"
+      },
+      {
+       "n": "7P",
+       "text": "Lesotho"
+      },
+      {
+       "n": "7Q",
+       "text": "Malawi"
+      },
+      {
+       "n": "7R",
+       "text": "Algeria"
+      },
+      {
+       "n": "7S",
+       "text": "Sweden"
+      },
+      {
+       "n": "7T–7Y",
+       "text": "Algeria"
+      },
+      {
+       "n": "7Z",
+       "text": "Saudi Arabia"
+      },
+      {
+       "n": "8A–8I",
+       "text": "Indonesia"
+      },
+      {
+       "n": "8J–8N",
+       "text": "Japan"
+      },
+      {
+       "n": "8O",
+       "text": "Botswana"
+      },
+      {
+       "n": "8P",
+       "text": "Barbados"
+      },
+      {
+       "n": "8Q",
+       "text": "Maldives"
+      },
+      {
+       "n": "8R",
+       "text": "Guyana"
+      },
+      {
+       "n": "8S",
+       "text": "Sweden"
+      },
+      {
+       "n": "8T–8Y",
+       "text": "India"
+      },
+      {
+       "n": "8Z",
+       "text": "Saudi Arabia"
+      },
+      {
+       "n": "9A",
+       "text": "Croatia"
+      },
+      {
+       "n": "9B–9D",
+       "text": "Iran"
+      },
+      {
+       "n": "9E–9F",
+       "text": "Ethiopia"
+      },
+      {
+       "n": "9G",
+       "text": "Ghana"
+      },
+      {
+       "n": "9H",
+       "text": "Malta"
+      },
+      {
+       "n": "9I–9J",
+       "text": "Zambia"
+      },
+      {
+       "n": "9K",
+       "text": "Kuwait"
+      },
+      {
+       "n": "9L",
+       "text": "Sierra Leone"
+      },
+      {
+       "n": "9M",
+       "text": "Malaysia"
+      },
+      {
+       "n": "9N",
+       "text": "Nepal"
+      },
+      {
+       "n": "9O–9T",
+       "text": "Democratic Republic of the Congo"
+      },
+      {
+       "n": "9U",
+       "text": "Burundi"
+      },
+      {
+       "n": "9V",
+       "text": "Singapore"
+      },
+      {
+       "n": "9W",
+       "text": "Malaysia"
+      },
+      {
+       "n": "9X",
+       "text": "Rwanda"
+      },
+      {
+       "n": "9Y–9Z",
+       "text": "Trinidad and Tobago"
+      }
+     ]
+    }
+   ]
   }
  },
  "byCode": {
@@ -1542,5 +3277,14 @@
   "QQ": [
    "PRATIQUE"
   ]
- }
+ },
+ "guide": [
+  "FLAGS",
+  "TERMS",
+  "LETTERS",
+  "PROCEDURE",
+  "MORSE",
+  "DISTRESS",
+  "PREFIX"
+ ]
 }

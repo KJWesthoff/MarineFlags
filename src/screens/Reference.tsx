@@ -1,21 +1,26 @@
 import { useMemo, useState } from 'react'
 import { Flag } from '../components/Flag'
-import { TableLinks } from '../components/TableSheet'
+import { TableLinks, type Transfer } from '../components/TableSheet'
 import { FLAGS } from '../data/flags'
-import { CODEBOOK, encodeGroup, searchCodebook, tablesFor, type CodebookEntry, type TableRef } from '../lib/signals'
+import {
+  CODEBOOK, GUIDE, TABLES, encodeGroup, searchCodebook, tablesFor, type CodebookEntry, type TableRef,
+} from '../lib/signals'
 import { useStored } from '../lib/useStored'
 
-type View = 'flags' | 'signals'
+type View = 'flags' | 'signals' | 'guide'
 
 const SECTIONS = [...new Set(CODEBOOK.map((e) => e.section ?? 'Other'))]
 
 interface Props {
   onShowAsFlags: (group: string) => void
   onOpenTable: (ref: TableRef) => void
+  onTransfer: (transfer: Transfer) => void
 }
 
-export function Reference({ onShowAsFlags, onOpenTable }: Props) {
-  const [view, setView] = useStored<View>('reference-view', 'flags', (r) => (r === 'signals' ? 'signals' : 'flags'))
+export function Reference({ onShowAsFlags, onOpenTable, onTransfer }: Props) {
+  const [view, setView] = useStored<View>('reference-view', 'flags', (r) =>
+    r === 'signals' || r === 'guide' ? r : 'flags',
+  )
   const [query, setQuery] = useState('')
   const [section, setSection] = useStored('reference-section', SECTIONS[0], (r) =>
     SECTIONS.includes(r as string) ? (r as string) : undefined,
@@ -36,6 +41,25 @@ export function Reference({ onShowAsFlags, onOpenTable }: Props) {
     [q, query, section],
   )
 
+  const onAddFlag = (f: (typeof FLAGS)[number]) =>
+    onTransfer({ group: f.id, flag: f.id, label: f.kind === 'letter' || f.kind === 'numeral' ? f.id : f.name, replace: false })
+
+  // Rows from every guide topic that match the search, e.g. a country or a call sign prefix.
+  const guideHits = useMemo(() => {
+    if (!q) return []
+    const words = q.split(/\s+/)
+    return GUIDE.flatMap((id) =>
+      TABLES[id].groups.flatMap((g) =>
+        g.rows
+          .filter((row) => {
+            const text = `${row.n} ${row.text} ${row.detail ?? ''}`.toLowerCase()
+            return words.every((w) => text.includes(w))
+          })
+          .map((row) => ({ id, row })),
+      ),
+    ).slice(0, 120)
+  }, [q])
+
   return (
     <div className="reference">
       <header className="reference-head">
@@ -46,11 +70,20 @@ export function Reference({ onShowAsFlags, onOpenTable }: Props) {
           <button type="button" role="tab" aria-selected={view === 'signals'} onClick={() => setView('signals')}>
             Code book
           </button>
+          <button type="button" role="tab" aria-selected={view === 'guide'} onClick={() => setView('guide')}>
+            Guide
+          </button>
         </div>
         <input
           className="search"
           type="search"
-          placeholder={view === 'flags' ? 'Search flags: K, Kilo, pilot' : 'Search signals: NC, tow, doctor'}
+          placeholder={
+            view === 'flags'
+              ? 'Search flags: K, Kilo, pilot'
+              : view === 'signals'
+                ? 'Search signals: NC, tow, doctor'
+                : 'Search the guide: Denmark, OZ, tackline'
+          }
           aria-label="Search"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
@@ -79,12 +112,49 @@ export function Reference({ onShowAsFlags, onOpenTable }: Props) {
                     {f.pronunciation && <span className="say">{f.pronunciation}</span>}
                   </h2>
                   <p>{f.meaning ?? (f.kind === 'numeral' ? 'Numeral pennant.' : 'No meaning when hoisted alone.')}</p>
+                  <button
+                    type="button"
+                    className="quiet add-flag"
+                    onClick={() => onAddFlag(f)}
+                    aria-label={`Add ${f.name} to the hoist`}
+                  >
+                    Add to hoist
+                  </button>
                 </div>
               </li>
             ))}
           </ul>
         ) : (
           <p className="no-results">No flag matches “{query}”. Try a letter or a code word such as Kilo.</p>
+        )
+      ) : view === 'guide' ? (
+        !q ? (
+          <ul className="guide-list">
+            {GUIDE.map((id) => (
+              <li key={id}>
+                <button type="button" onClick={() => onOpenTable({ id })}>
+                  <strong>{TABLES[id].title}</strong>
+                  {TABLES[id].subtitle && <span>{TABLES[id].subtitle}</span>}
+                </button>
+              </li>
+            ))}
+          </ul>
+        ) : guideHits.length ? (
+          <ul className="guide-list">
+            {guideHits.map(({ id, row }) => (
+              <li key={`${id}-${row.n}`}>
+                <button type="button" onClick={() => onOpenTable({ id, row: row.n })}>
+                  <strong>
+                    <span className="group">{row.n}</span> {TABLES[id].keys === 'stacked' ? '' : row.text}
+                  </strong>
+                  {TABLES[id].keys === 'stacked' && <span>{row.text}</span>}
+                  <span>{TABLES[id].title}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="no-results">Nothing in the guide matches “{query}”. Try a country, such as Denmark.</p>
         )
       ) : signals.length ? (
         <ul className="signal-list">
@@ -103,7 +173,7 @@ function SignalRow(props: { entry: CodebookEntry; onOpen: (group: string) => voi
   const { entry, onOpen } = props
   const group = entry.code.replace(' ', '')
   const flags = useMemo(() => encodeGroup(group).flags, [group])
-  const tables = useMemo(() => tablesFor(entry).map((id): TableRef => ({ id })), [entry])
+  const tables = useMemo(() => tablesFor(entry).map((id): TableRef => ({ id, code: entry.code })), [entry])
   return (
     <li>
       <button type="button" onClick={() => onOpen(group)} aria-label={`${entry.code}: ${entry.meaning} Show as flags`}>

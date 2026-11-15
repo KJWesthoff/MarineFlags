@@ -31,13 +31,48 @@ export interface TableRow {
 export interface RefTable {
   title: string
   subtitle?: string
-  source: string
+  /** Where in the International Code of Signals the table is. */
+  source?: string
+  /** Source line for material that is not from the code book. */
+  credit?: string
   note?: string
+  /** How row keys are laid out: a wider column, or stacked above the text. */
+  keys?: 'wide' | 'stacked'
   groups: { title?: string; rows: TableRow[] }[]
 }
 
 export const TABLES = tablesData.tables as Record<string, RefTable>
 const TABLES_BY_CODE = tablesData.byCode as Record<string, string[]>
+/** Background topics offered in the Reference guide, in display order. */
+export const GUIDE = tablesData.guide as string[]
+
+/**
+ * The call sign series a group falls in, and the country it is allocated to.
+ * Series are keyed by their first one to three characters, e.g. "OU–OZ" or "3DA–3DM".
+ */
+export function callSignCountry(group: string): TableRow | undefined {
+  const allocations = TABLES.PREFIX.groups[0].rows
+  for (const length of [3, 2, 1]) {
+    const head = group.slice(0, length)
+    if (head.length < length) continue
+    const found = allocations.find((row) => {
+      const [from, to = from] = row.n.split('–')
+      return from.length === length && head >= from && head <= to
+    })
+    if (found) return found
+  }
+  return undefined
+}
+
+/** A note and table link for a group that could be a ship's call sign. */
+function callSignHint(group: string): { tables: TableRef[]; notes: string[] } {
+  const found = group.length >= 4 && group.length <= 7 ? callSignCountry(group) : undefined
+  if (!found) return { tables: [], notes: [] }
+  return {
+    tables: [{ id: 'PREFIX', row: found.n }],
+    notes: [`As a call sign, it belongs to ${found.text} (series ${found.n}).`],
+  }
+}
 
 /** Ids of the tables a signal refers to, in the order the meaning mentions them. */
 export function tablesFor(entry: CodebookEntry): string[] {
@@ -59,6 +94,24 @@ export function findRow(tableId: string, n: string): TableRow | undefined {
 export interface TableRef {
   id: string
   row?: string
+  /** The signal the table was opened from, e.g. "MBF" or "UV 4"; its rows are that signal's complements. */
+  code?: string
+}
+
+/** Tables whose rows are read, not hoisted. */
+const READ_ONLY_TABLES = new Set(['TERMS', 'FLAGS', 'DISTRESS', 'MAFOR'])
+/** Tables whose row keys are themselves signals or letters. */
+const SIGNAL_TABLES = new Set(['PRATIQUE', 'PROCEDURE', 'LETTERS', 'MORSE'])
+
+/**
+ * The group a table row stands for when hoisted, or null if the row is not a signal.
+ * A complement row joins the signal the table was opened from: MBF with row 12 is "MBF12".
+ */
+export function rowGroup(ref: TableRef, row: TableRow): string | null {
+  if (READ_ONLY_TABLES.has(ref.id)) return null
+  if (ref.id === 'PREFIX') return row.n.split('–')[0]
+  if (SIGNAL_TABLES.has(ref.id)) return row.n.replace(/\s/g, '')
+  return (ref.code ?? '').replace(/\s/g, '') + row.n
 }
 
 /** Tables for a signal, resolving a numeric complement to a row where one matches. */
@@ -68,7 +121,7 @@ function resolveTables(entry: CodebookEntry, complement?: string): { tables: Tab
   const tables = tablesFor(entry).map((id): TableRef => {
     const row = n === undefined ? undefined : findRow(id, n)
     if (row) notes.push(`${n}: ${row.text}${row.text.endsWith('.') ? '' : '.'}`)
-    return row ? { id, row: n } : { id }
+    return row ? { id, row: n, code: entry.code } : { id, code: entry.code }
   })
   return { tables, notes }
 }
@@ -276,7 +329,7 @@ export function decodeHoist(flags: FlagId[]): Decoded {
 
   const m = /^([A-Z]*)([0-9.]*)$/.exec(text)
   if (!m) {
-    return result({ kind: 'spelling', title: 'Mixed group', meaning: text })
+    return result({ kind: 'spelling', title: 'Mixed group', meaning: text, ...callSignHint(text) })
   }
   const [, letters, digits] = m
 
@@ -338,10 +391,11 @@ export function decodeHoist(flags: FlagId[]): Decoded {
     return result({
       kind: 'spelling', title: 'Spelled out',
       meaning: letters,
-      notes: [[...letters].map((l) => FLAG_BY_ID[l as FlagId].name).join(' · ')],
+      tables: callSignHint(letters).tables,
+      notes: [[...letters].map((l) => FLAG_BY_ID[l as FlagId].name).join(' · '), ...callSignHint(letters).notes],
     })
   }
-  return result({ kind: 'unknown', title: 'Unrecognized group', meaning: text })
+  return result({ kind: 'unknown', title: 'Unrecognized group', meaning: text, ...callSignHint(text) })
 }
 
 /** Decode a full message: several hoists, in the order they are to be read. */

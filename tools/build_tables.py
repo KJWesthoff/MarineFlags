@@ -213,6 +213,192 @@ M3_INTERNAL = [
 ]
 
 
+# ---------- Guide topics: background a signaller wants at hand ----------
+
+def stacked(*items):
+    return [{"n": heading, "text": text} for heading, text in items]
+
+
+FLAG_PROCEDURE = {
+    "title": "Signaling by flags",
+    "subtitle": "How a flag signal is made and answered",
+    "source": "Chapter 1, Section 5",
+    "keys": "stacked",
+    "groups": [{"rows": stacked(
+        ("One hoist at a time",
+         "As a general rule only one hoist should be shown at a time. Each hoist is kept flying until the receiving "
+         "station has answered it. Hoist the signal where the receiving station can see it most easily, with the "
+         "flags blowing out clear and free from smoke. Groups shown on the same halyard are separated by a tackline."),
+        ("How to call",
+         "Hoist the identity signal of the station addressed with the signal. With no identity signal, the signal is "
+         "addressed to all stations within visual signaling distance. If you do not know the other station’s identity "
+         "signal, first hoist VF (You should hoist your identity signal) or CS (What is the name or identity signal "
+         "of your vessel?), together with your own identity signal."),
+        ("How to answer",
+         "Hoist the answering pennant at the dip as soon as you see each hoist, and close up as soon as you understand "
+         "it. Lower it to the dip when the hoist is hauled down, and close up again when the next hoist is understood."),
+        ("How to complete a signal",
+         "After the last hoist, the transmitting station hoists the answering pennant alone to show the signal is "
+         "complete. The receiving station answers it like any other hoist."),
+        ("When a signal is not understood",
+         "If you cannot make the signal out, keep the answering pennant at the dip. If you can make it out but not "
+         "understand it, hoist ZQ (Your signal appears incorrectly coded. You should check and repeat the whole) or "
+         "ZL (Your signal has been received but not understood)."),
+        ("Substitutes",
+         "Substitutes repeat a flag within a group when only one set of flags is carried. The first substitute repeats "
+         "the uppermost flag of the class (letters or numerals) of the flag just above it; the second repeats the "
+         "second flag of that class, the third the third. No substitute is used more than once in a group. The "
+         "answering pennant used as a decimal point is ignored when choosing a substitute. Examples: VV is V, first "
+         "substitute. 1100 is 1, first substitute, 0, third substitute. L2330 is L, 2, 3, second substitute, 0."),
+        ("How to spell",
+         "Names in the text of a signal are spelled out with the alphabetical flags. YZ (The words which follow are "
+         "in plain language) can be used first if necessary."),
+        ("Code pennant by ships of war",
+         "A ship of war wishing to communicate with a merchant vessel hoists the Code pennant in a conspicuous "
+         "position and keeps it flying the whole time the signal is being made."),
+    )}],
+}
+
+TERMS = {
+    "title": "Signaling terms",
+    "subtitle": "Words the code uses",
+    "source": "Chapter 1, Section 2",
+    "keys": "stacked",
+    "groups": [{"rows": stacked(
+        ("Group", "More than one continuous letter and/or numeral which together compose a signal."),
+        ("Numeral group", "One or more numerals."),
+        ("Hoist", "One or more groups displayed from a single halyard."),
+        ("At the dip", "A hoist or signal hoisted about half of the full extent of the halyards."),
+        ("Close up", "A hoist or signal hoisted to the full extent of the halyards."),
+        ("Tackline", "A length of halyard about 2 m (6 ft) long, used to separate each group of flags."),
+        ("Identity signal or call sign",
+         "The group of letters and figures assigned to each station by its administration. Identity signals are "
+         "allocated internationally, so they can indicate the nationality of a ship or aircraft."),
+        ("Station", "A ship, aircraft, survival craft, or any place at which communications can be effected."),
+        ("Transmitting station", "The station by which a signal is actually being made."),
+        ("Receiving station", "The station by which a signal is actually being read."),
+        ("Procedure signal", "A signal designed to facilitate the conduct of signaling."),
+        ("Originator", "The authority who orders a signal to be sent."),
+        ("Addressee", "The authority to whom a signal is addressed."),
+        ("Time of origin", "The time at which a signal is ordered to be made."),
+    )}],
+}
+
+LETTER_COMPLEMENTS = {
+    "title": "Single letters with numerals",
+    "subtitle": "A letter followed by figures gives a value",
+    "source": "Chapter 1, Section 10",
+    "groups": [{"rows": rows(
+        ("A", "Azimuth or bearing", "With three numerals."),
+        ("C", "Course", "With three numerals."),
+        ("D", "Date", "With two, four or six numerals."),
+        ("G", "Longitude", "With four or five numerals: the last two are minutes, the rest degrees."),
+        ("K", "I wish to communicate with you by… (Complements Table 1)", "With one numeral."),
+        ("L", "Latitude", "With four numerals: the first two are degrees, the rest minutes."),
+        ("R", "Distance in nautical miles", "With one or more numerals."),
+        ("S", "Speed in knots", "With one or more numerals."),
+        ("T", "Local time", "With four numerals: the first two are hours, the rest minutes."),
+        ("V", "Speed in kilometers per hour", "With one or more numerals."),
+        ("Z", "UTC", "With four numerals: the first two are hours, the rest minutes. With one numeral: to call "
+              "or address shore visual stations."),
+    )}],
+}
+
+PROCEDURE_SIGNALS = {
+    "title": "Procedure signals",
+    "subtitle": "Signals that help conduct signaling",
+    "source": "Chapter 1, Section 10",
+    "keys": "wide",
+    "note": "C, N, NO and RQ cannot be used in conjunction with single-letter signals.",
+    "groups": [{"rows": rows(
+        ("AA", "“All after…” (used after RPT) means “Repeat all after…”."),
+        ("AB", "“All before…” (used after RPT) means “Repeat all before…”."),
+        ("AR", "Ending signal, or end of transmission or signal."),
+        ("AS", "Waiting signal or period."),
+        ("BN", "“All between… and…” (used after RPT) means “Repeat all between… and…”."),
+        ("C", "Affirmative: yes, or “The significance of the previous group should be read in the affirmative”."),
+        ("CQ", "Call for unknown station(s) or general call to all stations."),
+        ("CS", "“What is the name or identity signal of your vessel (or station)?”"),
+        ("DE", "“From…” (used to precede the name or identity signal of the calling station)."),
+        ("K", "“I wish to communicate with you” or “Invitation to transmit”."),
+        ("NO", "Negative: no, or “The significance of the previous group should be read in the negative”."),
+        ("OK", "Acknowledging a correct repetition, or “It is correct”."),
+        ("RQ", "Interrogative, or “The significance of the previous group should be read as a question”."),
+        ("R", "“Received” or “I have received your last signal”."),
+        ("RPT", "Repeat signal: “I repeat” or “Repeat what you have sent” or “Repeat what you have received”."),
+        ("WA", "“Word or group after…” (used after RPT) means “Repeat word or group after…”."),
+        ("WB", "“Word or group before…” (used after RPT) means “Repeat word or group before…”."),
+    )}],
+}
+
+MORSE_CODES = {
+    "A": ".-", "B": "-...", "C": "-.-.", "D": "-..", "E": ".", "F": "..-.", "G": "--.", "H": "....", "I": "..",
+    "J": ".---", "K": "-.-", "L": ".-..", "M": "--", "N": "-.", "O": "---", "P": ".--.", "Q": "--.-", "R": ".-.",
+    "S": "...", "T": "-", "U": "..-", "V": "...-", "W": ".--", "X": "-..-", "Y": "-.--", "Z": "--..",
+    "1": ".----", "2": "..---", "3": "...--", "4": "....-", "5": ".....", "6": "-....", "7": "--...",
+    "8": "---..", "9": "----.", "0": "-----",
+}
+
+
+def morse_rows(chars):
+    return [{"n": c, "text": " ".join("•" if s == "." else "–" for s in MORSE_CODES[c])} for c in chars]
+
+
+MORSE = {
+    "title": "Morse code",
+    "subtitle": "Letters and numerals",
+    "source": "Chapter 1, Section 10",
+    "groups": [
+        {"title": "Letters", "rows": morse_rows("ABCDEFGHIJKLMNOPQRSTUVWXYZ")},
+        {"title": "Numerals", "rows": morse_rows("1234567890")},
+    ],
+}
+
+DISTRESS = {
+    "title": "Distress signals",
+    "subtitle": "Prescribed by the International Regulations for Preventing Collisions at Sea, 1972",
+    "source": "Chapter 4, Section 1",
+    "note": "To be used or displayed, together or separately, by a vessel (or seaplane on the water) in distress "
+            "requiring assistance from other vessels or from the shore. Using any of these signals except to "
+            "indicate distress, or using signals that may be confused with them, is prohibited.",
+    "groups": [{"rows": rows(
+        (1, "A gun or other explosive signal fired at intervals of about a minute."),
+        (2, "A continuous sounding with any fog-signaling apparatus."),
+        (3, "Rockets or shells, throwing red stars fired one at a time at short intervals."),
+        (4, "A signal made by radiotelegraphy or by any other signaling method consisting of the group "
+            "• • •  – – –  • • • (SOS) in the Morse Code."),
+        (5, "A signal sent by radiotelephony consisting of the spoken word “MAYDAY”."),
+        (6, "The International Code Signal of distress indicated by NC."),
+        (7, "A signal consisting of a square flag having above or below it a ball or anything resembling a ball."),
+        (8, "Flames on the vessel (as from a burning tar barrel, oil barrel, etc.)."),
+        (9, "A rocket parachute flare or a hand flare showing a red light."),
+        (10, "A smoke signal giving off a volume of orange-colored smoke."),
+        (11, "Slowly and repeatedly raising and lowering arms outstretched to each side."),
+        (12, "The radiotelegraph alarm signal.", "A series of twelve four-second dashes at intervals of one second."),
+        (13, "The radiotelephone alarm signal.",
+             "Two audio tones transmitted alternately at 2200 Hz and 1300 Hz for 30 seconds to one minute."),
+        (14, "Signals transmitted by emergency position-indicating beacons."),
+    )}],
+}
+
+
+def build_prefixes():
+    allocations = json.loads(Path(__file__).with_name("itu_prefixes.json").read_text())
+    return {
+        "title": "Call sign prefixes",
+        "subtitle": "The country a call sign (identity signal) belongs to",
+        "credit": "International Telecommunication Union, Radio Regulations, Appendix 42: allocation of "
+                  "international call sign series.",
+        "keys": "wide",
+        "note": "A ship’s call sign starts with characters from a series allocated to its flag state, so the first "
+                "one or two characters of an identity signal show its nationality.",
+        "groups": [{"rows": [{"n": prefix, "text": country} for prefix, country in allocations]}],
+    }
+
+
+GUIDE = ["FLAGS", "TERMS", "LETTERS", "PROCEDURE", "MORSE", "DISTRESS", "PREFIX"]
+
+
 def medicament(n, common, english, latin, strength=None, caution=None):
     detail = f"{english} ({latin})" if english.lower() != common.lower() else latin
     if strength:
@@ -298,6 +484,8 @@ def main():
         "M1": build_m1(lines), "M2": build_m2(lines), "M3": build_m3(),
         "AGROUND": AGROUND, "JETTISON": JETTISON, "PASSAGE": PASSAGE,
         "SEA": SEA, "SWELL": SWELL, "MAFOR": MAFOR, "PRATIQUE": pratique,
+        "FLAGS": FLAG_PROCEDURE, "TERMS": TERMS, "LETTERS": LETTER_COMPLEMENTS,
+        "PROCEDURE": PROCEDURE_SIGNALS, "MORSE": MORSE, "DISTRESS": DISTRESS, "PREFIX": build_prefixes(),
     }
     # Signals that point at a list without naming a numbered table.
     by_code = {
@@ -306,7 +494,7 @@ def main():
         "WY": ["SEA"], "XB": ["SEA"], "XE": ["SWELL"], "XH": ["SWELL"],
         "XV": ["MAFOR"], "QQ": ["PRATIQUE"],
     }
-    Path(out).write_text(json.dumps({"tables": tables, "byCode": by_code}, ensure_ascii=False, indent=1) + "\n")
+    Path(out).write_text(json.dumps({"tables": tables, "byCode": by_code, "guide": GUIDE}, ensure_ascii=False, indent=1) + "\n")
     print({k: sum(len(g["rows"]) for g in t["groups"]) for k, t in tables.items()}, file=sys.stderr)
 
 

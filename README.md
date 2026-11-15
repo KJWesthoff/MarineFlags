@@ -8,7 +8,7 @@ Phases 1 (foundation) and 2 (compose and reference) are done.
 
 - **Compose** – build a message from flags or by typing a group; each hoist is decoded live.
 - **Positions** – add a latitude/longitude from the device's location or by tapping a map. The map uses OpenStreetMap tiles when online, over a bundled coastline that works offline.
-- **Reference** – all 40 flags with names and meanings, and the searchable code book. Tapping a signal shows it as flags.
+- **Reference** – all 40 flags with names and meanings, the searchable code book, and a guide (signaling procedure, terms, procedure signals, Morse code, distress signals, call sign prefixes by country). Tapping a signal shows it as flags.
 - Installable and usable offline (service worker and web manifest via `vite-plugin-pwa`).
 
 Code layout:
@@ -38,5 +38,7 @@ python3 tools/build_tables.py pub102.txt src/data/tables.json
 ```
 
 ## Source
+
+Call sign prefixes (`tools/itu_prefixes.json`) are the ITU allocations of international call sign series (Radio Regulations, Appendix 42), taken from the list on Wikipedia's “ITU prefix” page.
 
 Signal meanings come from the *International Code of Signals* (Pub. 102, 1969 edition, revised 2020), published by the US National Geospatial-Intelligence Agency.
