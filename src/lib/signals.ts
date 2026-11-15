@@ -3,6 +3,7 @@
  * Pure logic, no UI: a hoist is a list of flags read from the top down.
  */
 import codebookData from '../data/codebook.json'
+import tablesData from '../data/tables.json'
 import { FLAG_BY_ID, type FlagId } from '../data/flags'
 
 export interface CodebookEntry {
@@ -16,6 +17,61 @@ export const CODEBOOK = codebookData as CodebookEntry[]
 const BY_CODE = new Map(CODEBOOK.map((e) => [e.code, e]))
 
 export const lookup = (code: string): CodebookEntry | undefined => BY_CODE.get(code)
+
+export interface TableRow {
+  n: string
+  text: string
+  detail?: string
+  caution?: string
+  /** Marked in the book: indicate the side of the body as required. */
+  star?: boolean
+}
+
+/** A table or list from the book that signals refer to. */
+export interface RefTable {
+  title: string
+  subtitle?: string
+  source: string
+  note?: string
+  groups: { title?: string; rows: TableRow[] }[]
+}
+
+export const TABLES = tablesData.tables as Record<string, RefTable>
+const TABLES_BY_CODE = tablesData.byCode as Record<string, string[]>
+
+/** Ids of the tables a signal refers to, in the order the meaning mentions them. */
+export function tablesFor(entry: CodebookEntry): string[] {
+  const ids = new Set<string>()
+  for (const m of entry.meaning.matchAll(/Table (M-)?(\d)/g)) ids.add((m[1] ? 'M' : 'C') + m[2])
+  for (const id of TABLES_BY_CODE[entry.code] ?? []) ids.add(id)
+  return [...ids].filter((id) => id in TABLES)
+}
+
+export function findRow(tableId: string, n: string): TableRow | undefined {
+  for (const g of TABLES[tableId]?.groups ?? []) {
+    const row = g.rows.find((r) => r.n === n)
+    if (row) return row
+  }
+  return undefined
+}
+
+/** A table to offer alongside a decoded signal, with the row its complement selects. */
+export interface TableRef {
+  id: string
+  row?: string
+}
+
+/** Tables for a signal, resolving a numeric complement to a row where one matches. */
+function resolveTables(entry: CodebookEntry, complement?: string): { tables: TableRef[]; notes: string[] } {
+  const n = complement === undefined ? undefined : String(Number(complement))
+  const notes: string[] = []
+  const tables = tablesFor(entry).map((id): TableRef => {
+    const row = n === undefined ? undefined : findRow(id, n)
+    if (row) notes.push(`${n}: ${row.text}${row.text.endsWith('.') ? '' : '.'}`)
+    return row ? { id, row: n } : { id }
+  })
+  return { tables, notes }
+}
 
 const isLetter = (c: string) => /^[A-Z]$/.test(c)
 const isDigit = (c: string) => /^[0-9]$/.test(c)
@@ -129,6 +185,8 @@ export interface Decoded {
   notes: string[]
   errors: string[]
   entry?: CodebookEntry
+  /** Tables from the book that this signal refers to. */
+  tables: TableRef[]
 }
 
 const COMMUNICATE_BY = [
@@ -183,7 +241,7 @@ function decodeComplement(letter: string, digits: string): { title: string; mean
 
 /** Work out what one hoist means. */
 export function decodeHoist(flags: FlagId[]): Decoded {
-  const base = { notes: [] as string[], errors: [] as string[] }
+  const base = { notes: [] as string[], errors: [] as string[], tables: [] as TableRef[] }
   if (flags.length === 0) return { ...base, kind: 'empty', text: '', title: '', meaning: '' }
 
   if (flags.length === 1 && FLAG_BY_ID[flags[0]].kind !== 'letter' && FLAG_BY_ID[flags[0]].kind !== 'numeral') {
@@ -193,9 +251,9 @@ export function decodeHoist(flags: FlagId[]): Decoded {
   }
 
   const { text, errors } = resolveHoist(flags)
-  const result = (d: Omit<Decoded, 'notes' | 'errors' | 'text'> & { notes?: string[]; text?: string }): Decoded => ({
-    text, notes: [], ...d, errors,
-  })
+  const result = (
+    d: Omit<Decoded, 'notes' | 'errors' | 'text' | 'tables'> & { notes?: string[]; text?: string; tables?: TableRef[] },
+  ): Decoded => ({ text, notes: [], tables: [], ...d, errors })
 
   if (text.includes('?')) {
     return result({ kind: 'unknown', title: 'Invalid hoist', meaning: 'This hoist cannot be read as it stands.' })
@@ -233,18 +291,29 @@ export function decodeHoist(flags: FlagId[]): Decoded {
     const title = medical ? 'Medical signal' : 'Code signal'
     if (!digits) {
       const entry = lookup(letters)
-      if (entry) return result({ kind, title, meaning: entry.meaning, entry })
+      if (entry) return result({ kind, title, meaning: entry.meaning, entry, ...resolveTables(entry) })
     } else if (plainDigits) {
       const exactCode = `${letters} ${Number(digits)}`
       const exact = digits.length <= 2 ? lookup(exactCode) : undefined
       if (exact) {
-        return result({ kind, title, meaning: exact.meaning, entry: exact, text: exactCode })
+        return result({ kind, title, meaning: exact.meaning, entry: exact, text: exactCode, ...resolveTables(exact) })
+      }
+      // A numbered signal followed by its own complement, e.g. UV 4 with condition 2.
+      for (const split of [1, 2]) {
+        const sub = digits.length > split ? lookup(`${letters} ${Number(digits.slice(0, split))}`) : undefined
+        const rest = digits.slice(split)
+        const resolved = sub && resolveTables(sub, rest)
+        if (sub && resolved && resolved.notes.length) {
+          return result({ kind, title, meaning: sub.meaning, entry: sub, text: `${sub.code} ${rest}`, ...resolved })
+        }
       }
       const entry = lookup(letters)
       if (entry) {
+        const resolved = resolveTables(entry, digits)
         return result({
           kind, title, meaning: entry.meaning, entry, text: `${letters} ${digits}`,
-          notes: [`With complement ${digits}.`],
+          tables: resolved.tables,
+          notes: resolved.notes.length ? resolved.notes : [`With complement ${digits}.`],
         })
       }
     }

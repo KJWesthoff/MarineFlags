@@ -1,14 +1,20 @@
 import { useMemo, useState } from 'react'
 import { Flag } from '../components/Flag'
+import { TableLinks } from '../components/TableSheet'
 import { FLAGS } from '../data/flags'
-import { CODEBOOK, encodeGroup, searchCodebook, type CodebookEntry } from '../lib/signals'
+import { CODEBOOK, encodeGroup, searchCodebook, tablesFor, type CodebookEntry, type TableRef } from '../lib/signals'
 import { useStored } from '../lib/useStored'
 
 type View = 'flags' | 'signals'
 
 const SECTIONS = [...new Set(CODEBOOK.map((e) => e.section ?? 'Other'))]
 
-export function Reference({ onShowAsFlags }: { onShowAsFlags: (group: string) => void }) {
+interface Props {
+  onShowAsFlags: (group: string) => void
+  onOpenTable: (ref: TableRef) => void
+}
+
+export function Reference({ onShowAsFlags, onOpenTable }: Props) {
   const [view, setView] = useStored<View>('reference-view', 'flags', (r) => (r === 'signals' ? 'signals' : 'flags'))
   const [query, setQuery] = useState('')
   const [section, setSection] = useStored('reference-section', SECTIONS[0], (r) =>
@@ -83,7 +89,7 @@ export function Reference({ onShowAsFlags }: { onShowAsFlags: (group: string) =>
       ) : signals.length ? (
         <ul className="signal-list">
           {signals.map((e) => (
-            <SignalRow key={e.code} entry={e} onOpen={onShowAsFlags} />
+            <SignalRow key={e.code} entry={e} onOpen={onShowAsFlags} onOpenTable={onOpenTable} />
           ))}
         </ul>
       ) : (
@@ -93,9 +99,11 @@ export function Reference({ onShowAsFlags }: { onShowAsFlags: (group: string) =>
   )
 }
 
-function SignalRow({ entry, onOpen }: { entry: CodebookEntry; onOpen: (group: string) => void }) {
+function SignalRow(props: { entry: CodebookEntry; onOpen: (group: string) => void; onOpenTable: (ref: TableRef) => void }) {
+  const { entry, onOpen } = props
   const group = entry.code.replace(' ', '')
   const flags = useMemo(() => encodeGroup(group).flags, [group])
+  const tables = useMemo(() => tablesFor(entry).map((id): TableRef => ({ id })), [entry])
   return (
     <li>
       <button type="button" onClick={() => onOpen(group)} aria-label={`${entry.code}: ${entry.meaning} Show as flags`}>
@@ -109,6 +117,7 @@ function SignalRow({ entry, onOpen }: { entry: CodebookEntry; onOpen: (group: st
           <span>{entry.meaning}</span>
         </span>
       </button>
+      <TableLinks tables={tables} onOpen={props.onOpenTable} />
     </li>
   )
 }

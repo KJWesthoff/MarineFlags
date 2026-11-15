@@ -68,7 +68,13 @@ def parse(lines, start, end, entry_re, medical, vocab):
         nonlocal block
         if block:
             m = entry_re.match(block[0])
-            block = block[: next((i for i, l in enumerate(block) if XREF_RE.search(l)), len(block))] if m and not XREF_RE.search(block[0]) else []
+            if m and XREF_RE.search(block[0]):
+                # A signal that duplicates a single-letter signal: dot leaders run to the
+                # cross-reference column. Keep the meaning, drop the leaders.
+                block = [re.sub(r"\s*(\.\s){6,}.*$", ".", block[0])]
+                m = entry_re.match(block[0])
+            elif m:
+                block = block[: next((i for i, l in enumerate(block) if XREF_RE.search(l)), len(block))]
             if m and block:
                 star, code, num, first = m.groups()
                 if num:

@@ -1,0 +1,1546 @@
+{
+ "tables": {
+  "C1": {
+   "title": "Complements Table 1",
+   "subtitle": "Means of communication",
+   "source": "Chapter 2, Section 10",
+   "groups": [
+    {
+     "rows": [
+      {
+       "n": "1",
+       "text": "Morse signaling by hand flags or arms"
+      },
+      {
+       "n": "2",
+       "text": "Loud hailer (megaphone)"
+      },
+      {
+       "n": "3",
+       "text": "Morse signaling lamp"
+      },
+      {
+       "n": "4",
+       "text": "Sound signals"
+      }
+     ]
+    }
+   ]
+  },
+  "C2": {
+   "title": "Complements Table 2",
+   "subtitle": "Assistance and supplies",
+   "source": "Chapter 2, Section 10",
+   "groups": [
+    {
+     "rows": [
+      {
+       "n": "0",
+       "text": "Water"
+      },
+      {
+       "n": "1",
+       "text": "Provisions"
+      },
+      {
+       "n": "2",
+       "text": "Fuel"
+      },
+      {
+       "n": "3",
+       "text": "Pumping equipment"
+      },
+      {
+       "n": "4",
+       "text": "Firefighting appliances"
+      },
+      {
+       "n": "5",
+       "text": "Medical assistance"
+      },
+      {
+       "n": "6",
+       "text": "Towing"
+      },
+      {
+       "n": "7",
+       "text": "Survival craft"
+      },
+      {
+       "n": "8",
+       "text": "Vessel to stand by"
+      },
+      {
+       "n": "9",
+       "text": "Icebreaker"
+      }
+     ]
+    }
+   ]
+  },
+  "C3": {
+   "title": "Complements Table 3",
+   "subtitle": "Directions",
+   "source": "Chapter 2, Section 10",
+   "groups": [
+    {
+     "rows": [
+      {
+       "n": "0",
+       "text": "Direction unknown (or calm)"
+      },
+      {
+       "n": "1",
+       "text": "Northeast"
+      },
+      {
+       "n": "2",
+       "text": "East"
+      },
+      {
+       "n": "3",
+       "text": "Southeast"
+      },
+      {
+       "n": "4",
+       "text": "South"
+      },
+      {
+       "n": "5",
+       "text": "Southwest"
+      },
+      {
+       "n": "6",
+       "text": "West"
+      },
+      {
+       "n": "7",
+       "text": "Northwest"
+      },
+      {
+       "n": "8",
+       "text": "North"
+      },
+      {
+       "n": "9",
+       "text": "All directions (or confused or variable)"
+      }
+     ]
+    }
+   ]
+  },
+  "M1": {
+   "title": "Table M-1",
+   "subtitle": "Regions of the body",
+   "source": "Chapter 3, Section 4",
+   "note": "Side of body or limb affected should be clearly indicated: right, left. For regions marked *, indicate side as required.",
+   "groups": [
+    {
+     "title": "Front of the body",
+     "rows": [
+      {
+       "n": "1",
+       "text": "Frontal region of head"
+      },
+      {
+       "n": "2",
+       "text": "Side of head"
+      },
+      {
+       "n": "3",
+       "text": "Top of head"
+      },
+      {
+       "n": "4",
+       "text": "Face"
+      },
+      {
+       "n": "5",
+       "text": "Jaw"
+      },
+      {
+       "n": "6",
+       "text": "Neck front"
+      },
+      {
+       "n": "7",
+       "text": "Shoulder"
+      },
+      {
+       "n": "8",
+       "text": "Clavicle"
+      },
+      {
+       "n": "9",
+       "text": "Chest",
+       "star": true
+      },
+      {
+       "n": "10",
+       "text": "Chest, mid"
+      },
+      {
+       "n": "11",
+       "text": "Heart"
+      },
+      {
+       "n": "12",
+       "text": "Armpit"
+      },
+      {
+       "n": "13",
+       "text": "Arm upper"
+      },
+      {
+       "n": "14",
+       "text": "Forearm"
+      },
+      {
+       "n": "15",
+       "text": "Wrist"
+      },
+      {
+       "n": "16",
+       "text": "Palm of hand"
+      },
+      {
+       "n": "17",
+       "text": "Fingers"
+      },
+      {
+       "n": "18",
+       "text": "Thumb"
+      },
+      {
+       "n": "19",
+       "text": "Central upper abdomen"
+      },
+      {
+       "n": "20",
+       "text": "Central lower abdomen"
+      },
+      {
+       "n": "21",
+       "text": "Upper abdomen",
+       "star": true
+      },
+      {
+       "n": "22",
+       "text": "Lower abdomen",
+       "star": true
+      },
+      {
+       "n": "23",
+       "text": "Lateral abdomen",
+       "star": true
+      },
+      {
+       "n": "24",
+       "text": "Groin",
+       "star": true
+      },
+      {
+       "n": "25",
+       "text": "Scrotum"
+      },
+      {
+       "n": "26",
+       "text": "Testicles"
+      },
+      {
+       "n": "27",
+       "text": "Penis"
+      },
+      {
+       "n": "28",
+       "text": "Upper thigh"
+      },
+      {
+       "n": "29",
+       "text": "Middle thigh"
+      },
+      {
+       "n": "30",
+       "text": "Lower thigh"
+      },
+      {
+       "n": "31",
+       "text": "Knee"
+      },
+      {
+       "n": "32",
+       "text": "Patella"
+      },
+      {
+       "n": "33",
+       "text": "Front of leg"
+      },
+      {
+       "n": "34",
+       "text": "Ankle"
+      },
+      {
+       "n": "35",
+       "text": "Foot"
+      },
+      {
+       "n": "36",
+       "text": "Toes"
+      }
+     ]
+    },
+    {
+     "title": "Back of the body",
+     "rows": [
+      {
+       "n": "37",
+       "text": "Back of head"
+      },
+      {
+       "n": "38",
+       "text": "Back of neck"
+      },
+      {
+       "n": "39",
+       "text": "Back of shoulder"
+      },
+      {
+       "n": "40",
+       "text": "Scapula region"
+      },
+      {
+       "n": "41",
+       "text": "Elbow"
+      },
+      {
+       "n": "42",
+       "text": "Back upper arm"
+      },
+      {
+       "n": "43",
+       "text": "Back lower arm"
+      },
+      {
+       "n": "44",
+       "text": "Back of hand"
+      },
+      {
+       "n": "45",
+       "text": "Lower chest region",
+       "star": true
+      },
+      {
+       "n": "46",
+       "text": "Spinal column upper"
+      },
+      {
+       "n": "47",
+       "text": "Spinal column middle"
+      },
+      {
+       "n": "48",
+       "text": "Spinal column lower"
+      },
+      {
+       "n": "49",
+       "text": "Lumbar (kidney) region",
+       "star": true
+      },
+      {
+       "n": "50",
+       "text": "Sacral region"
+      },
+      {
+       "n": "51",
+       "text": "Buttock"
+      },
+      {
+       "n": "52",
+       "text": "Anus"
+      },
+      {
+       "n": "53",
+       "text": "Back of thigh"
+      },
+      {
+       "n": "54",
+       "text": "Back of knee"
+      },
+      {
+       "n": "55",
+       "text": "Calf"
+      },
+      {
+       "n": "56",
+       "text": "Heel"
+      }
+     ]
+    },
+    {
+     "title": "Other organs of the body",
+     "rows": [
+      {
+       "n": "57",
+       "text": "Artery"
+      },
+      {
+       "n": "58",
+       "text": "Bladder"
+      },
+      {
+       "n": "59",
+       "text": "Brain"
+      },
+      {
+       "n": "60",
+       "text": "Breast"
+      },
+      {
+       "n": "61",
+       "text": "Ear(s)"
+      },
+      {
+       "n": "62",
+       "text": "Eye(s)"
+      },
+      {
+       "n": "63",
+       "text": "Eyelid(s)"
+      },
+      {
+       "n": "64",
+       "text": "Gall bladder"
+      },
+      {
+       "n": "65",
+       "text": "Gullet (esophagus)"
+      },
+      {
+       "n": "66",
+       "text": "Gums"
+      },
+      {
+       "n": "67",
+       "text": "Intestine"
+      },
+      {
+       "n": "68",
+       "text": "Kidney"
+      },
+      {
+       "n": "69",
+       "text": "Lip, lower"
+      },
+      {
+       "n": "70",
+       "text": "Lip, upper"
+      },
+      {
+       "n": "71",
+       "text": "Liver"
+      },
+      {
+       "n": "72",
+       "text": "Lungs"
+      },
+      {
+       "n": "73",
+       "text": "Mouth"
+      },
+      {
+       "n": "74",
+       "text": "Nose"
+      },
+      {
+       "n": "75",
+       "text": "Pancreas"
+      },
+      {
+       "n": "76",
+       "text": "Prostate"
+      },
+      {
+       "n": "77",
+       "text": "Rib(s)"
+      },
+      {
+       "n": "78",
+       "text": "Spleen"
+      },
+      {
+       "n": "79",
+       "text": "Stomach"
+      },
+      {
+       "n": "80",
+       "text": "Throat"
+      },
+      {
+       "n": "81",
+       "text": "Tongue"
+      },
+      {
+       "n": "82",
+       "text": "Tonsils"
+      },
+      {
+       "n": "83",
+       "text": "Tooth, teeth"
+      },
+      {
+       "n": "84",
+       "text": "Urethra"
+      },
+      {
+       "n": "85",
+       "text": "Uterus, womb"
+      },
+      {
+       "n": "86",
+       "text": "Vein"
+      },
+      {
+       "n": "87",
+       "text": "Voice box (larynx)"
+      },
+      {
+       "n": "88",
+       "text": "Whole abdomen"
+      },
+      {
+       "n": "89",
+       "text": "Whole arm"
+      },
+      {
+       "n": "90",
+       "text": "Whole back"
+      },
+      {
+       "n": "91",
+       "text": "Whole chest"
+      },
+      {
+       "n": "92",
+       "text": "Whole leg"
+      }
+     ]
+    }
+   ]
+  },
+  "M2": {
+   "title": "Table M-2",
+   "subtitle": "List of common diseases",
+   "source": "Chapter 3, Section 4",
+   "groups": [
+    {
+     "rows": [
+      {
+       "n": "1",
+       "text": "Abscess"
+      },
+      {
+       "n": "2",
+       "text": "Alcoholism"
+      },
+      {
+       "n": "3",
+       "text": "Allergic reaction"
+      },
+      {
+       "n": "4",
+       "text": "Amoebic dysentery"
+      },
+      {
+       "n": "5",
+       "text": "Angina pectoris"
+      },
+      {
+       "n": "6",
+       "text": "Anthrax"
+      },
+      {
+       "n": "7",
+       "text": "Apoplexy (stroke)"
+      },
+      {
+       "n": "8",
+       "text": "Appendicitis"
+      },
+      {
+       "n": "9",
+       "text": "Asthma"
+      },
+      {
+       "n": "10",
+       "text": "Bacillary dysentery"
+      },
+      {
+       "n": "11",
+       "text": "Boils"
+      },
+      {
+       "n": "12",
+       "text": "Bronchitis (acute)"
+      },
+      {
+       "n": "13",
+       "text": "Bronchitis (chronic)"
+      },
+      {
+       "n": "14",
+       "text": "Brucellosis"
+      },
+      {
+       "n": "15",
+       "text": "Carbuncle"
+      },
+      {
+       "n": "16",
+       "text": "Cellulitis"
+      },
+      {
+       "n": "17",
+       "text": "Chancroid"
+      },
+      {
+       "n": "18",
+       "text": "Chicken pox"
+      },
+      {
+       "n": "19",
+       "text": "Cholera"
+      },
+      {
+       "n": "20",
+       "text": "Cirrhosis of the liver"
+      },
+      {
+       "n": "21",
+       "text": "Concussion"
+      },
+      {
+       "n": "22",
+       "text": "Compression of brain"
+      },
+      {
+       "n": "23",
+       "text": "Congestive heart failure"
+      },
+      {
+       "n": "24",
+       "text": "Constipation"
+      },
+      {
+       "n": "25",
+       "text": "Coronary thrombosis"
+      },
+      {
+       "n": "26",
+       "text": "Cystitis (bladder inflammation)"
+      },
+      {
+       "n": "27",
+       "text": "Dengue"
+      },
+      {
+       "n": "28",
+       "text": "Diabetes"
+      },
+      {
+       "n": "29",
+       "text": "Diabetic coma"
+      },
+      {
+       "n": "30",
+       "text": "Diptheria"
+      },
+      {
+       "n": "31",
+       "text": "Drug reaction"
+      },
+      {
+       "n": "32",
+       "text": "Duodenal ulcer"
+      },
+      {
+       "n": "33",
+       "text": "Eczema"
+      },
+      {
+       "n": "34",
+       "text": "Erysipelas"
+      },
+      {
+       "n": "35",
+       "text": "Fits"
+      },
+      {
+       "n": "36",
+       "text": "Gangrene"
+      },
+      {
+       "n": "37",
+       "text": "Gastric ulcer"
+      },
+      {
+       "n": "38",
+       "text": "Gastroenteritis"
+      },
+      {
+       "n": "39",
+       "text": "Gonorrhea"
+      },
+      {
+       "n": "40",
+       "text": "Gout"
+      },
+      {
+       "n": "41",
+       "text": "Heat cramps"
+      },
+      {
+       "n": "42",
+       "text": "Heat exhaustion"
+      },
+      {
+       "n": "43",
+       "text": "Heat stroke"
+      },
+      {
+       "n": "44",
+       "text": "Hepatitis"
+      },
+      {
+       "n": "45",
+       "text": "Hernia"
+      },
+      {
+       "n": "46",
+       "text": "Hernia (irreducible)"
+      },
+      {
+       "n": "47",
+       "text": "Hernia (strangulated)"
+      },
+      {
+       "n": "48",
+       "text": "Immersion foot"
+      },
+      {
+       "n": "49",
+       "text": "Impetigo"
+      },
+      {
+       "n": "50",
+       "text": "Insulin overdose"
+      },
+      {
+       "n": "51",
+       "text": "Indigestion"
+      },
+      {
+       "n": "52",
+       "text": "Influenza"
+      },
+      {
+       "n": "53",
+       "text": "Intestinal obstruction"
+      },
+      {
+       "n": "54",
+       "text": "Kidney stone (renal colic)"
+      },
+      {
+       "n": "55",
+       "text": "Laryngitis"
+      },
+      {
+       "n": "56",
+       "text": "Malaria"
+      },
+      {
+       "n": "57",
+       "text": "Measles"
+      },
+      {
+       "n": "58",
+       "text": "Meningitis"
+      },
+      {
+       "n": "59",
+       "text": "Mental illness"
+      },
+      {
+       "n": "60",
+       "text": "Migraine"
+      },
+      {
+       "n": "61",
+       "text": "Mumps"
+      },
+      {
+       "n": "62",
+       "text": "Orchitis"
+      },
+      {
+       "n": "63",
+       "text": "Peritonitis"
+      },
+      {
+       "n": "64",
+       "text": "Phlebitis"
+      },
+      {
+       "n": "65",
+       "text": "Piles"
+      },
+      {
+       "n": "66",
+       "text": "Plague"
+      },
+      {
+       "n": "67",
+       "text": "Pleurisy"
+      },
+      {
+       "n": "68",
+       "text": "Pneumonia"
+      },
+      {
+       "n": "69",
+       "text": "Poisoning (corrosive)"
+      },
+      {
+       "n": "70",
+       "text": "Poisoning (noncorrosive)"
+      },
+      {
+       "n": "71",
+       "text": "Poisoning (barbiturates)"
+      },
+      {
+       "n": "72",
+       "text": "Poisoning (methyl alcohol)"
+      },
+      {
+       "n": "73",
+       "text": "Poisoning (gases)"
+      },
+      {
+       "n": "74",
+       "text": "Poliomyelitis"
+      },
+      {
+       "n": "75",
+       "text": "Prolapsed intervertebral disc (slipped disc)"
+      },
+      {
+       "n": "76",
+       "text": "Pulmonary tuberculosis"
+      },
+      {
+       "n": "77",
+       "text": "Quinsy"
+      },
+      {
+       "n": "78",
+       "text": "Rheumatism"
+      },
+      {
+       "n": "79",
+       "text": "Rheumatic fever"
+      },
+      {
+       "n": "80",
+       "text": "Scarlet fever"
+      },
+      {
+       "n": "81",
+       "text": "Sciatica"
+      },
+      {
+       "n": "82",
+       "text": "Shingles (herpes zoster)"
+      },
+      {
+       "n": "83",
+       "text": "Sinusitis"
+      },
+      {
+       "n": "84",
+       "text": "Shock"
+      },
+      {
+       "n": "85",
+       "text": "Smallpox"
+      },
+      {
+       "n": "86",
+       "text": "Syphilis"
+      },
+      {
+       "n": "87",
+       "text": "Tetanus"
+      },
+      {
+       "n": "88",
+       "text": "Tonsillitis"
+      },
+      {
+       "n": "89",
+       "text": "Typhoid"
+      },
+      {
+       "n": "90",
+       "text": "Typhus"
+      },
+      {
+       "n": "91",
+       "text": "Urethritis"
+      },
+      {
+       "n": "92",
+       "text": "Urticaria (nettle rash)"
+      },
+      {
+       "n": "93",
+       "text": "Whooping cough"
+      },
+      {
+       "n": "94",
+       "text": "Yellow fever"
+      }
+     ]
+    }
+   ]
+  },
+  "M3": {
+   "title": "Table M-3",
+   "subtitle": "List of medicaments",
+   "source": "Chapter 3, Section 4",
+   "note": "Preparations listed may have been substituted by equivalent preparations in the ship’s medicine chest. Latin names are given so that a correct translation can be found in each language. For congestive heart failure, chlorothiazide (500 mg per tablet) and digoxin (0.25 mg per tablet) or equivalents are available on board, but should be used only on medical advice transmitted in plain language and not by code.",
+   "groups": [
+    {
+     "title": "For external use",
+     "rows": [
+      {
+       "n": "1",
+       "text": "Ear drops",
+       "detail": "Glycerin ear drops (Auristillae Glyceris)."
+      },
+      {
+       "n": "2",
+       "text": "Antiseptic eye drops",
+       "detail": "Sulfacetamide eye drops (Guttae Sulfacetamidi)."
+      },
+      {
+       "n": "3",
+       "text": "Anaesthetic eye drops",
+       "detail": "Tetracaine eye drops (Guttae Tetracainae)."
+      },
+      {
+       "n": "4",
+       "text": "Salicylate liniment",
+       "detail": "Methyl salicylate liniment (Linimentum Methylis Salicylatis)."
+      },
+      {
+       "n": "5",
+       "text": "Calamine lotion",
+       "detail": "Lotio Calaminae."
+      },
+      {
+       "n": "6",
+       "text": "Antiseptic lotion",
+       "detail": "Cetrimide lotion (Lotio Cetrimidi)."
+      },
+      {
+       "n": "7",
+       "text": "Nasal drops",
+       "detail": "Norephedrine hydrochloride drops (Naristillae Ephedrine)."
+      },
+      {
+       "n": "8",
+       "text": "Soft paraffin",
+       "detail": "Yellow soft paraffin (Paraffinum Molle Flavum)."
+      },
+      {
+       "n": "9",
+       "text": "Burn/wound dressing",
+       "detail": "Tulle gras dressing (paraffin gauze) (Paraffinum Molle Flavum Carbasi Absorbentis)."
+      },
+      {
+       "n": "10",
+       "text": "Antibiotic ointment",
+       "detail": "Bacitracin ointment (Unguentum Bacitracini)."
+      },
+      {
+       "n": "11",
+       "text": "Pile ointment",
+       "detail": "Compound benzocaine ointment (Unguentum Benzocaini Compositum)."
+      },
+      {
+       "n": "12",
+       "text": "Local anaesthetic ointment",
+       "detail": "Xylocaine ointment (Unguentum Xylocaini Hydrochloridi)."
+      }
+     ]
+    },
+    {
+     "title": "For internal use: allergic conditions",
+     "rows": [
+      {
+       "n": "13",
+       "text": "Antihistamine tablets",
+       "detail": "Promethazine hydrochloride tablets (Compressi Promethazini Hydrochloridi). 25 mg per tablet."
+      },
+      {
+       "n": "14",
+       "text": "Adrenaline",
+       "detail": "Adrenaline injection (Injectio Adrenalini). 1 mg in “Ampins”.",
+       "caution": "Caution: use only on medical advice by radio, except in case of anaphylactic shock due to penicillin injection."
+      }
+     ]
+    },
+    {
+     "title": "For internal use: antibiotics",
+     "rows": [
+      {
+       "n": "15",
+       "text": "Tetracycline capsules",
+       "detail": "Tetracycline hydrochloride capsules (Capsulae Tetracyclini Hydrochloridi). 250 mg per capsule."
+      },
+      {
+       "n": "16",
+       "text": "Penicillin tablets",
+       "detail": "Phenoxymethylpenicillin (Compressi Phenoxymethylpenicillini). 125 mg per tablet."
+      },
+      {
+       "n": "17",
+       "text": "Sulfonamide tablets",
+       "detail": "Sulfadimidine tablets (Compressi Sulfadimidini). 500 mg per tablet."
+      },
+      {
+       "n": "18",
+       "text": "Penicillin injection",
+       "detail": "Procaine penicillin G (Injectio Benzylpenicillini). 600,000 units per ampoule."
+      },
+      {
+       "n": "19",
+       "text": "Streptomycin injection",
+       "detail": "Streptomycin sulfate injection (Injectio Streptomycini Sulfatis). 1,000 mg per ampoule."
+      },
+      {
+       "n": "20",
+       "text": "Tetracycline injection",
+       "detail": "Tetracycline hydrochloride (Injectio Tetracyclini Hydrochloridi). 100 mg per ampoule."
+      }
+     ]
+    },
+    {
+     "title": "For internal use: asthma",
+     "rows": [
+      {
+       "n": "21",
+       "text": "Asthma relief tablets",
+       "detail": "Aminophylline tablets (Compressi Aminophyllini). 300 mg per tablet.",
+       "caution": "Caution: use only on medical advice by radio."
+      },
+      {
+       "n": "22",
+       "text": "Ephedrine tablets",
+       "detail": "Ephedrine hydrochloride tablets (Compressi Ephedrini Hydrochloridi). 30 mg per tablet."
+      },
+      {
+       "n": "23",
+       "text": "Inhalation mixture",
+       "detail": "Tincture of benzoin compound (Tinctura Benzoini Composita)."
+      }
+     ]
+    },
+    {
+     "title": "For internal use: cough",
+     "rows": [
+      {
+       "n": "24",
+       "text": "Codeine tablets",
+       "detail": "Codeine phosphate tablets (Compressi Codeini Phosphatis). 15 mg per tablet."
+      },
+      {
+       "n": "25",
+       "text": "Cough linctus",
+       "detail": "Linctus of squill, opiate (Linctus Scillae Opiata)."
+      }
+     ]
+    },
+    {
+     "title": "For internal use: diarrhea",
+     "rows": [
+      {
+       "n": "26",
+       "text": "Diarrhea mixture",
+       "detail": "Kaolin and morphine mixture (Mistura Kaolini et Morphinae)."
+      }
+     ]
+    },
+    {
+     "title": "For internal use: heart",
+     "rows": [
+      {
+       "n": "27",
+       "text": "Heart tablets",
+       "detail": "Glycerin trinitrate tablets (Compressi Glycerylis Trinitratis). 0.5 mg per tablet."
+      }
+     ]
+    },
+    {
+     "title": "For internal use: indigestion",
+     "rows": [
+      {
+       "n": "28",
+       "text": "Stomach tablets",
+       "detail": "Magnesium trisilicate (Compressi Magnesii Trisilicas)."
+      }
+     ]
+    },
+    {
+     "title": "For internal use: laxatives",
+     "rows": [
+      {
+       "n": "29",
+       "text": "Vegetable laxative tablets",
+       "detail": "Compound colocynth and jalap tablets (Compressi Colocynthidis et Jalapae Compositae)."
+      },
+      {
+       "n": "30",
+       "text": "Liquid laxative (“Milk of Magnesia”)",
+       "detail": "Magnesium hydroxide mixture (Magnesii Hydroxidum)."
+      }
+     ]
+    },
+    {
+     "title": "For internal use: malaria",
+     "rows": [
+      {
+       "n": "31",
+       "text": "Malaria tablets",
+       "detail": "Chloroquine sulfate tablets (Compressi Chloroquini Sulfatis). 200 mg per tablet."
+      }
+     ]
+    },
+    {
+     "title": "For internal use: pain",
+     "rows": [
+      {
+       "n": "32",
+       "text": "Aspirin tablets",
+       "detail": "Acetylsalicylic acid tablets (Compressi Acidi Acetylsalicylici). 300 mg per tablet."
+      },
+      {
+       "n": "33",
+       "text": "Morphine injection",
+       "detail": "Morphine sulfate injection (Injectio Morphini). 15 mg per ampoule."
+      }
+     ]
+    },
+    {
+     "title": "For internal use: sedation",
+     "rows": [
+      {
+       "n": "34",
+       "text": "Sedative tablets",
+       "detail": "Butobarbitone tablets (Compressi Butobarbitali). 100 mg per tablet."
+      },
+      {
+       "n": "35",
+       "text": "Phenobarbitone tablets",
+       "detail": "Compressi Phenobarbitali. 30 mg per tablet."
+      },
+      {
+       "n": "36",
+       "text": "Tranquillizer tablets (Largactil)",
+       "detail": "Chlorpromazine hydrochloride tablets (Compressi Chlorpromazini Hydrochloridi). 50 mg per tablet.",
+       "caution": "Caution: use only on medical advice by radio."
+      }
+     ]
+    },
+    {
+     "title": "For internal use: salt depletion or heat cramps",
+     "rows": [
+      {
+       "n": "37",
+       "text": "Salt tablets",
+       "detail": "Sodium chloride tablets (Compressi Natrii Chloridi Solv). 500 mg per tablet."
+      }
+     ]
+    },
+    {
+     "title": "For internal use: seasickness",
+     "rows": [
+      {
+       "n": "38",
+       "text": "Seasickness tablets",
+       "detail": "Hyoscine hydrobromide tablets (Compressi Hyoscini Hydrobromidi). 0.3 mg per tablet."
+      }
+     ]
+    }
+   ]
+  },
+  "AGROUND": {
+   "title": "Complements to JF",
+   "subtitle": "How the vessel is aground",
+   "source": "Chapter 2, Section 2",
+   "groups": [
+    {
+     "rows": [
+      {
+       "n": "0",
+       "text": "On rocky bottom."
+      },
+      {
+       "n": "1",
+       "text": "On soft bottom."
+      },
+      {
+       "n": "2",
+       "text": "Forward."
+      },
+      {
+       "n": "3",
+       "text": "Amidship."
+      },
+      {
+       "n": "4",
+       "text": "Aft."
+      },
+      {
+       "n": "5",
+       "text": "At high water forward."
+      },
+      {
+       "n": "6",
+       "text": "At high water amidship."
+      },
+      {
+       "n": "7",
+       "text": "At high water aft."
+      },
+      {
+       "n": "8",
+       "text": "Full length of vessel."
+      },
+      {
+       "n": "9",
+       "text": "Full length of vessel at high water."
+      }
+     ]
+    }
+   ]
+  },
+  "JETTISON": {
+   "title": "Complements to JP and JQ",
+   "subtitle": "What is jettisoned",
+   "source": "Chapter 2, Section 2",
+   "groups": [
+    {
+     "rows": [
+      {
+       "n": "1",
+       "text": "Cargo."
+      },
+      {
+       "n": "2",
+       "text": "Bunkers."
+      },
+      {
+       "n": "3",
+       "text": "Everything movable forward."
+      },
+      {
+       "n": "4",
+       "text": "Everything movable aft."
+      }
+     ]
+    }
+   ]
+  },
+  "PASSAGE": {
+   "title": "Conditions of innocent passage",
+   "subtitle": "Complements to UV 4, UV 5 and UV 6",
+   "source": "Chapter 2, Section 5",
+   "note": "Signals UV 1 to UV 9 are not mandatory. Use of these signals is not a precondition to the exercise of the right of innocent passage or freedom of navigation.",
+   "groups": [
+    {
+     "rows": [
+      {
+       "n": "0",
+       "text": "By threatening or using force against our/your sovereignty, territorial integrity, or political independence."
+      },
+      {
+       "n": "1",
+       "text": "By exercising or practicing with weapons."
+      },
+      {
+       "n": "2",
+       "text": "By engaging in acts aimed at collecting information to the prejudice of our/your defense or security."
+      },
+      {
+       "n": "3",
+       "text": "By engaging in acts of propaganda aimed at affecting our/your defense or security."
+      },
+      {
+       "n": "4",
+       "text": "By engaging in the launching, landing or taking on board of aircraft or a military device."
+      },
+      {
+       "n": "5",
+       "text": "By engaging in the loading or unloading of a commodity, currency or person contrary to the customs, fiscal, immigration or sanitary laws or regulations of our/your country."
+      },
+      {
+       "n": "6",
+       "text": "By engaging in willful and serious pollution."
+      },
+      {
+       "n": "7",
+       "text": "By engaging in fishing activities."
+      },
+      {
+       "n": "8",
+       "text": "By engaging in research or survey activities."
+      },
+      {
+       "n": "9",
+       "text": "By engaging in acts aimed at interfering with our/your systems of communication or other facilities or installations."
+      }
+     ]
+    }
+   ]
+  },
+  "SEA": {
+   "title": "State of the sea",
+   "subtitle": "Complements to WY and XB, by wave height",
+   "source": "Chapter 2, Section 6",
+   "groups": [
+    {
+     "rows": [
+      {
+       "n": "0",
+       "text": "Calm (glassy)",
+       "detail": "0 m (0 ft)"
+      },
+      {
+       "n": "1",
+       "text": "Calm (rippled)",
+       "detail": "0–0.1 m (0–1/3 ft)"
+      },
+      {
+       "n": "2",
+       "text": "Smooth (wavelets)",
+       "detail": "0.1–0.5 m (1/3–1 2/3 ft)"
+      },
+      {
+       "n": "3",
+       "text": "Slight",
+       "detail": "0.5–1.25 m (1 2/3–4 ft)"
+      },
+      {
+       "n": "4",
+       "text": "Moderate",
+       "detail": "1.25–2.5 m (4–8 ft)"
+      },
+      {
+       "n": "5",
+       "text": "Rough",
+       "detail": "2.5–4 m (8–13 ft)"
+      },
+      {
+       "n": "6",
+       "text": "Very rough",
+       "detail": "4–6 m (13–20 ft)"
+      },
+      {
+       "n": "7",
+       "text": "High",
+       "detail": "6–9 m (20–30 ft)"
+      },
+      {
+       "n": "8",
+       "text": "Very high",
+       "detail": "9–14 m (30–45 ft)"
+      },
+      {
+       "n": "9",
+       "text": "Phenomenal",
+       "detail": "over 14 m (over 45 ft)"
+      }
+     ]
+    }
+   ]
+  },
+  "SWELL": {
+   "title": "State of the swell",
+   "subtitle": "Complements to XE and XH",
+   "source": "Chapter 2, Section 6",
+   "groups": [
+    {
+     "rows": [
+      {
+       "n": "0",
+       "text": "No swell"
+      }
+     ]
+    },
+    {
+     "title": "Weak: approximate height under 2 m (6 ft)",
+     "rows": [
+      {
+       "n": "1",
+       "text": "Short or middle"
+      },
+      {
+       "n": "2",
+       "text": "Long"
+      }
+     ]
+    },
+    {
+     "title": "Moderate: approximate height 2–4 m (6–12 ft)",
+     "rows": [
+      {
+       "n": "3",
+       "text": "Short"
+      },
+      {
+       "n": "4",
+       "text": "Middle"
+      },
+      {
+       "n": "5",
+       "text": "Long"
+      }
+     ]
+    },
+    {
+     "title": "High: approximate height over 4 m (12 ft)",
+     "rows": [
+      {
+       "n": "6",
+       "text": "Short"
+      },
+      {
+       "n": "7",
+       "text": "Middle"
+      },
+      {
+       "n": "8",
+       "text": "Long"
+      }
+     ]
+    },
+    {
+     "rows": [
+      {
+       "n": "9",
+       "text": "Confused"
+      }
+     ]
+    }
+   ]
+  },
+  "MAFOR": {
+   "title": "MAFOR Code",
+   "source": "Chapter 2, Section 6",
+   "note": "MAFOR is the prefix used to identify an International Coded Weather Forecast for Shipping.",
+   "groups": []
+  },
+  "PRATIQUE": {
+   "title": "Pratique messages",
+   "subtitle": "International Health Regulations",
+   "source": "Chapter 2, Section 9",
+   "note": "By night a red light over a white light may be shown, where it can best be seen, by vessels requiring health clearance. These lights should only be about 6 feet apart, should be exhibited within the precincts of a port and should be visible all around the horizon as nearly as possible.",
+   "groups": [
+    {
+     "rows": [
+      {
+       "n": "ZS",
+       "text": "My vessel is “healthy” and I request free pratique."
+      },
+      {
+       "n": "ZT",
+       "text": "My Maritime Declaration of Health has negative answers to the six Health Questions."
+      },
+      {
+       "n": "ZU",
+       "text": "My Maritime Declaration of Health has a positive answer to Health Question(s)… (Health Questions are indicated by complements 1-6)."
+      },
+      {
+       "n": "ZV",
+       "text": "I believe I have been in an infected area during the last thirty days."
+      },
+      {
+       "n": "ZW",
+       "text": "I require Port Medical Officer."
+      },
+      {
+       "n": "ZW 1",
+       "text": "Port Medical Officer will be available at (time indicated)."
+      },
+      {
+       "n": "ZX",
+       "text": "You should make the appropriate pratique signal."
+      },
+      {
+       "n": "ZY",
+       "text": "You have pratique."
+      },
+      {
+       "n": "ZZ",
+       "text": "You should proceed to anchorage for health clearance (at place indicated)."
+      },
+      {
+       "n": "ZZ 1",
+       "text": "Where is the anchorage for health clearance?"
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "byCode": {
+  "JF": [
+   "AGROUND"
+  ],
+  "JP": [
+   "JETTISON"
+  ],
+  "JQ": [
+   "JETTISON"
+  ],
+  "UV 4": [
+   "PASSAGE"
+  ],
+  "UV 5": [
+   "PASSAGE"
+  ],
+  "UV 6": [
+   "PASSAGE"
+  ],
+  "WY": [
+   "SEA"
+  ],
+  "XB": [
+   "SEA"
+  ],
+  "XE": [
+   "SWELL"
+  ],
+  "XH": [
+   "SWELL"
+  ],
+  "XV": [
+   "MAFOR"
+  ],
+  "QQ": [
+   "PRATIQUE"
+  ]
+ }
+}

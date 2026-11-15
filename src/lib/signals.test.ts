@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { FLAGS, type FlagId } from '../data/flags'
-import { CODEBOOK, decodeHoist, encodeGroup, lookup, resolveHoist, searchCodebook } from './signals'
+import {
+  CODEBOOK, TABLES, decodeHoist, encodeGroup, findRow, lookup, resolveHoist, searchCodebook, tablesFor,
+} from './signals'
 
 describe('flag set', () => {
   it('has the 40 flags of the code', () => {
@@ -103,6 +105,38 @@ describe('decoding', () => {
     expect(decodeHoist(['CODE']).kind).toBe('pennant')
     expect(decodeHoist(['SUB1', 'A']).kind).toBe('unknown')
     expect(decodeHoist([]).kind).toBe('empty')
+  })
+})
+
+describe('referenced tables', () => {
+  it('links signals to the tables they mention', () => {
+    expect(tablesFor(lookup('MBF')!)).toEqual(['M1'])
+    expect(tablesFor(lookup('CD')!)).toEqual(['C2'])
+    expect(tablesFor(lookup('WY')!)).toEqual(['SEA'])
+    expect(tablesFor(lookup('QQ')!)).toEqual(['PRATIQUE'])
+    expect(tablesFor(lookup('AC')!)).toEqual([])
+  })
+
+  it('has complete medical tables', () => {
+    const count = (id: string) => TABLES[id].groups.reduce((n, g) => n + g.rows.length, 0)
+    expect(count('M1')).toBe(92)
+    expect(count('M2')).toBe(94)
+    expect(count('M3')).toBe(38)
+    expect(findRow('M1', '12')?.text).toBe('Armpit')
+  })
+
+  it('resolves a complement to its table row', () => {
+    const body = decodeHoist(['M', 'B', 'F', '1', '2'])
+    expect(body.tables).toEqual([{ id: 'M1', row: '12' }])
+    expect(body.notes).toEqual(['12: Armpit.'])
+    expect(decodeHoist(['W', 'Y', '4']).notes).toEqual(['4: Moderate.'])
+    expect(decodeHoist(['J', 'F', '3']).notes).toEqual(['3: Amidship.'])
+    expect(decodeHoist(['U', 'V', '4', '7'])).toMatchObject({ text: 'UV 4 7', notes: ['7: By engaging in fishing activities.'] })
+  })
+
+  it('keeps signals that duplicate single-letter signals', () => {
+    expect(lookup('ZS')?.meaning).toBe('My vessel is “healthy” and I request free pratique.')
+    expect(lookup('SO')?.meaning).toBe('You should stop your vessel instantly.')
   })
 })
 

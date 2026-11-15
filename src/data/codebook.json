@@ -2171,6 +2171,11 @@
   "section": "Casualties – Damages"
  },
  {
+  "code": "IT 1",
+  "meaning": "I am on fire and have dangerous cargo on board; keep well clear of me.",
+  "section": "Casualties – Damages"
+ },
+ {
   "code": "IT 2",
   "meaning": "Vessel (name or identity signal) is on fire.",
   "section": "Casualties – Damages"
@@ -3746,6 +3751,11 @@
   "section": "Aids to Navigation – Navigation – Hydrography"
  },
  {
+  "code": "NF",
+  "meaning": "You are running into danger.",
+  "section": "Aids to Navigation – Navigation – Hydrography"
+ },
+ {
   "code": "NF 1",
   "meaning": "You are running into danger; there is a radiation hazard.",
   "section": "Aids to Navigation – Navigation – Hydrography"
@@ -4624,6 +4634,11 @@
   "section": "Maneuvers"
  },
  {
+  "code": "QI 1",
+  "meaning": "My engines are going astern.",
+  "section": "Maneuvers"
+ },
+ {
   "code": "QI 2",
   "meaning": "I will keep going astern.",
   "section": "Maneuvers"
@@ -4824,6 +4839,11 @@
   "section": "Maneuvers"
  },
  {
+  "code": "RB",
+  "meaning": "I am dragging my anchor.",
+  "section": "Maneuvers"
+ },
+ {
   "code": "RB 1",
   "meaning": "You appear to be dragging your anchor.",
   "section": "Maneuvers"
@@ -5009,8 +5029,18 @@
   "section": "Maneuvers"
  },
  {
+  "code": "RT",
+  "meaning": "Stop carrying out your intentions and watch for my signals.",
+  "section": "Maneuvers"
+ },
+ {
   "code": "RT 1",
   "meaning": "What maneuvers do you intend to carry out?",
+  "section": "Maneuvers"
+ },
+ {
+  "code": "RU",
+  "meaning": "Keep clear of me; I am maneuvering with difficulty.",
   "section": "Maneuvers"
  },
  {
@@ -5139,6 +5169,11 @@
   "section": "Maneuvers"
  },
  {
+  "code": "SO",
+  "meaning": "You should stop your vessel instantly.",
+  "section": "Maneuvers"
+ },
+ {
   "code": "SO 1",
   "meaning": "You should stop. Head offshore.",
   "section": "Maneuvers"
@@ -5151,6 +5186,11 @@
  {
   "code": "SP",
   "meaning": "Take the way off your vessel.",
+  "section": "Maneuvers"
+ },
+ {
+  "code": "SP 1",
+  "meaning": "My vessel is stopped and making no way through the water.",
   "section": "Maneuvers"
  },
  {
@@ -5226,6 +5266,11 @@
  {
   "code": "SV",
   "meaning": "I am not seaworthy due to shifting of cargo or ballast.",
+  "section": "Miscellaneous"
+ },
+ {
+  "code": "SW",
+  "meaning": "I am taking in, or discharging, or carrying dangerous goods.",
   "section": "Miscellaneous"
  },
  {
@@ -6811,6 +6856,11 @@
   "code": "ZR",
   "meaning": "Repeat the signal now being made to me by vessel (or coast station)… (name or identity signal).",
   "section": "Communications"
+ },
+ {
+  "code": "ZS",
+  "meaning": "My vessel is “healthy” and I request free pratique.",
+  "section": "International Health Regulations"
  },
  {
   "code": "ZT",

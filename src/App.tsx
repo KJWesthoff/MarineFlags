@@ -1,6 +1,7 @@
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
+import { TableSheet } from './components/TableSheet'
 import { FLAG_BY_ID, type FlagId } from './data/flags'
-import { encodeGroup } from './lib/signals'
+import { encodeGroup, type TableRef } from './lib/signals'
 import { useStored } from './lib/useStored'
 import { Compose } from './screens/Compose'
 import { Reference } from './screens/Reference'
@@ -24,6 +25,7 @@ function reviveMessage(raw: unknown): Message | undefined {
 export default function App() {
   const [tab, setTab] = useStored<Tab>('tab', 'compose', (r) => (r === 'reference' ? 'reference' : 'compose'))
   const [message, setMessage] = useStored<Message>('message', EMPTY, reviveMessage)
+  const [table, setTable] = useState<TableRef | null>(null)
 
   /** Put a code-book signal on the active hoist and show it. */
   const showAsFlags = useCallback(
@@ -42,9 +44,9 @@ export default function App() {
     <div className="app">
       <main className="screen">
         {tab === 'compose' ? (
-          <Compose message={message} setMessage={setMessage} />
+          <Compose message={message} setMessage={setMessage} onOpenTable={setTable} />
         ) : (
-          <Reference onShowAsFlags={showAsFlags} />
+          <Reference onShowAsFlags={showAsFlags} onOpenTable={setTable} />
         )}
       </main>
       <nav className="tabbar" aria-label="Sections">
@@ -63,6 +65,7 @@ export default function App() {
           Reference
         </button>
       </nav>
+      <TableSheet open={table} onClose={() => setTable(null)} />
     </div>
   )
 }

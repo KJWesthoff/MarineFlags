@@ -1,8 +1,9 @@
 import { useRef, useState, type Dispatch, type PointerEvent, type SetStateAction } from 'react'
 import type { Message } from '../App'
 import { Flag } from '../components/Flag'
+import { TableLinks } from '../components/TableSheet'
 import { FLAGS, type FlagId } from '../data/flags'
-import { decodeHoist, encodeGroup, resolveHoist, type Decoded } from '../lib/signals'
+import { decodeHoist, encodeGroup, resolveHoist, type Decoded, type TableRef } from '../lib/signals'
 
 const KEY_LABEL: Partial<Record<FlagId, string>> = { SUB1: '1st', SUB2: '2nd', SUB3: '3rd', CODE: 'Code' }
 const LETTER_KEYS = FLAGS.filter((f) => f.kind === 'letter')
@@ -27,9 +28,10 @@ const DRAG_THRESHOLD = 8
 interface Props {
   message: Message
   setMessage: Dispatch<SetStateAction<Message>>
+  onOpenTable: (ref: TableRef) => void
 }
 
-export function Compose({ message, setMessage }: Props) {
+export function Compose({ message, setMessage, onOpenTable }: Props) {
   const { hoists, active } = message
   const hoist = hoists[active]
   /** Index of the flag picked on the halyard, for moving or removing it. */
@@ -209,6 +211,7 @@ export function Compose({ message, setMessage }: Props) {
                   active={i === active}
                   showIndex={hoists.length > 1}
                   onSelect={() => selectHoist(i)}
+                  onOpenTable={onOpenTable}
                   onRemove={hoists.length > 1 ? () => removeHoist(i) : undefined}
                 />
               ))}
@@ -321,6 +324,7 @@ function Reading(props: {
   active: boolean
   showIndex: boolean
   onSelect: () => void
+  onOpenTable: (ref: TableRef) => void
   onRemove?: () => void
 }) {
   const { decoded: d, active } = props
@@ -351,6 +355,7 @@ function Reading(props: {
           </>
         )}
       </button>
+      {active && <TableLinks tables={d.tables} onOpen={props.onOpenTable} />}
       {props.onRemove && active && (
         <button type="button" className="quiet reading-remove" onClick={props.onRemove}>
           Remove hoist
