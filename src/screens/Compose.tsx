@@ -5,12 +5,15 @@ import type { Message } from '../App'
 import { Flag } from '../components/Flag'
 import { PositionSheet } from '../components/PositionSheet'
 import { TableLinks } from '../components/TableSheet'
-import { FLAGS, type FlagId } from '../data/flags'
+import { FLAGS, FLAG_BY_ID, type Flag as FlagData, type FlagId } from '../data/flags'
 import { decodeHoist, encodeGroup, resolveHoist, type Decoded, type TableRef } from '../lib/signals'
 import { useStored } from '../lib/useStored'
 
 const KEY_LABEL: Partial<Record<FlagId, string>> = { SUB1: '1st', SUB2: '2nd', SUB3: '3rd', CODE: 'Code' }
 const LETTER_KEYS = FLAGS.filter((f) => f.kind === 'letter')
+/** The letter flags in the rows of a typing keyboard. */
+const QWERTY_ROWS = ['QWERTYUIOP', 'ASDFGHJKL', 'ZXCVBNM'].map((row) => [...row].map((c) => FLAG_BY_ID[c as FlagId]))
+type KeyLayout = 'qwerty' | 'alphabet'
 const PENNANT_KEYS = FLAGS.filter((f) => f.kind !== 'letter')
 
 /** Where a dragged flag came from: a place on a halyard, or the flag keyboard. */
@@ -45,6 +48,7 @@ export function Compose({ message, setMessage, onOpenTable }: Props) {
   const [justAdded, setJustAdded] = useState<number | null>(null)
   const [keysHidden, setKeysHidden] = useStored('keys-hidden', false, (r) => r === true)
   const [pickingPosition, setPickingPosition] = useState(false)
+  const [layout, setLayout] = useStored<KeyLayout>('key-layout', 'qwerty', (r) => (r === 'alphabet' ? 'alphabet' : 'qwerty'))
 
   const [drag, setDrag] = useState<Drag | null>(null)
   const pending = useRef<{ source: DragSource; id: FlagId; x0: number; y0: number } | null>(null)
@@ -195,6 +199,19 @@ export function Compose({ message, setMessage, onOpenTable }: Props) {
     if (suppressClick.current) suppressClick.current = false
     else action()
   }
+  const renderKey = (f: FlagData) => (
+    <button
+      type="button"
+      key={f.id}
+      className="key"
+      onClick={tap(() => add(f.id))}
+      aria-label={f.name}
+      {...draggable({ from: 'key' }, f.id)}
+    >
+      <Flag id={f.id} />
+      <span aria-hidden="true">{KEY_LABEL[f.id] ?? f.id}</span>
+    </button>
+  )
   const dragFrom = drag?.source.from === 'hoist' ? drag.source : null
   const removing = dragFrom !== null && drag!.overKeys
 
@@ -366,36 +383,25 @@ export function Compose({ message, setMessage, onOpenTable }: Props) {
         )}
 
         <div id="flag-keys" className="keys-panel">
-          <div className="keys">
-            {LETTER_KEYS.map((f) => (
-              <button
-                type="button"
-                key={f.id}
-                className="key"
-                onClick={tap(() => add(f.id))}
-                aria-label={f.name}
-                {...draggable({ from: 'key' }, f.id)}
-              >
-                <Flag id={f.id} />
-                <span aria-hidden="true">{f.id}</span>
-              </button>
-            ))}
-          </div>
-          <div className="keys keys-pennants">
-            {PENNANT_KEYS.map((f) => (
-              <button
-                type="button"
-                key={f.id}
-                className="key"
-                onClick={tap(() => add(f.id))}
-                aria-label={f.name}
-                {...draggable({ from: 'key' }, f.id)}
-              >
-                <Flag id={f.id} />
-                <span aria-hidden="true">{KEY_LABEL[f.id] ?? f.id}</span>
-              </button>
-            ))}
-          </div>
+          {layout === 'qwerty' ? (
+            <div className="keys-qwerty">
+              {QWERTY_ROWS.map((row, i) => (
+                <div className="key-row" key={i}>
+                  {row.map(renderKey)}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="keys">{LETTER_KEYS.map(renderKey)}</div>
+          )}
+          <div className="keys keys-pennants">{PENNANT_KEYS.map(renderKey)}</div>
+          <button
+            type="button"
+            className="quiet layout-switch"
+            onClick={() => setLayout(layout === 'qwerty' ? 'alphabet' : 'qwerty')}
+          >
+            {layout === 'qwerty' ? 'Switch to A–Z order' : 'Switch to QWERTY order'}
+          </button>
         </div>
       </section>
 

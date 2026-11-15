@@ -578,6 +578,32 @@ button.quiet {
   gap: 4px 6px;
 }
 
+/* Letter flags laid out like a typing keyboard: ten to a row, shorter rows centred. */
+.keys-qwerty {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.key-row {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+}
+
+.key-row .key {
+  flex: 0 0 calc((100% - 36px) / 10);
+  min-width: 0;
+}
+
+.layout-switch {
+  display: block;
+  margin: 0.25rem auto 0;
+  min-height: 36px;
+  padding-block: 0.2rem;
+  font-size: var(--step--1);
+}
+
 .keys-pennants {
   margin-top: 6px;
   padding-top: 6px;
