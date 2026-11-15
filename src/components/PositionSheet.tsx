@@ -46,7 +46,7 @@ export function PositionSheet({ open, onClose, onAdd }: Props) {
           import('leaflet/dist/leaflet.css'),
         ])
         if (cancelled || !mapEl.current) return
-        map = L.map(mapEl.current, { center: HOME, zoom: 11, minZoom: 1, worldCopyJump: true })
+        map = L.map(mapEl.current, { center: HOME, zoom: 8, minZoom: 1, worldCopyJump: true })
         map.attributionControl.setPrefix('<a href="https://leafletjs.com">Leaflet</a>')
         // A bundled coastline sits under the online tiles, so the map still works at sea.
         map.createPane('land').style.zIndex = '150'
