@@ -1,4 +1,4 @@
-# MarineFlags
+# Kilo 102
 
 An app for reading, composing and learning signal flag messages in the International Code of Signals. It runs in the browser, works on a phone, and keeps working without a connection once installed.
 

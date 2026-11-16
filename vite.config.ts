@@ -12,8 +12,8 @@ export default defineConfig({
       includeAssets: ['favicon.svg'],
       workbox: { globPatterns: ['**/*.{js,css,html,svg,png,woff2}'] },
       manifest: {
-        name: 'Marine Flags',
-        short_name: 'Marine Flags',
+        name: 'Kilo 102',
+        short_name: 'Kilo 102',
         description: 'Read, compose and learn International Code of Signals flag messages.',
         start_url: '.',
         scope: '.',
