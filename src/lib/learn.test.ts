@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { FLAGS } from '../data/flags'
 import {
-  DECKS, DECK_BY_ID, INTERVAL_DAYS, buildSession, deckStats, grade, isKnown, isTypedCorrect, makeQuestion,
+  DECKS, DECK_BY_ID, INTERVAL_DAYS, buildSession, deckStats, grade, isKnown, isTypedCorrect, isTypedRight, makeQuestion,
   type Progress,
 } from './learn'
 import { lookup, resolveHoist } from './signals'
@@ -79,7 +79,9 @@ describe('sessions', () => {
   it('holds signals and hoists back until the alphabet has been met', () => {
     let p: Progress = {}
     for (const f of FLAGS) {
-      for (const deck of ['flag-name', 'name-flag', 'flag-meaning']) p = grade(p, `${deck}:${f.id}`, true, NOW)
+      for (const deck of ['flag-name', 'name-flag', 'flag-meaning', 'phonetic']) {
+        p = grade(p, `${deck}:${f.id}`, true, NOW)
+      }
     }
     const session = buildSession(DECKS.map((d) => d.id), p, NOW, { random: seeded() })
     expect(session.some((c) => c.deck === 'signals')).toBe(true)
@@ -114,6 +116,26 @@ describe('questions', () => {
         for (const o of q.options) expect(o.label ?? o.flag, card.key).toBeTruthy()
       }
     }
+  })
+
+  it('ask for code words typed from memory', () => {
+    expect(DECK_BY_ID.phonetic.cards).toHaveLength(36)
+    const alfa = makeQuestion(DECK_BY_ID.phonetic.cards[0])
+    if (alfa.kind !== 'typed') throw new Error('expected a typed question')
+    expect(alfa).toMatchObject({ text: 'A', answer: 'Alfa', explanation: 'A  Alfa, said AL FAH' })
+    expect(isTypedRight('alfa', alfa)).toBe(true)
+    expect(isTypedRight('Alpha', alfa)).toBe(true)
+    expect(isTypedRight('Able', alfa)).toBe(false)
+    const xray = makeQuestion(DECK_BY_ID.phonetic.cards[23])
+    expect(xray.kind === 'typed' && isTypedRight('x-ray', xray)).toBe(true)
+    const one = makeQuestion(DECK_BY_ID.phonetic.cards[27])
+    expect(one.kind === 'typed' && isTypedRight('unaone', one)).toBe(true)
+
+    // In mixed practice a code word is asked only once its flag has been met.
+    const p = grade({}, 'flag-name:A', true, NOW)
+    const session = buildSession(DECKS.map((d) => d.id), p, NOW + 1e12, { random: seeded() })
+    expect(session.some((c) => c.key === 'phonetic:A')).toBe(true)
+    expect(session.some((c) => c.key === 'phonetic:B')).toBe(false)
   })
 
   it('show hoists that spell the expected group', () => {

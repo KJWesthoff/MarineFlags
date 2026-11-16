@@ -6,7 +6,7 @@
 import { FLAGS, FLAG_BY_ID, type FlagId } from '../data/flags'
 import { encodeGroup, lookup } from './signals'
 
-export type DeckId = 'flag-name' | 'name-flag' | 'flag-meaning' | 'signals' | 'hoists'
+export type DeckId = 'flag-name' | 'name-flag' | 'flag-meaning' | 'phonetic' | 'signals' | 'hoists'
 
 export interface Card {
   /** Unique across decks: "flag-name:K". */
@@ -37,6 +37,7 @@ const HOIST_GROUPS = [
 
 const cards = (deck: DeckId, ids: string[]): Card[] => ids.map((id) => ({ key: `${deck}:${id}`, deck, id }))
 const ALL_FLAGS = FLAGS.map((f) => f.id as string)
+const LETTERS_AND_NUMERALS = FLAGS.filter((f) => f.kind === 'letter' || f.kind === 'numeral').map((f) => f.id as string)
 const LETTERS_WITH_MEANING = FLAGS.filter((f) => f.kind === 'letter' && f.meaning).map((f) => f.id as string)
 
 export const DECKS: Deck[] = [
@@ -57,6 +58,12 @@ export const DECKS: Deck[] = [
     title: 'Single-flag signals',
     description: 'See a flag, pick what it signals when flown alone.',
     cards: cards('flag-meaning', LETTERS_WITH_MEANING),
+  },
+  {
+    id: 'phonetic',
+    title: 'Phonetic alphabet',
+    description: 'See a letter or numeral, type its code word from memory.',
+    cards: cards('phonetic', LETTERS_AND_NUMERALS),
   },
   {
     id: 'signals',
@@ -122,7 +129,7 @@ export function deckStats(deck: Deck, progress: Progress, now: number): DeckStat
 
 /**
  * New cards in teaching order for mixed practice. A flag is named before it is asked the other
- * way round or for its meaning, and signals and hoists wait until the alphabet has been met.
+ * way round, for its meaning or for its code word, and signals and hoists wait until the alphabet has been met.
  */
 function freshInOrder(decks: Deck[], progress: Progress, gated: boolean): Card[] {
   const unseen = (deck: Deck) => deck.cards.filter((c) => !progress[c.key])
@@ -130,7 +137,7 @@ function freshInOrder(decks: Deck[], progress: Progress, gated: boolean): Card[]
   const met = (flag: string) => Boolean(progress[`flag-name:${flag}`])
   const lettersMet = FLAGS.filter((f) => f.kind === 'letter').every((f) => met(f.id))
   const followUps = decks
-    .filter((d) => d.id === 'name-flag' || d.id === 'flag-meaning')
+    .filter((d) => ['name-flag', 'flag-meaning', 'phonetic'].includes(d.id))
     .flatMap((d) => unseen(d).filter((c) => met(c.id)))
   const newFlags = decks.filter((d) => d.id === 'flag-name').flatMap(unseen)
   const later = lettersMet ? decks.filter((d) => d.id === 'signals' || d.id === 'hoists').flatMap(unseen) : []
@@ -200,6 +207,8 @@ export interface ChoiceQuestion extends QuestionBase {
 export interface TypedQuestion extends QuestionBase {
   kind: 'typed'
   answer: string
+  /** Other spellings that count as right, e.g. "Alpha" for "Alfa". */
+  accept?: string[]
 }
 
 export type Question = ChoiceQuestion | TypedQuestion
@@ -208,6 +217,15 @@ const flagLabel = (id: FlagId) => {
   const f = FLAG_BY_ID[id]
   return f.kind === 'letter' || f.kind === 'numeral' ? `${f.id}  ${f.name}` : f.name
 }
+
+/** A code word with how it is said: "K  Kilo, said KEY LOH". */
+const codeWord = (id: FlagId) => {
+  const f = FLAG_BY_ID[id]
+  return `${f.id}  ${f.name}${f.pronunciation ? `, said ${f.pronunciation}` : ''}`
+}
+
+/** Common spellings of code words that differ from the code book's. */
+const OTHER_SPELLINGS: Record<string, string[]> = { Alfa: ['Alpha'], Juliett: ['Juliet'], Xray: ['X-ray'], Whiskey: ['Whisky'] }
 
 /** The right answer plus three wrong ones from the same pool, shuffled. */
 function choices(answer: string, pool: string[], random: () => number): string[] {
@@ -249,6 +267,16 @@ export function makeQuestion(card: Card, random: () => number = Math.random): Qu
         answer: id, explanation: `${flagLabel(id)}: ${FLAG_BY_ID[id].meaning}`,
       }
     }
+    case 'phonetic': {
+      // Typed, not picked from a list: a code word starts with its own letter, so choices give it away.
+      const id = card.id as FlagId
+      const name = FLAG_BY_ID[id].name
+      return {
+        kind: 'typed', card, text: id,
+        question: `Type the code word for this ${FLAG_BY_ID[id].kind === 'numeral' ? 'numeral' : 'letter'}.`,
+        answer: name, accept: OTHER_SPELLINGS[name], explanation: codeWord(id),
+      }
+    }
     case 'signals': {
       const pool = DECK_BY_ID.signals.cards.map((c) => c.id)
       return {
@@ -265,6 +293,11 @@ export function makeQuestion(card: Card, random: () => number = Math.random): Qu
   }
 }
 
-/** Compare a typed answer with the expected group, ignoring case and spacing. */
-export const isTypedCorrect = (typed: string, answer: string) =>
-  typed.toUpperCase().replace(/[\s,]/g, '') === answer.toUpperCase()
+const normalize = (text: string) => text.toUpperCase().replace(/[\s,-]/g, '')
+
+/** Compare a typed answer with the expected one, ignoring case, spacing and hyphens. */
+export const isTypedCorrect = (typed: string, answer: string) => normalize(typed) === normalize(answer)
+
+/** Whether a typed answer matches a question's answer or one of its accepted spellings. */
+export const isTypedRight = (typed: string, question: TypedQuestion) =>
+  [question.answer, ...(question.accept ?? [])].some((a) => isTypedCorrect(typed, a))

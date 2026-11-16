@@ -2,7 +2,7 @@ import { useMemo, useState, type FormEvent } from 'react'
 import { Flag } from '../components/Flag'
 import { FLAGS, FLAG_BY_ID, type FlagId } from '../data/flags'
 import {
-  DECKS, buildSession, deckStats, grade, isTypedCorrect, makeQuestion,
+  DECKS, buildSession, deckStats, grade, isTypedRight, makeQuestion,
   type DeckId, type Progress, type Question,
 } from '../lib/learn'
 import { useStored } from '../lib/useStored'
@@ -29,7 +29,7 @@ interface Session {
   firstTries: { question: Question; correct: boolean }[]
   /** Cards already asked a second time, so a miss is repeated only once. */
   repeated: string[]
-  /** Flags this session asks about for the first time; they are shown before the questions start. */
+  /** Flags or code words this session asks about for the first time; shown before the questions start. */
   introduce: FlagId[]
 }
 
@@ -40,9 +40,13 @@ export function Learn() {
   const start = (title: string, decks: DeckId[]) => {
     const picked = buildSession(decks, progress, Date.now())
     const questions = picked.map((card) => makeQuestion(card))
-    const introduce = picked
-      .filter((card) => card.deck === 'flag-name' && !progress[card.key])
-      .map((card) => card.id as FlagId)
+    const introduce = [
+      ...new Set(
+        picked
+          .filter((card) => (card.deck === 'flag-name' || card.deck === 'phonetic') && !progress[card.key])
+          .map((card) => card.id as FlagId),
+      ),
+    ]
     if (questions.length) {
       setSession({ title, decks, questions, index: 0, given: null, firstTries: [], repeated: [], introduce })
     }
@@ -54,8 +58,8 @@ export function Learn() {
     return (
       <div className="learn">
         <div className="learn-body">
-          <h1>{session.introduce.length === 1 ? 'One new flag' : `${session.introduce.length} new flags`}</h1>
-          <p className="muted">Have a look before the questions start.</p>
+          <h1>{session.introduce.length === 1 ? 'One to learn first' : `${session.introduce.length} to learn first`}</h1>
+          <p className="muted">Have a look at each flag, its code word and how it is said before the questions start.</p>
           <ul className="flag-list intro-list">
             {session.introduce.map((id) => {
               const f = FLAG_BY_ID[id]
@@ -66,6 +70,7 @@ export function Learn() {
                     <h2>
                       {f.kind === 'letter' || f.kind === 'numeral' ? <strong className="group">{f.id}</strong> : null}
                       {f.name}
+                      {f.pronunciation && <span className="say">{f.pronunciation}</span>}
                     </h2>
                     {f.meaning && <p>{f.meaning}</p>}
                   </div>
@@ -99,7 +104,7 @@ export function Learn() {
 
   const question = session.questions[session.index]
   const isCorrect = (given: string) =>
-    question.kind === 'typed' ? isTypedCorrect(given, question.answer) : given === question.answer
+    question.kind === 'typed' ? isTypedRight(given, question) : given === question.answer
 
   const answer = (given: string) => {
     if (session.given !== null) return
@@ -206,7 +211,7 @@ function TypedAnswer({ disabled, onSubmit }: { disabled: boolean; onSubmit: (tex
         autoCapitalize="characters"
         autoCorrect="off"
         spellCheck={false}
-        placeholder="Type the letters and numbers"
+        placeholder="Type your answer"
         aria-label="Your answer"
         value={text}
         disabled={disabled}
