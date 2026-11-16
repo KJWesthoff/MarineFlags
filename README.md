@@ -33,6 +33,29 @@ Repeated flags are handled for you: typing `MAA` hoists M, A and the second subs
 
 Tap "Start learning" for a short session of about ten questions. New flags are shown before you are asked about them, and anything you miss comes back sooner while what you know comes back later. You can also practise one thing at a time: naming flags, finding flags, single-flag signals, the phonetic alphabet, common signals, or reading hoists. Progress is saved on your device.
 
+## What the app downloads and what it shares
+
+The app sends nothing back: there is no server, no account, no analytics and no tracking.
+
+**Downloaded from GitHub Pages** (about 1.3 MB in total, roughly 400 KB compressed):
+
+| What | Size | When |
+|---|---|---|
+| The app itself: screens, decoding logic, all 40 flags, the code book, tables, guide and naval notes | about 520 KB (130 KB compressed) | On first visit |
+| Styles | about 20 KB | On first visit |
+| The B612 typeface | about 100 KB in six files; the browser fetches only the ones it needs | On first visit |
+| App icons, install manifest, service worker | a few KB plus the icons | On first visit |
+| Map code and its styles | about 165 KB | When the position picker is first opened |
+| World coastline for the offline map | about 545 KB (180 KB compressed) | When the position picker is first opened |
+
+After the first visit a service worker stores these files on the device, including the map files, which is what lets the app work offline. Later visits only download files that changed.
+
+**Kept on the device:** your message, your Learn progress and your settings (keyboard layout, hidden keyboard, last tab) are held in the browser's local storage. They are never sent anywhere, and clearing the browser's site data removes them.
+
+**The one outside connection:** when the position picker is open and the device is online, the map loads its tile images directly from OpenStreetMap (`tile.openstreetmap.org`). OpenStreetMap therefore sees the device's IP address and which map areas were viewed. Your chosen position and your current location are not sent to them or to anyone; the location is read by the browser and used only on the device.
+
+GitHub, as the host, sees the usual web-server information for the downloads: IP address, browser type and time.
+
 ## For developers
 
 The app is a static, offline-first PWA built with React, TypeScript and Vite. There is no backend.
