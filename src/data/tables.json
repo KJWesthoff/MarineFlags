@@ -1,5 +1,56 @@
 {
  "tables": {
+  "LANGUAGE": {
+   "title": "Languages",
+   "subtitle": "Complements to ZA",
+   "source": "Chapter 2, Section 8",
+   "groups": [
+    {
+     "rows": [
+      {
+       "n": "0",
+       "text": "Dutch"
+      },
+      {
+       "n": "1",
+       "text": "English"
+      },
+      {
+       "n": "2",
+       "text": "French"
+      },
+      {
+       "n": "3",
+       "text": "German"
+      },
+      {
+       "n": "4",
+       "text": "Greek"
+      },
+      {
+       "n": "5",
+       "text": "Italian"
+      },
+      {
+       "n": "6",
+       "text": "Japanese"
+      },
+      {
+       "n": "7",
+       "text": "Norwegian"
+      },
+      {
+       "n": "8",
+       "text": "Russian"
+      },
+      {
+       "n": "9",
+       "text": "Spanish"
+      }
+     ]
+    }
+   ]
+  },
   "C1": {
    "title": "Complements Table 1",
    "subtitle": "Means of communication",
@@ -3276,6 +3327,9 @@
   ],
   "QQ": [
    "PRATIQUE"
+  ],
+  "ZA": [
+   "LANGUAGE"
   ]
  },
  "guide": [

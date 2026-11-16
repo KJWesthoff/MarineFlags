@@ -204,7 +204,9 @@ describe('call signs', () => {
 describe('values a signal calls for', () => {
   it('reads them from the wording', () => {
     expect(valueKindsFor(lookup('CH')!.meaning)).toEqual(['position', 'bearing', 'distance'])
-    expect(valueKindsFor(lookup('FE')!.meaning)).toEqual(['position', 'time'])
+    expect(valueKindsFor(lookup('FE')!.meaning)).toEqual(['time'])
+    expect(valueKindsFor('My position is indicated by rocket(s) or flare(s).')).toEqual([])
+    expect(valueKindsFor('I am sinking (lat… long… if necessary).')).toEqual(['position'])
     expect(valueKindsFor('I am altering my course to starboard.')).toEqual([])
     expect(valueKindsFor('You should steer course… speed… knots.')).toEqual(['course', 'speed'])
     expect(valueKindsFor(lookup('AC')!.meaning)).toEqual([])
@@ -245,7 +247,8 @@ describe('options for further information', () => {
   it('offers what a code signal calls for', () => {
     expect(labels('DI')).toEqual(['Add number'])
     expect(labels('MA')).toEqual(['Add number'])
-    expect(labels('FE')).toEqual(['Add position', 'Add time'])
+    expect(labels('FE')).toEqual(['Add time'])
+    expect(labels('GW')).toEqual(['Add position'])
     expect(labels('CH')).toEqual(['Add position', 'Add bearing', 'Add distance', 'Add name or call sign'])
     expect(labels('AC')).toEqual([])
   })
@@ -261,7 +264,14 @@ describe('options for further information', () => {
   it('finds something to offer for most signals with a blank to fill', () => {
     const blanks = CODEBOOK.filter((e) => e.meaning.includes('…'))
     const covered = blanks.filter((e) => optionsFor({ kind: 'code', text: e.code, entry: e }).length > 0 || tablesFor(e).length > 0)
-    expect(covered.length / blanks.length).toBeGreaterThan(0.9)
+    const uncovered = blanks.filter((e) => !covered.includes(e)).map((e) => e.code)
+    // Only the procedure signals for repeats and "From…" are left: they take words, not values.
+    expect(uncovered).toEqual(['AA', 'AB', 'BN', 'DE', 'WA', 'WB'])
+    expect(labels('SZ')).toEqual(['Add number'])
+    expect(labels('MI')).toEqual(['Add course'])
+    expect(labels('UU')).toEqual(['Add name or call sign'])
+    expect(tablesFor(lookup('ZA')!)).toEqual(['LANGUAGE'])
+    expect(decodeHoist(encodeGroup('ZA1').flags).meaning).toBe('English')
   })
 })
 

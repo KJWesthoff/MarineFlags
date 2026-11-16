@@ -218,6 +218,20 @@ button.quiet {
   scrollbar-width: thin;
 }
 
+/* Message-wide actions, above the hoists. */
+.mast-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0 1.25rem;
+  padding: 0.25rem 1rem 0;
+}
+
+.mast-actions button {
+  min-height: 40px;
+  padding-block: 0.2rem;
+  font-size: var(--step--1);
+}
+
 /* A halyard: a rope down the hoist edge with the flags hung from it. */
 .halyard {
   flex: none;
@@ -226,6 +240,17 @@ button.quiet {
   align-items: flex-start;
   min-width: 4rem;
   cursor: pointer;
+}
+
+/* Sits above the selected hoist. */
+.hoist-remove {
+  min-height: 36px;
+  padding: 0.2rem 0;
+  font-size: var(--step--1);
+}
+
+.hoist-remove[data-shown='false'] {
+  visibility: hidden;
 }
 
 .hoist-tab {

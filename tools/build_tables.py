@@ -479,7 +479,15 @@ def main():
         "groups": [{"rows": [{"n": c, "text": codebook[c]["meaning"]} for c in PRATIQUE_CODES]}],
     }
 
+    languages = {
+        "title": "Languages",
+        "subtitle": "Complements to ZA",
+        "source": "Chapter 2, Section 8",
+        "groups": [{"rows": [{"n": str(n), "text": codebook[f"ZA {n}"]["meaning"]} for n in range(10)]}],
+    }
+
     tables = {
+        "LANGUAGE": languages,
         "C1": C1, "C2": C2, "C3": C3,
         "M1": build_m1(lines), "M2": build_m2(lines), "M3": build_m3(),
         "AGROUND": AGROUND, "JETTISON": JETTISON, "PASSAGE": PASSAGE,
@@ -492,7 +500,7 @@ def main():
         "JF": ["AGROUND"], "JP": ["JETTISON"], "JQ": ["JETTISON"],
         "UV 4": ["PASSAGE"], "UV 5": ["PASSAGE"], "UV 6": ["PASSAGE"],
         "WY": ["SEA"], "XB": ["SEA"], "XE": ["SWELL"], "XH": ["SWELL"],
-        "XV": ["MAFOR"], "QQ": ["PRATIQUE"],
+        "XV": ["MAFOR"], "QQ": ["PRATIQUE"], "ZA": ["LANGUAGE"],
     }
     Path(out).write_text(json.dumps({"tables": tables, "byCode": by_code, "guide": GUIDE}, ensure_ascii=False, indent=1) + "\n")
     print({k: sum(len(g["rows"]) for g in t["groups"]) for k, t in tables.items()}, file=sys.stderr)

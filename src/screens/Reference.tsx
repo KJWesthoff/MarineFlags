@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Flag } from '../components/Flag'
+import { PositionSheet } from '../components/PositionSheet'
 import { TableLinks, type Transfer } from '../components/TableSheet'
 import { FLAGS } from '../data/flags'
 import {
@@ -15,9 +16,11 @@ interface Props {
   onShowAsFlags: (group: string) => void
   onOpenTable: (ref: TableRef) => void
   onTransfer: (transfer: Transfer) => void
+  onAddPosition: (groups: [string, string]) => void
 }
 
-export function Reference({ onShowAsFlags, onOpenTable, onTransfer }: Props) {
+export function Reference({ onShowAsFlags, onOpenTable, onTransfer, onAddPosition }: Props) {
+  const [pickingPosition, setPickingPosition] = useState(false)
   const [view, setView] = useStored<View>('reference-view', 'flags', (r) =>
     r === 'signals' || r === 'guide' ? r : 'flags',
   )
@@ -66,6 +69,7 @@ export function Reference({ onShowAsFlags, onOpenTable, onTransfer }: Props) {
 
   return (
     <div className="reference">
+      <PositionSheet open={pickingPosition} onClose={() => setPickingPosition(false)} onAdd={onAddPosition} />
       <header className="reference-head">
         <div className="segmented" role="tablist" aria-label="What to look up">
           <button type="button" role="tab" aria-selected={view === 'flags'} onClick={() => setView('flags')}>
@@ -135,6 +139,12 @@ export function Reference({ onShowAsFlags, onOpenTable, onTransfer }: Props) {
       ) : view === 'guide' ? (
         !q ? (
           <ul className="guide-list">
+            <li>
+              <button type="button" onClick={() => setPickingPosition(true)}>
+                <strong>Add a position</strong>
+                <span>Latitude and longitude from where you are now, or from a point on a map</span>
+              </button>
+            </li>
             {GUIDE.map((id) => (
               <li key={id}>
                 <button type="button" onClick={() => onOpenTable({ id })}>

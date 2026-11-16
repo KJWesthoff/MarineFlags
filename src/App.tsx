@@ -62,6 +62,16 @@ export default function App() {
     [setMessage, message],
   )
 
+  /** Add a position's latitude and longitude groups as two hoists at the end of the message. */
+  const addPosition = useCallback(
+    (groups: [string, string]) => {
+      const kept = message.hoists.filter((h) => h.length > 0)
+      setMessage({ hoists: [...kept, ...groups.map((g) => encodeGroup(g).flags)], active: kept.length })
+      setNotice(`Added ${groups[0]} and ${groups[1]} as hoists ${kept.length + 1} and ${kept.length + 2}`)
+    },
+    [setMessage, message],
+  )
+
   /** Put a code-book signal on the active hoist and show it. */
   const showAsFlags = useCallback(
     (group: string) => {
@@ -81,7 +91,12 @@ export default function App() {
         {tab === 'compose' ? (
           <Compose message={message} setMessage={setMessage} onOpenTable={setTable} />
         ) : tab === 'reference' ? (
-          <Reference onShowAsFlags={showAsFlags} onOpenTable={setTable} onTransfer={transfer} />
+          <Reference
+            onShowAsFlags={showAsFlags}
+            onOpenTable={setTable}
+            onTransfer={transfer}
+            onAddPosition={addPosition}
+          />
         ) : (
           <Learn />
         )}

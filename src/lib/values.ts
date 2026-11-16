@@ -20,7 +20,8 @@ export interface ValueKindInfo {
 export const VALUE_KINDS: Record<ValueKind, ValueKindInfo> = {
   position: {
     name: 'position',
-    pattern: /lat…|long…|\bposition\b/i,
+    // Only where a position is to be given: "my position is indicated by rockets" does not count.
+    pattern: /lat…|long…|position indicated|position to be indicated|indicated by position|position and time/i,
     letters: [
       { letter: 'L', label: 'Latitude' },
       { letter: 'G', label: 'Longitude' },
@@ -38,10 +39,10 @@ export const VALUE_KINDS: Record<ValueKind, ValueKindInfo> = {
   course: {
     name: 'course',
     // Not "altering my course": that describes a maneuver, it does not ask for a figure.
-    pattern: /(?<!alter(ing)? (my |your )?)\bcourse\b/i,
+    pattern: /(?<!alter(ing)? (my |your )?)\bcourse\b|\bcourse to…/i,
     letters: [{ letter: 'C', label: 'Course' }],
   },
-  bearing: { name: 'bearing', pattern: /\bbearing\b/i, letters: [{ letter: 'A', label: 'Bearing' }] },
+  bearing: { name: 'bearing', pattern: /\bbearings?\b/i, letters: [{ letter: 'A', label: 'Bearing' }] },
   distance: {
     name: 'distance',
     pattern: /(?<!(safe|shorten|shortening|signal) )\bdistance\b/i,
@@ -84,10 +85,12 @@ export interface SignalOption {
   request: ValueRequest | 'position'
 }
 
-const NUMBER_ASKED = /…\s*\((indicate )?(in |number|numerals?)|\(maximum and minimum|tens of degrees/i
+const NUMBER_ASKED =
+  /…\s*\((indicate )?(in |number|numerals?)|\(maximum and minimum|tens of degrees|indicated by complements|\b(number|hundreds)\b[^.]*\bis…/i
 const NUMBER_WITH_UNIT = /…\s*(degrees|knots|miles|hours|kHz|MHz)\b/i
 const LENGTH_UNITS = /feet or meters/i
-const NAME_ASKED = /name or identity signal|\((name|or name)\b|(vessel|place|station|port|aircraft) indicated/i
+const NAME_ASKED =
+  /name or identity signal|name \(or identity signal\)|\((name|or name)\b|(vessel|place|station|port|aircraft) indicated|(bound for|coming from|coast of)…/i
 
 /**
  * The further information a decoded hoist can take: the value for a lone value letter,

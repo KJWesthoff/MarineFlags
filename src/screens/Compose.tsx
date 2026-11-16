@@ -246,12 +246,36 @@ export function Compose({ message, setMessage, onOpenTable }: Props) {
   return (
     <div className="compose">
       <section className="deck" aria-label="Message">
+        {!isEmpty && (
+          <div className="mast-actions">
+            <button type="button" className="quiet" onClick={clearAll}>
+              Clear message
+            </button>
+          </div>
+        )}
         <div className="mast" ref={mastRef} style={{ '--n': longest } as CSSProperties}>
           {hoists.map((flags, h) => {
             const fromHere = dragFrom?.hoist === h ? dragFrom.index : null
             const gapHere = drag?.target?.hoist === h ? drag.target.gap : null
             return (
               <div className="halyard" key={h} data-active={h === active} onClick={() => selectHoist(h)}>
+                {hoists.length > 1 && (
+                  <button
+                    type="button"
+                    className="quiet hoist-remove"
+                    // Every hoist keeps the space so the halyards stay level; only the selected one shows it.
+                    data-shown={h === active}
+                    tabIndex={h === active ? 0 : -1}
+                    aria-hidden={h !== active}
+                    aria-label={`Remove hoist ${h + 1}`}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      removeHoist(h)
+                    }}
+                  >
+                    Remove
+                  </button>
+                )}
                 <button
                   type="button"
                   className="hoist-tab"
@@ -325,21 +349,10 @@ export function Compose({ message, setMessage, onOpenTable }: Props) {
                   onSelect={() => selectHoist(i)}
                   onOpenTable={onOpenTable}
                   onAskFor={askFor}
-                  onRemove={hoists.length > 1 ? () => removeHoist(i) : undefined}
                 />
               ))}
             </ol>
           )}
-          <div className="message-actions">
-            <button type="button" className="quiet" onClick={() => setPickingPosition(true)}>
-              Add position
-            </button>
-            {!isEmpty && (
-              <button type="button" className="quiet" onClick={clearAll}>
-                Clear message
-              </button>
-            )}
-          </div>
         </div>
       </section>
 
@@ -455,7 +468,6 @@ function Reading(props: {
   onSelect: () => void
   onOpenTable: (ref: TableRef) => void
   onAskFor: (wanted: SignalOption['request']) => void
-  onRemove?: () => void
 }) {
   const { decoded: d, active } = props
   const empty = d.kind === 'empty'
@@ -496,11 +508,6 @@ function Reading(props: {
             </button>
           ))}
         </div>
-      )}
-      {props.onRemove && active && (
-        <button type="button" className="quiet reading-remove" onClick={props.onRemove}>
-          Remove hoist
-        </button>
       )}
     </li>
   )
